@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="AppTheme" parent="AppTheme.Base">
+    </style>
+    <!-- Used two colors found from SPR Consulting website -->
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:colorControlHighlight">@color/colorControlHighlight</item>
+    </style>
+
+    <style name="customToolbar" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColorPrimary">#FFFFFF</item>
+
+    </style>
+</resources>

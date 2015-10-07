@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Songs and Hymns of Life</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="_7">7</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
+    <string name="_0">0</string>
+    <string name="contentdescription">content</string>
+    <string name="play_music">play/pause</string>
+    <string name="loop_music">loop</string>
+    <string name="search">search</string>
+    <string name="search_hint">title</string>
+    <string name="previou_song">previous song</string>
+    <string name="next_song">next_song</string>
+    <string name="search_title">search title</string>
+    <string name="numbers">NUMBERS</string>
+    <string name="category">CATEGORY</string>
+    <string name="list">LIST</string>
+    <string name="favourite">favourite</string>
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
+    <string-array name="tabs">
+        <item>Tab 1</item>
+        <item>Tab 2</item>
+        <item>Tab 3</item>
+    </string-array>
+</resources>
