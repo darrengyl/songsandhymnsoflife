@@ -33,7 +33,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         holder.track.setText(data.get(position).getTrackNumber()+"");
         holder.title.setText(data.get(position).getTitle());
-        holder.freq.setText(data.get(position).getFrequency()+"");
+        holder.freq.setText("This song has been played " + data.get(position).getFrequency()+" time(s)");
         if (data.get(position).getFavorite() != 0){
             holder.fav.setImageResource(R.drawable.ic_favorite_black_36dp);
         } else {

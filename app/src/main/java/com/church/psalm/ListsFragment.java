@@ -2,17 +2,19 @@
 package com.church.psalm;
 
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class ListsFragment extends Fragment{
@@ -32,7 +34,7 @@ public class ListsFragment extends Fragment{
 		View V = inflater.inflate(R.layout.fragment_lists, container, false);
 		recyclerView = (RecyclerView)V.findViewById(R.id.recyclerview);
 		dbAdapter = new DBAdapter(getContext());
-
+		InsertSongs();
 		data = dbAdapter.getAllSongs();
 
 		RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), data);
@@ -122,7 +124,10 @@ public class ListsFragment extends Fragment{
 	}
 
 	public void InsertSongs(){
-		SQLiteDatabase.
+		if (doesDatabaseExist((ContextWrapper)getContext(), "AllSongs.db")){
+			return;
+		}
+
 		String[] title = {
 				"荣耀荣耀归于父神"
 				,"但愿荣耀归于圣父"
@@ -713,9 +718,16 @@ public class ListsFragment extends Fragment{
 
 		};
 		for (int i = 0; i < title.length; i++){
-			dbAdapter.insertSongData(i+1, title[i], 0, 0, "", 0);
+			if (dbAdapter.insertSongData(i+1, title[i], 0, 0, "", 0) == -1){
+				Log.d("Database error", "error occurred when inserting" + String.valueOf(i+1) + title[i]);
+			}
 		}
 
+	}
+
+	public boolean doesDatabaseExist(ContextWrapper context, String dbName) {
+		File dbFile = context.getDatabasePath(dbName);
+		return dbFile.exists();
 	}
 
 	

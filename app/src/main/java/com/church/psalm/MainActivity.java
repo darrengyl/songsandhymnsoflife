@@ -22,8 +22,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbAdapter = new DBAdapter(this);
-        long id1 = dbAdapter.insertSongData(3, "test1", 2, 0, "123", 1);
-        long id2 = dbAdapter.insertSongData(4, "test2", 5, 0, "324", 0);
+        //long id1 = dbAdapter.insertSongData(3, "test1", 2, 0, "123", 1);
+        //long id2 = dbAdapter.insertSongData(4, "test2", 5, 0, "324", 0);
         //dbAdapter.getAllSongs();
 
 
