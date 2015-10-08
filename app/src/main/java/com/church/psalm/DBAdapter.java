@@ -48,18 +48,37 @@ public class DBAdapter {
     }
 
     public void flipFav(int position){
+        boolean booleanFav = isFav(position);
+        booleanFav = !booleanFav;
+        int integerFave = booleanFav? 1 : 0;
+        ContentValues args = new ContentValues();
+        args.put(COLUMN_NAME_FAVORITE, integerFave);
         db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FAVORITE}
+        db.update(TABLE_NAME, args, COLUMN_NAME_TRACKNUMBER + " = ?"
+                , new String[]{String.valueOf(position)});
+        db.close();
+    }
+
+    public int getFreq(int position){
+        int freq = 0;
+        db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FREQUENCY}
                 , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position)}
                 , null, null, null);
         if (cursor.moveToNext() && cursor.getCount() == 1){
-            int fav = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
-            fav ^= 1;
-            ContentValues args = new ContentValues();
-            args.put(COLUMN_NAME_FAVORITE, fav);
-            db.update(TABLE_NAME, args, COLUMN_NAME_TRACKNUMBER + " = ?"
-                    , new String[]{String.valueOf(position)});
+            freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
         }
+        db.close();
+        return freq;
+    }
+
+    public void incrementFreq(int position){
+        int freq = getFreq(position);
+        db = dbHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_NAME_FREQUENCY, freq++);
+        db.update(TABLE_NAME, contentValues, COLUMN_NAME_TRACKNUMBER + " + ?"
+                , new String[]{String.valueOf(position)});
         db.close();
     }
 
@@ -83,9 +102,6 @@ public class DBAdapter {
     public ArrayList<Song> getAllSongs(){
         data = new ArrayList<Song>();
         db = dbHelper.getReadableDatabase();
-        if (db != null){
-            System.out.println("get db successfully");
-        }
         Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER, COLUMN_NAME_TITLE,
                         COLUMN_NAME_FREQUENCY, COLUMN_NAME_DOWNLOADED, COLUMN_NAME_LYRICS,
                         COLUMN_NAME_FAVORITE},

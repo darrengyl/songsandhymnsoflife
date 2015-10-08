@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,40 +51,16 @@ public class ListsFragment extends Fragment{
 		return V;
 	}
 
-	/*@Override
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-		inflater.inflate(R.menu.searchmenu, menu);
+		inflater.inflate(R.menu.menu_list_fragment, menu);
 		View view = (View)menu.findItem(R.id.search).getActionView();
-		searchEditText = (EditText)view.findViewById(R.id.searchedittext);
+		searchEditText = (EditText)view.findViewById(R.id.search);
 		//searchEditText.setText("");
 		searchEditText.setHint("Search Titles");
-		searchEditText.setOnEditorActionListener(new OnEditorActionListener() {
-			
-			@Override
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				//List<Map<String, String>> filter = new ArrayList<Map<String, String>>();
-				//filter = Search(v.getText().toString());
-				
-				searchAdapter = new SimpleAdapter(getActivity(), Search(v.getText().toString()), android.R.layout.simple_list_item_1, new String[]{"songs"}, new int[]{android.R.id.text1}){
-					@Override
-					public View getView(int position, View convertView, ViewGroup parent){
-						View view = super.getView(position, convertView, parent);
-						TextView text = (TextView)view.findViewById(android.R.id.text1);
-						text.setTextColor(Color.parseColor("#25383C"));
-						return view;
-					}
-				};
-				
-				lv.setAdapter(searchAdapter);
-				InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
-					      Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
-				return false;
-			}
-		});
-		//searchEditText.seto
 
-	}*/
+
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item){
@@ -710,15 +688,7 @@ public class ListsFragment extends Fragment{
 	}
 
 /*
-	public List<Map<String, String>> Search(String query){
-		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
-		for (int i = 0; i < songslist.size(); i++){
-			if (songslist.get(i).get("songs").contains(query)){
-				result.add(songslist.get(i));
-			}
-		}
-		return result;
-	}
+
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser){
 		super.setUserVisibleHint(isVisibleToUser);

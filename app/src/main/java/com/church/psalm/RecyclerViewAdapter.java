@@ -67,16 +67,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "clicked on" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(v.getContext(), "clicked on" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                    int counter = Integer.valueOf(freq.getText().toString());
+                    freq.setText(counter++);
                     Intent intent = new Intent(v.getContext(), ScoreActivity.class);
-                    intent.putExtra("trackNumber", getLayoutPosition()+1);
+                    intent.putExtra("trackNumber", getLayoutPosition() + 1);
                     v.getContext().startActivity(intent);
+                    DBAdapter dbAdapter = new DBAdapter(v.getContext());
+                    dbAdapter.incrementFreq(getLayoutPosition()+1);
+                    notifyItemChanged(getLayoutPosition());
+
+
                 }
             });
             fav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "clicked on fav" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(v.getContext(), "clicked on fav" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                    DBAdapter dbAdapter = new DBAdapter(v.getContext());
+                    dbAdapter.flipFav(getLayoutPosition()+1);
+                    if (dbAdapter.isFav(getLayoutPosition()+1)){
+                        fav.setImageResource(R.drawable.ic_favorite_black_36dp);
+                    } else {
+                        fav.setImageResource(R.drawable.ic_favorite_border_black_36dp);
+                    }
+                    notifyItemChanged(getLayoutPosition());
                 }
             });
 
