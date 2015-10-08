@@ -2,7 +2,9 @@
 package com.church.psalm;
 
 
+import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +24,7 @@ public class ListsFragment extends Fragment{
 	EditText searchEditText;
 	DBAdapter dbAdapter;
 	ArrayList<Song> data;
+	final static String prefsName = "com.church.psalm.DATABASE_PREFERENCE";
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -34,42 +37,31 @@ public class ListsFragment extends Fragment{
 		View V = inflater.inflate(R.layout.fragment_lists, container, false);
 		recyclerView = (RecyclerView)V.findViewById(R.id.recyclerview);
 		dbAdapter = new DBAdapter(getContext());
-		InsertSongs();
+		if (getDatabaseSharedPreference()){
+			Log.d("ListFragment Database", "Database can't be found");
+			Thread thread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					InsertSongs();
+					setDatabaseSharedPreference();
+
+
+				}
+			});
+		} else {
+			Log.d("ListFragment Database", "Database is found");
+		}
+
+
+
+
 		data = dbAdapter.getAllSongs();
 
 		RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), data);
 		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-		/*lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				ConnectivityManager cm =
-						(ConnectivityManager) getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);
-
-				NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-				boolean isConnected = activeNetwork != null &&
-						activeNetwork.isConnectedOrConnecting();
-				if (isConnected) {
-					TextView clickedView = (TextView) view;
-					String selected = (String) clickedView.getText().toString();
-					if (selected.charAt(1) == '.') {
-						selected = selected.substring(0, 1);
-					} else if (selected.charAt(2) == '.') {
-						selected = selected.substring(0, 2);
-					} else {
-						selected = selected.substring(0, 3);
-					}
-					Intent intent = new Intent(getActivity(), pictureactivity.class);
-					intent.putExtra("link", Integer.parseInt(selected));
-					startActivity(intent);
-				} else {
-					Toast.makeText(getActivity(), "Please check your Internet connection", Toast.LENGTH_SHORT).show();
-					;
-				}
-			}
-		});*/
 
 
 
@@ -124,9 +116,7 @@ public class ListsFragment extends Fragment{
 	}
 
 	public void InsertSongs(){
-		if (doesDatabaseExist((ContextWrapper)getContext(), "AllSongs.db")){
-			return;
-		}
+
 
 		String[] title = {
 				"荣耀荣耀归于父神"
@@ -725,37 +715,19 @@ public class ListsFragment extends Fragment{
 
 	}
 
-	public boolean doesDatabaseExist(ContextWrapper context, String dbName) {
-		File dbFile = context.getDatabasePath(dbName);
-		return dbFile.exists();
+	public void setDatabaseSharedPreference(){
+		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putBoolean("databaseLoaded", true);
+		editor.commit();
 	}
 
-	
-
-
-
-	
-	/*private void initList(){
-
-		MySQLiteHelper db = new MySQLiteHelper(getActivity());
-		try {
-			db.CreateDatabase();
-		} catch(IOException e) {
-			throw new Error("Unable to create database");
-		}
-		try {
-			db.OpenDatabase();
-		} catch(SQLException sqle) {
-			throw sqle;
-		}
+	public boolean getDatabaseSharedPreference(){
+		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE);
+		return sharedPreferences.getBoolean("databaseLoaded", false);
 	}
-	
-	private HashMap<String, String>createsongs(String key, String value){
-		HashMap<String, String> song = new HashMap<String, String>();
-		song.put(key, value);
-		return song;
-	}
-	
+
+/*
 	public List<Map<String, String>> Search(String query){
 		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (int i = 0; i < songslist.size(); i++){
