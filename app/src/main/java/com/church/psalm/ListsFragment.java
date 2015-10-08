@@ -3,8 +3,8 @@ package com.church.psalm;
 
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,15 +15,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class ListsFragment extends Fragment{
 	RecyclerView recyclerView;
+	ProgressBar progressBar;
 	EditText searchEditText;
 	DBAdapter dbAdapter;
 	ArrayList<Song> data;
+	RecyclerViewAdapter adapter;
+	boolean writeSongs = false;
 	final static String prefsName = "com.church.psalm.DATABASE_PREFERENCE";
 	
 	@Override
@@ -36,34 +39,12 @@ public class ListsFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View V = inflater.inflate(R.layout.fragment_lists, container, false);
 		recyclerView = (RecyclerView)V.findViewById(R.id.recyclerview);
-		dbAdapter = new DBAdapter(getContext());
-		if (getDatabaseSharedPreference()){
-			Log.d("ListFragment Database", "Database can't be found");
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					InsertSongs();
-					setDatabaseSharedPreference();
-
-
-				}
-			});
-		} else {
-			Log.d("ListFragment Database", "Database is found");
-		}
-
-
-
-
-		data = dbAdapter.getAllSongs();
-
-		RecyclerViewAdapter adapter = new RecyclerViewAdapter(getContext(), data);
-		recyclerView.setAdapter(adapter);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		progressBar = (ProgressBar)V.findViewById(R.id.progress_bar);
+		dbAdapter = new DBAdapter(getContext());
 
 
-
-
+		new readWriteAllSongs().execute();
 
 		return V;
 	}
@@ -718,11 +699,12 @@ public class ListsFragment extends Fragment{
 	public void setDatabaseSharedPreference(){
 		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.clear();
 		editor.putBoolean("databaseLoaded", true);
 		editor.commit();
 	}
 
-	public boolean getDatabaseSharedPreference(){
+	public boolean existDatabaseSharedPreference(){
 		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE);
 		return sharedPreferences.getBoolean("databaseLoaded", false);
 	}
@@ -750,5 +732,45 @@ public class ListsFragment extends Fragment{
 			}
 		}
 	}*/
+
+	public class readWriteAllSongs extends AsyncTask<Void, ArrayList<Song>, Void> {
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			progressBar.setVisibility(View.VISIBLE);
+			recyclerView.setVisibility(View.GONE);
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			if (existDatabaseSharedPreference()){
+				Log.d("ListFragment Database", "Database is found");
+			} else {
+				Log.d("ListFragment Database", "Database can't be found");
+				InsertSongs();
+				setDatabaseSharedPreference();
+
+			}
+			data = dbAdapter.getAllSongs();
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void aVoid) {
+			super.onPostExecute(aVoid);
+
+			progressBar.setVisibility(View.GONE);
+			recyclerView.setVisibility(View.VISIBLE);
+
+			adapter = new RecyclerViewAdapter(getContext(),data);
+			recyclerView.setAdapter(adapter);
+
+
+
+
+		}
+
+	}
 }
 

@@ -1,12 +1,14 @@
 package com.church.psalm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -16,6 +18,10 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private LayoutInflater inflator;
     ArrayList<Song> data;
+
+    public RecyclerViewAdapter(Context context){
+        inflator = LayoutInflater.from(context);
+    }
 
     public RecyclerViewAdapter(Context context, ArrayList<Song> data) {
         inflator = LayoutInflater.from(context);
@@ -58,6 +64,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             title = (TextView)itemView.findViewById(R.id.title);
             freq = (TextView)itemView.findViewById(R.id.freq);
             fav = (ImageView)itemView.findViewById(R.id.fav_star);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "clicked on" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(v.getContext(), ScoreActivity.class);
+                    intent.putExtra("trackNumber", getLayoutPosition()+1);
+                    v.getContext().startActivity(intent);
+                }
+            });
+            fav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "clicked on fav" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
 
 

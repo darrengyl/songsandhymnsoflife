@@ -6,11 +6,17 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static com.church.psalm.AllSongsContract.AllSongsEntry.*;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_DOWNLOADED;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_FAVORITE;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_FREQUENCY;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_LYRICS;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_TITLE;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_TRACKNUMBER;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.ID;
+import static com.church.psalm.AllSongsContract.AllSongsEntry.TABLE_NAME;
 
 /**
  * Created by Darren Gu on 8/20/2015.
@@ -24,6 +30,40 @@ public class DBAdapter {
         this.context = context;
         dbHelper = new DBHelper(context);
     }
+
+    public boolean isFav(int position){
+        boolean favourite = false;
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FAVORITE}
+                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position)}
+                , null, null, null);
+        if (cursor.moveToNext() && cursor.getCount() == 1){
+            int fav = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
+            if (fav != 0){
+                favourite = true;
+            }
+        }
+        db.close();
+        return favourite;
+    }
+
+    public void flipFav(int position){
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FAVORITE}
+                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position)}
+                , null, null, null);
+        if (cursor.moveToNext() && cursor.getCount() == 1){
+            int fav = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
+            fav ^= 1;
+            ContentValues args = new ContentValues();
+            args.put(COLUMN_NAME_FAVORITE, fav);
+            db.update(TABLE_NAME, args, COLUMN_NAME_TRACKNUMBER + " = ?"
+                    , new String[]{String.valueOf(position)});
+        }
+        db.close();
+    }
+
+
     public long insertSongData(int track, String title, int freq, int downloaded, String text, int fav){
         db = dbHelper.getWritableDatabase();
         if (db != null){
@@ -42,7 +82,7 @@ public class DBAdapter {
     }
     public ArrayList<Song> getAllSongs(){
         data = new ArrayList<Song>();
-        db = dbHelper.getWritableDatabase();
+        db = dbHelper.getReadableDatabase();
         if (db != null){
             System.out.println("get db successfully");
         }
@@ -90,7 +130,6 @@ public class DBAdapter {
         public void onCreate(SQLiteDatabase db) {
             try {
                 db.execSQL(SQL_CREATE_ENTRIES);
-                Toast.makeText(context,"onCreate",Toast.LENGTH_SHORT).show();
             } catch (SQLException e){
                 e.printStackTrace();
             }
