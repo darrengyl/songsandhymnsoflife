@@ -45,7 +45,7 @@ public class ListsFragment extends Fragment{
 		View V = inflater.inflate(R.layout.fragment_lists, container, false);
 		recyclerView = (RecyclerView)V.findViewById(R.id.recyclerview);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		progressBarList = (MaterialProgressBar)V.findViewById(R.id.progress_bar);
+		progressBarList = (MaterialProgressBar)V.findViewById(R.id.progress_bar_list);
 		dbAdapter = new DBAdapter(getContext());
 
 

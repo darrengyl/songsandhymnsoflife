@@ -3,6 +3,7 @@ package com.church.psalm;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,9 +37,11 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class ScoreActivity extends AppCompatActivity{
     Toolbar toolbar;
     SubsamplingScaleImageView imageView;
-    Bitmap bitmapName;
     ImageLoader imageLoader;
     MaterialProgressBar progressBarScore;
+    //int imageHeight;
+    //int imageWidth;
+    BitmapFactory.Options options;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,9 @@ public class ScoreActivity extends AppCompatActivity{
         if (!foundScoreInStorage(trackNumber)){
 
         }
+        options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+
 
         RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
         imageLoader = VolleySingleton.getInstance(this).getImageLoader();
@@ -62,7 +68,8 @@ public class ScoreActivity extends AppCompatActivity{
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 if (response.getBitmap() != null){
-                    imageView.setImage(ImageSource.bitmap(response.getBitmap()));
+                    Bitmap bitmap = getResizedBitmap(response.getBitmap(), 4000, 4000);
+                    imageView.setImage(ImageSource.bitmap(bitmap));
                     progressBarScore.setVisibility(View.GONE);
 
                 }
@@ -137,6 +144,23 @@ public class ScoreActivity extends AppCompatActivity{
 
         }
         return bitmap;
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight){
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
     }
 
     @Override
