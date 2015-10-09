@@ -31,11 +31,11 @@ public class DBAdapter {
         dbHelper = new DBHelper(context);
     }
 
-    public boolean isFav(int position){
+    public boolean getFav(int position){
         boolean favourite = false;
         db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FAVORITE}
-                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position)}
+                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position+1)}
                 , null, null, null);
         if (cursor.moveToNext() && cursor.getCount() == 1){
             int fav = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
@@ -48,14 +48,14 @@ public class DBAdapter {
     }
 
     public void flipFav(int position){
-        boolean booleanFav = isFav(position);
+        boolean booleanFav = getFav(position);
         booleanFav = !booleanFav;
         int integerFave = booleanFav? 1 : 0;
         ContentValues args = new ContentValues();
         args.put(COLUMN_NAME_FAVORITE, integerFave);
         db = dbHelper.getWritableDatabase();
         db.update(TABLE_NAME, args, COLUMN_NAME_TRACKNUMBER + " = ?"
-                , new String[]{String.valueOf(position)});
+                , new String[]{String.valueOf(position+1)});
         db.close();
     }
 
@@ -77,7 +77,7 @@ public class DBAdapter {
         db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME_FREQUENCY, freq++);
-        db.update(TABLE_NAME, contentValues, COLUMN_NAME_TRACKNUMBER + " + ?"
+        db.update(TABLE_NAME, contentValues, COLUMN_NAME_TRACKNUMBER + " = ?"
                 , new String[]{String.valueOf(position)});
         db.close();
     }

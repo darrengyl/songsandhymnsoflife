@@ -3,13 +3,21 @@ package com.church.psalm;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import java.io.File;
@@ -19,6 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+
 
 /**
  * Created by yuanlong.gu on 10/7/2015.
@@ -27,16 +37,43 @@ public class ScoreActivity extends AppCompatActivity{
     Toolbar toolbar;
     SubsamplingScaleImageView imageView;
     Bitmap bitmapName;
+    ImageLoader imageLoader;
+    MaterialProgressBar progressBarScore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.score_layout);
+        progressBarScore = (MaterialProgressBar)findViewById(R.id.progress_bar_list);
+
         toolbar = (Toolbar)findViewById(R.id.app_bar_score);
+
+        setSupportActionBar(toolbar);
         imageView = (SubsamplingScaleImageView)findViewById(R.id.imageView);
         Intent intent = getIntent();
         int trackNumber = intent.getIntExtra("trackNumber", 1);
+        if (!foundScoreInStorage(trackNumber)){
 
-        setSupportActionBar(toolbar);
+        }
+
+        RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+        imageLoader = VolleySingleton.getInstance(this).getImageLoader();
+        Log.d("score link", getScoreLink(trackNumber));
+        imageLoader.get(getScoreLink(trackNumber), new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                if (response.getBitmap() != null){
+                    imageView.setImage(ImageSource.bitmap(response.getBitmap()));
+                    progressBarScore.setVisibility(View.GONE);
+
+                }
+
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
 
 
 
@@ -106,6 +143,32 @@ public class ScoreActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_score_activity, menu);
+        MenuItem play = menu.findItem(R.id.play);
+        MenuItem previous = menu.findItem(R.id.previous);
+        MenuItem next = menu.findItem(R.id.next);
+        MenuItem loop = menu.findItem(R.id.loop);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            play.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_play_circle_filled_black_24dp, getTheme())));
+            previous.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_skip_previous_black_24dp, getTheme())));
+            next.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_skip_next_black_24dp, getTheme())));
+            loop.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_repeat_one_black_24dp, getTheme())));
+        } else {
+            play.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_play_circle_filled_black_24dp)));
+            previous.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_skip_previous_black_24dp)));
+            next.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_skip_next_black_24dp)));
+            loop.setIcon(setTintDrawable(getResources()
+                    .getDrawable(R.drawable.ic_repeat_one_black_24dp)));
+        }
+
+
+
 
         return true;
     }
@@ -127,13 +190,16 @@ public class ScoreActivity extends AppCompatActivity{
         }
     }
 
-    /*class LoadScore extends AsyncTask<String, Integer, Void>{
-
-        @Override
-        protected void doInBackground(String... params) {
-
+    public Drawable setTintDrawable(Drawable drawable){
+        Drawable tintedDrawable = drawable;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            tintedDrawable.setTint(getResources().getColor(R.color.colorMenuIcon, getTheme()));
+        } else {
+            tintedDrawable.setTint(getResources().getColor(R.color.colorMenuIcon));
         }
-    }*/
+        return tintedDrawable;
+
+    }
 
 
 

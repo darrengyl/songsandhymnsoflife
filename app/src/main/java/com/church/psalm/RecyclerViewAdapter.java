@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -42,6 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.freq.setText("This song has been played " + data.get(position).getFrequency()+" time(s)");
         if (data.get(position).getFavorite() != 0){
             holder.fav.setImageResource(R.drawable.ic_favorite_black_36dp);
+
         } else {
             holder.fav.setImageResource(R.drawable.ic_favorite_border_black_36dp);
         }
@@ -68,13 +68,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(v.getContext(), "clicked on" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
-                    int counter = Integer.valueOf(freq.getText().toString());
-                    freq.setText(counter++);
                     Intent intent = new Intent(v.getContext(), ScoreActivity.class);
                     intent.putExtra("trackNumber", getLayoutPosition() + 1);
                     v.getContext().startActivity(intent);
                     DBAdapter dbAdapter = new DBAdapter(v.getContext());
-                    dbAdapter.incrementFreq(getLayoutPosition()+1);
+                    dbAdapter.incrementFreq(getLayoutPosition());
                     notifyItemChanged(getLayoutPosition());
 
 
@@ -85,13 +83,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 public void onClick(View v) {
                     //Toast.makeText(v.getContext(), "clicked on fav" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
                     DBAdapter dbAdapter = new DBAdapter(v.getContext());
-                    dbAdapter.flipFav(getLayoutPosition()+1);
-                    if (dbAdapter.isFav(getLayoutPosition()+1)){
+                    dbAdapter.flipFav(getLayoutPosition());
+                    //notifyItemChanged(getLayoutPosition());
+                    notifyDataSetChanged();
+                    if (dbAdapter.getFav(getLayoutPosition())){
                         fav.setImageResource(R.drawable.ic_favorite_black_36dp);
                     } else {
                         fav.setImageResource(R.drawable.ic_favorite_border_black_36dp);
                     }
-                    notifyItemChanged(getLayoutPosition());
+
                 }
             });
 

@@ -4,7 +4,9 @@ package com.church.psalm;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,13 +19,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+
 public class ListsFragment extends Fragment{
 	RecyclerView recyclerView;
-	ProgressBar progressBar;
+	MaterialProgressBar progressBarList;
 	EditText searchEditText;
 	DBAdapter dbAdapter;
 	ArrayList<Song> data;
@@ -42,7 +45,7 @@ public class ListsFragment extends Fragment{
 		View V = inflater.inflate(R.layout.fragment_lists, container, false);
 		recyclerView = (RecyclerView)V.findViewById(R.id.recyclerview);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		progressBar = (ProgressBar)V.findViewById(R.id.progress_bar);
+		progressBarList = (MaterialProgressBar)V.findViewById(R.id.progress_bar);
 		dbAdapter = new DBAdapter(getContext());
 
 
@@ -54,10 +57,23 @@ public class ListsFragment extends Fragment{
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
 		inflater.inflate(R.menu.menu_list_fragment, menu);
-		View view = (View)menu.findItem(R.id.search).getActionView();
-		searchEditText = (EditText)view.findViewById(R.id.search);
+		MenuItem searchMenu = menu.findItem(R.id.search);
+		Drawable searchIcon = getResources().getDrawable(R.drawable.ic_search_black_24dp
+				, getContext().getTheme());
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+			searchIcon.setTint(getResources().getColor(R.color.colorMenuIcon
+					, getContext().getTheme()));
+		} else {
+			searchIcon.setTint(getResources().getColor(R.color.colorMenuIcon));
+		}
+
+		searchMenu.setIcon(searchIcon);
+		//searchIcon.setColorFilter(
+		//		getResources().getColor(R.color.colorAccent, getContext().getTheme())
+		//		,);
+		//searchEditText = (EditText)view.findViewById(R.id.search);
 		//searchEditText.setText("");
-		searchEditText.setHint("Search Titles");
+		//searchEditText.setHint("Search Titles");
 
 
 	}
@@ -667,7 +683,8 @@ public class ListsFragment extends Fragment{
 
 		};
 		for (int i = 0; i < title.length; i++){
-			if (dbAdapter.insertSongData(i+1, title[i], 0, 0, "", 0) == -1){
+			if (dbAdapter.insertSongData(i+1, title[i], dbAdapter.getFreq(i+1), 0 , ""
+					, dbAdapter.getFav(i+1)? 1:0) == -1){
 				Log.d("Database error", "error occurred when inserting" + String.valueOf(i+1) + title[i]);
 			}
 		}
@@ -707,7 +724,7 @@ public class ListsFragment extends Fragment{
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			progressBar.setVisibility(View.VISIBLE);
+			progressBarList.setVisibility(View.VISIBLE);
 			recyclerView.setVisibility(View.GONE);
 
 		}
@@ -723,6 +740,7 @@ public class ListsFragment extends Fragment{
 
 			}
 			data = dbAdapter.getAllSongs();
+
 			return null;
 		}
 
@@ -730,11 +748,13 @@ public class ListsFragment extends Fragment{
 		protected void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
 
-			progressBar.setVisibility(View.GONE);
+			progressBarList.setVisibility(View.GONE);
 			recyclerView.setVisibility(View.VISIBLE);
 
 			adapter = new RecyclerViewAdapter(getContext(),data);
+			adapter.notifyDataSetChanged();
 			recyclerView.setAdapter(adapter);
+
 
 
 
