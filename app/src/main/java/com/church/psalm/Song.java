@@ -35,9 +35,9 @@ public class Song {
         return title;
     }
 
-    /*public void setTitle(String title) {
+    public void setTitle(String title) {
         this.title = title;
-    }*/
+    }
 
     public int getFrequency() {
         return frequency;

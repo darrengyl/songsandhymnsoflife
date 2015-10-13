@@ -63,7 +63,7 @@ public class DBAdapter {
         int freq = 0;
         db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FREQUENCY}
-                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position)}
+                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position+1)}
                 , null, null, null);
         if (cursor.moveToNext() && cursor.getCount() == 1){
             freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
