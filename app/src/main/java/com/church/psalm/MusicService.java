@@ -18,11 +18,12 @@ import java.text.DecimalFormat;
  * Created by yuanlong.gu on 10/13/2015.
  */
 public class MusicService extends Service implements
-        OnPreparedListener, OnErrorListener, OnCompletionListener{
+        OnPreparedListener, OnErrorListener, OnCompletionListener {
     private MediaPlayer player;
     //private String songUrl;
     private int trackNumber;
     private final IBinder musicBind = new MusicBinder();
+
     @Override
     public IBinder onBind(Intent intent) {
         return musicBind;
@@ -50,31 +51,32 @@ public class MusicService extends Service implements
         return false;
     }
 
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         player = new MediaPlayer();
         initMusicPlayer();
     }
-    public void initMusicPlayer(){
+
+    public void initMusicPlayer() {
         player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
     }
-    public String getMusicLink(int track){
+
+    public String getMusicLink(int track) {
         String musicLink = "http://shengmingshige.net/hymnal/mp3/"
                 + new DecimalFormat("0000").format(track) + ".mp3";
         return musicLink;
     }
-    public void setTrackNumber(int track){
-        trackNumber = track;
-    };
 
-    public void playSong(){
+
+    public void playSong() {
         player.reset();
         try {
             player.setDataSource(getMusicLink(trackNumber));
+
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("Music databinding", "Error getting data source");
@@ -82,36 +84,42 @@ public class MusicService extends Service implements
         }
     }
 
-    public int getPos(){
+    public int getPos() {
         return player.getCurrentPosition();
     }
-    public int getDur(){
+
+    public int getDur() {
         return player.getDuration();
     }
-    public boolean isPng(){
+
+    public boolean isPng() {
         return player.isPlaying();
     }
-    public void pausePlayer(){
+
+    public void pausePlayer() {
         player.pause();
     }
-    public void seek(int pos){
+
+    public void seek(int pos) {
         player.seekTo(pos);
     }
-    public void go(){
+
+    public void go() {
         player.start();
     }
-    public void playPrev(){
+
+    public void playPrev() {
         trackNumber--;
-        if (trackNumber < 1){
+        if (trackNumber < 1) {
             trackNumber = 586;
         }
         playSong();
 
     }
 
-    public void playNext(){
+    public void playNext() {
         trackNumber++;
-        if (trackNumber > 586){
+        if (trackNumber > 586) {
             trackNumber = 1;
         }
         playSong();
@@ -122,7 +130,7 @@ public class MusicService extends Service implements
     }
 
     public class MusicBinder extends Binder {
-        MusicService getService(){
+        MusicService getService() {
             return MusicService.this;
         }
     }

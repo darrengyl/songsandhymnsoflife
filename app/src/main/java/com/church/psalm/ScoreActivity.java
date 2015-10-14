@@ -6,23 +6,22 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import com.church.psalm.MusicService;
-import android.widget.MediaController;
+import android.view.WindowManager;
 import android.widget.MediaController.MediaPlayerControl;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.davemorrissey.labs.subscaleview.ImageSource;
@@ -46,14 +45,15 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
     SubsamplingScaleImageView imageView;
     ImageLoader imageLoader;
     MaterialProgressBar progressBarScore;
+    static int screenWidth;
+    static int screenHeight;
     private MusicController controller;
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound;
-    String songUrl;
+
     int trackNumber;
-    //int imageHeight;
-    //int imageWidth;
+
     BitmapFactory.Options options;
 
     @Override
@@ -70,30 +70,37 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.score_layout);
+        View decorView = getWindow().getDecorView();
+// Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        getScreenResolution(this);
         progressBarScore = (MaterialProgressBar)findViewById(R.id.progress_bar_list);
 
-        toolbar = (Toolbar)findViewById(R.id.app_bar_score);
+        //toolbar = (Toolbar)findViewById(R.id.app_bar_score);
 
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
         imageView = (SubsamplingScaleImageView)findViewById(R.id.imageView);
+        imageView.resetScaleAndCenter();
         Intent intent = getIntent();
         trackNumber = intent.getIntExtra("trackNumber", 1);
-        musicService.setTrackNumber(trackNumber);
+        //musicService.setTrackNumber(trackNumber);
         if (!foundScoreInStorage(trackNumber)){
 
         }
         options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
 
-
-        RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+        //
+        //RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
         imageLoader = VolleySingleton.getInstance(this).getImageLoader();
         Log.d("score link", getScoreLink(trackNumber));
         imageLoader.get(getScoreLink(trackNumber), new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 if (response.getBitmap() != null) {
-                    Bitmap bitmap = getResizedBitmap(response.getBitmap(), 4000, 4000);
+                    Bitmap bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
+                            screenHeight);
                     imageView.setImage(ImageSource.bitmap(bitmap));
                     progressBarScore.setVisibility(View.GONE);
 
@@ -103,12 +110,11 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
             @Override
             public void onErrorResponse(VolleyError error) {
-
             }
         });
 
         setController();
-
+        //musicService.passTrackNum(trackNumber);
     }
 
     private ServiceConnection musicConnection = new ServiceConnection(){
@@ -117,7 +123,6 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.MusicBinder binder = (MusicService.MusicBinder)service;
             musicService = binder.getService();
-            musicService.passTrackNum(trackNumber);
             musicBound = true;
         }
 
@@ -126,6 +131,16 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
             musicBound = false;
         }
     };
+    private static void getScreenResolution(Context context)
+    {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+        screenWidth = metrics.widthPixels;
+        screenHeight = metrics.heightPixels;
+
+    }
 
     private void setController(){
         controller = new MusicController(this);
@@ -203,20 +218,25 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         return bitmap;
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight){
+    public Bitmap getResizedBitmap(Bitmap bm, int boundWidth, int boundHeight){
+
         int width = bm.getWidth();
         int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
+        if (width <= boundWidth && height <= boundHeight){
+            return bm;
+        } else {
+            float ratioW = width / boundWidth;
+            float ratioH = height / boundHeight;
+            if (ratioW >= ratioH){
+                height = Math.round(height / ratioW);
+                width = boundWidth;
+            } else {
+                width = Math.round(width / ratioH);
+                height = boundHeight;
+            }
+        }
 
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bm, width, height, false);
         return resizedBitmap;
     }
 
@@ -258,6 +278,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
     protected void onDestroy() {
         stopService(playIntent);
         super.onDestroy();
+        unbindService(musicConnection);
 
     }
 
@@ -273,7 +294,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
                 return true;
             case R.id.loop:
                 return true;
-            case R.id.ac
+            //case R.id.ac
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -293,32 +314,44 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public void start() {
-
+        musicService.go();
     }
 
     @Override
     public void pause() {
-
+        musicService.pausePlayer();
     }
 
     @Override
     public int getDuration() {
-        return 0;
+        if (musicService != null && musicBound && musicService.isPng()){
+            return musicService.getDur();
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public int getCurrentPosition() {
-        return 0;
+        if (musicService != null && musicBound && musicService.isPng()){
+            return musicService.getPos();
+        } else {
+            return 0;
+        }
     }
 
     @Override
     public void seekTo(int pos) {
-
+        musicService.seek(pos);
     }
 
     @Override
     public boolean isPlaying() {
-        return false;
+        if (musicService != null && musicBound && musicService.isPng()){
+            return musicService.isPng();
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -328,21 +361,31 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public boolean canPause() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekBackward() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean canSeekForward() {
-        return false;
+        return true;
     }
 
     @Override
     public int getAudioSessionId() {
         return 0;
+    }
+
+    private void playNext(){
+        musicService.playNext();
+        controller.show(0);
+    }
+
+    private void playPrev(){
+        musicService.playPrev();
+        controller.show(0);
     }
 }
