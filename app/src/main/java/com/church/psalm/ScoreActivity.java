@@ -51,6 +51,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound;
+    private boolean paused, playbackPaused;
 
     int trackNumber;
 
@@ -61,6 +62,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         super.onStart();
         if (playIntent == null){
             playIntent = new Intent(this, MusicService.class);
+            //playIntent.putExtra("trackNumber", trackNumber);
             bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             startService(playIntent);
         }
@@ -82,8 +84,10 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         //setSupportActionBar(toolbar);
         imageView = (SubsamplingScaleImageView)findViewById(R.id.imageView);
         imageView.resetScaleAndCenter();
+
         Intent intent = getIntent();
         trackNumber = intent.getIntExtra("trackNumber", 1);
+        //musicService.passTrackNum(trackNumber);
         //musicService.setTrackNumber(trackNumber);
         if (!foundScoreInStorage(trackNumber)){
 
@@ -103,6 +107,14 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
                             screenHeight);
                     imageView.setImage(ImageSource.bitmap(bitmap));
                     progressBarScore.setVisibility(View.GONE);
+                    setController();
+/*
+                    imageView.setListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        }
+                    });
+*/
 
                 }
 
@@ -113,8 +125,8 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
             }
         });
 
-        setController();
-        //musicService.passTrackNum(trackNumber);
+
+
     }
 
     private ServiceConnection musicConnection = new ServiceConnection(){
@@ -131,8 +143,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
             musicBound = false;
         }
     };
-    private static void getScreenResolution(Context context)
-    {
+    private static void getScreenResolution(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -156,8 +167,9 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
             }
         });
         controller.setMediaPlayer(this);
-        //controller.setAnchorView();
+        controller.setAnchorView(imageView);
         controller.setEnabled(true);
+        controller.show(0);
     }
 
     public String getScoreLink(int track){
@@ -275,6 +287,15 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (paused){
+            setController();
+            paused = false;
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         stopService(playIntent);
         super.onDestroy();
@@ -314,17 +335,35 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public void start() {
-        musicService.go();
+        if (playbackPaused){
+            setController();
+            playbackPaused = false;
+        }
+        musicService.playSong();
     }
 
     @Override
     public void pause() {
+        playbackPaused = true;
         musicService.pausePlayer();
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        paused = true;
+    }
+
+    @Override
+    protected void onStop() {
+        controller.hide();
+        super.onStop();
+    }
+
+    @Override
     public int getDuration() {
-        if (musicService != null && musicBound && musicService.isPng()){
+        //&& musicService.isPng()
+        if (musicService != null && musicBound ){
             return musicService.getDur();
         } else {
             return 0;
@@ -333,7 +372,8 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public int getCurrentPosition() {
-        if (musicService != null && musicBound && musicService.isPng()){
+        //&& musicService.isPng()
+        if (musicService != null && musicBound ){
             return musicService.getPos();
         } else {
             return 0;
@@ -381,11 +421,19 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     private void playNext(){
         musicService.playNext();
+        if (playbackPaused){
+            setController();
+            playbackPaused = false;
+        }
         controller.show(0);
     }
 
     private void playPrev(){
         musicService.playPrev();
+        if (playbackPaused){
+            setController();
+            playbackPaused = false;
+        }
         controller.show(0);
     }
 }

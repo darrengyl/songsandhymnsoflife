@@ -4,11 +4,12 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.*;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.IOException;
@@ -25,6 +26,13 @@ public class MusicService extends Service implements
     private final IBinder musicBind = new MusicBinder();
 
     @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        trackNumber = intent.getIntExtra("trackNumber", 1);
+        Log.d("trackNum in service", String.valueOf(trackNumber));
+        return START_STICKY;
+    }
+
+    @Override
     public IBinder onBind(Intent intent) {
         return musicBind;
     }
@@ -36,11 +44,14 @@ public class MusicService extends Service implements
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        mp.reset();
         return false;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        mp.getDuration();
+        mp.getCurrentPosition();
         mp.start();
     }
 
@@ -76,12 +87,14 @@ public class MusicService extends Service implements
         player.reset();
         try {
             player.setDataSource(getMusicLink(trackNumber));
+            Log.e("DataSource is found","");
 
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("Music databinding", "Error getting data source");
-            player.prepareAsync();
+
         }
+        player.prepareAsync();
     }
 
     public int getPos() {

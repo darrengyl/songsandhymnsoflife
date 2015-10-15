@@ -85,9 +85,9 @@ public class DBAdapter {
 
     public long insertSongData(int track, String title, int freq, int downloaded, String text, int fav){
         db = dbHelper.getWritableDatabase();
-        if (db != null){
+        /*if (db != null){
             System.out.println("get db successfully");
-        }
+        }*/
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME_TRACKNUMBER, track);
         contentValues.put(COLUMN_NAME_TITLE, title);
@@ -113,7 +113,7 @@ public class DBAdapter {
             String dwnld = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DOWNLOADED));
             String lyrics = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LYRICS));
             int favourite = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
-            System.out.println("" + track + title + freq + dwnld + lyrics);
+            //System.out.println("" + track + title + freq + dwnld + lyrics);
             Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
             data.add(song);
         }
