@@ -1,11 +1,15 @@
 package com.church.psalm;
 
 
-
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +26,7 @@ public class NumbersFragment extends Fragment{
 	ImageButton backspace;
 	ImageButton discard;
 	ImageButton accept;
-	StringBuilder sBuffer;
+	StringBuilder sBuilder;
 	public static NumbersFragment getInstance(int position){
 		NumbersFragment numbersFragment = new NumbersFragment();
 		Bundle args = new Bundle();
@@ -33,12 +37,17 @@ public class NumbersFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View V = inflater.inflate(R.layout.fragment_numbers, container, false);
+		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		Bundle bundle = getArguments();
 		if (bundle != null){
 
 		}
-		sBuffer = new StringBuilder();
+		sBuilder = new StringBuilder();
 		display = (TextView)V.findViewById(R.id.display);
+		SpannableString hint = new SpannableString(getString(R.string.enter_track_number));
+		AbsoluteSizeSpan ass = new AbsoluteSizeSpan(25, true);
+		hint.setSpan(ass, 0, hint.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+		display.setHint(new SpannableString(hint));
 		dp0 = (Button)V.findViewById(R.id.dp0);
 		dp1 = (Button)V.findViewById(R.id.dp1);
 		dp2 = (Button)V.findViewById(R.id.dp2);
@@ -66,9 +75,9 @@ public class NumbersFragment extends Fragment{
 			
 			@Override
 			public void onClick(View v) {
-				if (sBuffer.length() > 0){
-					sBuffer.setLength(sBuffer.length() - 1);
-					display.setText(sBuffer);
+				if (sBuilder.length() > 0){
+					sBuilder.setLength(sBuilder.length() - 1);
+					display.setText(sBuilder);
 				}
 				
 			}
@@ -96,12 +105,12 @@ public class NumbersFragment extends Fragment{
 						startActivity(intent);
 						*/
 					} else {
-						Toast.makeText(getActivity(), "Please insert a number between 1 and 586", Toast.LENGTH_SHORT).show();
-						sBuffer.setLength(0);
+						Toast.makeText(getActivity(), getString(R.string.long_digits_warning), Toast.LENGTH_SHORT).show();
+						sBuilder.setLength(0);
 						display.setText(null);
 					}
 				} else {
-					Toast.makeText(getActivity(), "Please check your Internet connection", Toast.LENGTH_SHORT).show();;
+					Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
 
 				}
 			}
@@ -111,14 +120,23 @@ public class NumbersFragment extends Fragment{
 		
 		return V;
 	}
+
 	
 	public void onClickButtonListener(final Button button){
 		button.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				sBuffer.append(button.getText());
-				display.setText(sBuffer);
+				if (sBuilder.length() < 4){
+					sBuilder.append(button.getText());
+					display.setText(sBuilder);
+				} else {
+					sBuilder.setLength(0);
+					display.setText(null);
+					Toast.makeText(getContext(), getString(R.string.long_digits_warning)
+							, Toast.LENGTH_SHORT).show();
+				}
+
 			}
 		});
 

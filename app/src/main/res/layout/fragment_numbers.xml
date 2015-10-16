@@ -1,183 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:orientation="vertical"
-    android:background="#ffffff">
-    
-    <TextView 
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <TextView
         android:id="@+id/display"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="center"
+        android:hint="@string/enter_track_number"
+        android:textColor="@color/colorPrimaryText"
+        android:textColorHint="@color/colorSeconaryText"
         android:textSize="60sp"
-        android:textColor="#ffffff"
-        
         />
 
-	<TableLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    >
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
 
-	    <TableRow
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1" 
-	        >
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-		    <Button
-		        android:id="@+id/dp1"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_1"
+            <Button
+                android:id="@+id/dp1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:text="@string/_1"
+                android:textSize="40sp" />
 
-		        android:textSize="40sp" />
+            <Button
+                android:id="@+id/dp2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_2"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
 
-		    <Button
-		        android:id="@+id/dp2"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_2"
+                android:textSize="40sp" />
 
-		        android:textSize="40sp" />
-	   
-		    <Button
-		        android:id="@+id/dp3"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_3"
+            <Button
+                android:id="@+id/dp3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_3"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		        android:textSize="40sp" />
+        </TableRow>
 
-	 	</TableRow>
-	    <TableRow
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1" >
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-		    <Button
-		        android:id="@+id/dp4"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_4"
+            <Button
+                android:id="@+id/dp4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_4"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		        android:textSize="40sp" />
+            <Button
+                android:id="@+id/dp5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_5"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		    <Button
-		        android:id="@+id/dp5"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_5"
+            <Button
+                android:id="@+id/dp6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_6"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		        android:textSize="40sp" />
-	   
-		    <Button
-		        android:id="@+id/dp6"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_6"
+        </TableRow>
 
-		        android:textSize="40sp" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-	 	</TableRow>
-	 	<TableRow
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1" >
+            <Button
+                android:id="@+id/dp7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_7"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		    <Button
-		        android:id="@+id/dp7"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_7"
+            <Button
+                android:id="@+id/dp8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_8"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		        android:textSize="40sp" />
+            <Button
+                android:id="@+id/dp9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_9"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		    <Button
-		        android:id="@+id/dp8"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_8"
+        </TableRow>
 
-		        android:textSize="40sp" />
-	   
-		    <Button
-		        android:id="@+id/dp9"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_9"
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
-		        android:textSize="40sp" />
+            <ImageButton
+                android:id="@+id/backspace"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
 
-	 	</TableRow>
-	 	<TableRow
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1" 
-	        >
+                android:gravity="center"
+                android:background="@drawable/ripple_function_button"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:src="@drawable/ic_undo_white_36dp"
 
-		    <ImageButton
-		        android:id="@+id/backspace"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
+                android:textSize="40sp" />
 
-		        android:gravity="center"
+            <Button
+                android:id="@+id/dp0"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_number"
+                android:gravity="center"
+                android:text="@string/_0"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:textSize="40sp" />
 
-		        android:textSize="40sp" />
+            <ImageButton
+                android:id="@+id/accept"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/ripple_function_button"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:gravity="center"
+                android:src="@drawable/ic_play_arrow_white_36dp"
+                android:textSize="40sp" />
 
-		    <Button
-		        android:id="@+id/dp0"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:background="?android:attr/selectableItemBackground"
-		        android:gravity="center"
-		        android:text="@string/_0"
-
-		        android:textSize="40sp" />
-	   
-		    <ImageButton
-		        android:id="@+id/accept"
-		        android:layout_width="wrap_content"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-
-		        android:gravity="center"
-
-		        android:textSize="40sp" />
-
-	 	</TableRow>        
-	</TableLayout>	    
-
+        </TableRow>
+    </TableLayout>
 
 
 </LinearLayout>

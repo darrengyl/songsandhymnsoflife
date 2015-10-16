@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.MediaController;
 
 public class MainActivity extends AppCompatActivity{
     Toolbar toolbar;
@@ -22,6 +21,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         dbAdapter = new DBAdapter(this);
         //long id1 = dbAdapter.insertSongData(3, "test1", 2, 0, "123", 1);
         //long id2 = dbAdapter.insertSongData(4, "test2", 5, 0, "324", 0);
@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity{
         mTabs = (SlidingTabLayout)findViewById(R.id.tabs);
 
         mPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-
+        mTabs.setDistributeEvenly(true);
         mTabs.setViewPager(mPager);
-        //mTabs.setDistributeEvenly(true);
+
         //mPager.setd
 
 
@@ -80,12 +80,15 @@ public class MainActivity extends AppCompatActivity{
         @Override
         public Fragment getItem(int position) {
             switch (position){
-                case 1:
+                case 0:
                     NumbersFragment numbersFragment = NumbersFragment.getInstance(position);
                     return numbersFragment;
-                default:
+                case 1:
                     ListsFragment listsFragment = new ListsFragment();
                     return listsFragment;
+                default:
+                    ListsFragment listsFragmentDefault = new ListsFragment();
+                    return listsFragmentDefault;
             }
 
 
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
     }
 }

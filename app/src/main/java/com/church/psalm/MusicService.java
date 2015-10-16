@@ -29,6 +29,7 @@ public class MusicService extends Service implements
     public int onStartCommand(Intent intent, int flags, int startId) {
         trackNumber = intent.getIntExtra("trackNumber", 1);
         Log.d("trackNum in service", String.valueOf(trackNumber));
+
         return START_STICKY;
     }
 
@@ -50,8 +51,8 @@ public class MusicService extends Service implements
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        mp.getDuration();
-        mp.getCurrentPosition();
+        //mp.getDuration();
+        //mp.getCurrentPosition();
         mp.start();
     }
 
@@ -74,6 +75,16 @@ public class MusicService extends Service implements
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
+        player.reset();
+        try {
+            player.setDataSource(getMusicLink(trackNumber));
+            Log.e("DataSource is found","");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("Music databinding", "Error getting data source");
+
+        }
     }
 
     public String getMusicLink(int track) {

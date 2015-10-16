@@ -30,9 +30,11 @@
     <string name="favourite">favourite</string>
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
+    <string name="enter_track_number">Please enter track number</string>
+    <string name="long_digits_warning">Please enter a number between 1 and 586</string>
+    <string name="network_error">Please check your Internet connection</string>
     <string-array name="tabs">
-        <item>Tab 1</item>
-        <item>Tab 2</item>
-        <item>Tab 3</item>
+        <item>Number</item>
+        <item>List</item>
     </string-array>
 </resources>
