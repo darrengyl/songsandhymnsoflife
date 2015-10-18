@@ -37,4 +37,9 @@
         <item>Number</item>
         <item>List</item>
     </string-array>
+    <plurals name="frequency_number">
+        <item quantity="one">This song has been played once</item>
+        <item quantity="two">This song has been played twice</item>
+        <item quantity="other">This song has been played %1$d times</item>
+    </plurals>
 </resources>

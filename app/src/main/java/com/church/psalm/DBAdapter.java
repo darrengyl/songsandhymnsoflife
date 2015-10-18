@@ -30,20 +30,25 @@ public class DBAdapter {
         this.context = context;
         dbHelper = new DBHelper(context);
     }
-
+    //position is one based
     public boolean getFav(int position){
         boolean favourite = false;
-        db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FAVORITE}
-                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position+1)}
-                , null, null, null);
-        if (cursor.moveToNext() && cursor.getCount() == 1){
-            int fav = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
-            if (fav != 0){
-                favourite = true;
+        try {
+            db = dbHelper.getWritableDatabase();
+            Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FAVORITE}
+                    , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position)}
+                    , null, null, null);
+            if (cursor.moveToNext() && cursor.getCount() == 1){
+                int fav = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
+                if (fav != 0){
+                    favourite = true;
+                }
             }
+        } finally {
+            db.close();
         }
-        db.close();
+
+
         return favourite;
     }
 
@@ -53,38 +58,50 @@ public class DBAdapter {
         int integerFave = booleanFav? 1 : 0;
         ContentValues args = new ContentValues();
         args.put(COLUMN_NAME_FAVORITE, integerFave);
-        db = dbHelper.getWritableDatabase();
-        db.update(TABLE_NAME, args, COLUMN_NAME_TRACKNUMBER + " = ?"
-                , new String[]{String.valueOf(position+1)});
-        db.close();
+        try {
+            db = dbHelper.getWritableDatabase();
+            db.update(TABLE_NAME, args, COLUMN_NAME_TRACKNUMBER + " = ?"
+                    , new String[]{String.valueOf(position)});
+        } finally {
+            db.close();
+        }
+
+
     }
 
     public int getFreq(int position){
         int freq = 0;
-        db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FREQUENCY}
-                , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position+1)}
-                , null, null, null);
-        if (cursor.moveToNext() && cursor.getCount() == 1){
-            freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
+        try {
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_FREQUENCY}
+                    , COLUMN_NAME_TRACKNUMBER + " = ?", new String[]{String.valueOf(position)}
+                    , null, null, null);
+            if (cursor.moveToNext() && cursor.getCount() == 1){
+                freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
+            }
+        } finally {
+            db.close();
         }
-        db.close();
         return freq;
     }
 
     public void incrementFreq(int position){
         int freq = getFreq(position);
-        db = dbHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_NAME_FREQUENCY, freq++);
-        db.update(TABLE_NAME, contentValues, COLUMN_NAME_TRACKNUMBER + " = ?"
-                , new String[]{String.valueOf(position)});
-        db.close();
+        try {
+            db = dbHelper.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COLUMN_NAME_FREQUENCY, ++freq);
+            System.out.println(db.update(TABLE_NAME, contentValues, COLUMN_NAME_TRACKNUMBER + " = ?"
+                    , new String[]{String.valueOf(position)}));
+        } finally {
+            db.close();
+        }
+
     }
 
 
     public long insertSongData(int track, String title, int freq, int downloaded, String text, int fav){
-        db = dbHelper.getWritableDatabase();
+        long id = -1L;
         /*if (db != null){
             System.out.println("get db successfully");
         }*/
@@ -95,30 +112,38 @@ public class DBAdapter {
         contentValues.put(COLUMN_NAME_DOWNLOADED, downloaded);
         contentValues.put(COLUMN_NAME_LYRICS, text);
         contentValues.put(COLUMN_NAME_FAVORITE, fav);
-        long id = db.insert(TABLE_NAME, null, contentValues);
-        db.close();
+        try {
+            db = dbHelper.getWritableDatabase();
+            id = db.insert(TABLE_NAME, null, contentValues);
+        } finally {
+            db.close();
+        }
+
+
         return id;
     }
     public ArrayList<Song> getAllSongs(){
         data = new ArrayList<Song>();
-        db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER, COLUMN_NAME_TITLE,
-                        COLUMN_NAME_FREQUENCY, COLUMN_NAME_DOWNLOADED, COLUMN_NAME_LYRICS,
-                        COLUMN_NAME_FAVORITE},
-                null, null, null, null, COLUMN_NAME_TRACKNUMBER);
-        while (cursor.moveToNext()){
-            int track = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_TRACKNUMBER));
-            String title = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE));
-            int freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
-            String dwnld = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DOWNLOADED));
-            String lyrics = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LYRICS));
-            int favourite = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
-            //System.out.println("" + track + title + freq + dwnld + lyrics);
-            Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
-            data.add(song);
+        try {
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER, COLUMN_NAME_TITLE,
+                            COLUMN_NAME_FREQUENCY, COLUMN_NAME_DOWNLOADED, COLUMN_NAME_LYRICS,
+                            COLUMN_NAME_FAVORITE},
+                    null, null, null, null, COLUMN_NAME_TRACKNUMBER);
+            while (cursor.moveToNext()){
+                int track = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_TRACKNUMBER));
+                String title = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE));
+                int freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
+                String dwnld = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DOWNLOADED));
+                String lyrics = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LYRICS));
+                int favourite = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
+                //System.out.println("" + track + title + freq + dwnld + lyrics);
+                Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
+                data.add(song);
+            }
+        } finally {
+            db.close();
         }
-        db.close();
-
         return data;
 
 

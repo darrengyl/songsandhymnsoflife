@@ -1,7 +1,6 @@
 package com.church.psalm;
 
 
-import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,7 +23,6 @@ public class NumbersFragment extends Fragment{
 	TextView display;
 	Button dp1 ,dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9, dp0;
 	ImageButton backspace;
-	ImageButton discard;
 	ImageButton accept;
 	StringBuilder sBuilder;
 	public static NumbersFragment getInstance(int position){
@@ -87,13 +85,7 @@ public class NumbersFragment extends Fragment{
 			
 			@Override
 			public void onClick(View v) {
-				ConnectivityManager cm =
-				        (ConnectivityManager)getActivity().getSystemService(getActivity().CONNECTIVITY_SERVICE);
-				
-				NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-				boolean isConnected = activeNetwork != null &&
-				                      activeNetwork.isConnectedOrConnecting();
-				if (isConnected){
+				if (isNetworkConnected()){
 					if (display.length() == 0){
 						return;
 					}
@@ -105,12 +97,14 @@ public class NumbersFragment extends Fragment{
 						startActivity(intent);
 						*/
 					} else {
-						Toast.makeText(getActivity(), getString(R.string.long_digits_warning), Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), getString(R.string.long_digits_warning)
+								, Toast.LENGTH_SHORT).show();
 						sBuilder.setLength(0);
 						display.setText(null);
 					}
 				} else {
-					Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), getString(R.string.network_error)
+							, Toast.LENGTH_SHORT).show();
 
 				}
 			}
@@ -140,6 +134,16 @@ public class NumbersFragment extends Fragment{
 			}
 		});
 
+	}
+
+	public boolean isNetworkConnected(){
+		ConnectivityManager cm =
+				(ConnectivityManager)getActivity().getSystemService(
+						getActivity().CONNECTIVITY_SERVICE);
+
+		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+		boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+		return isConnected;
 	}
 	
 

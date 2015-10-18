@@ -1,7 +1,6 @@
 package com.church.psalm;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     private LayoutInflater inflator;
     ArrayList<Song> data;
+    Context context;
 
     public RecyclerViewAdapter(Context context){
         inflator = LayoutInflater.from(context);
@@ -25,6 +25,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public RecyclerViewAdapter(Context context, ArrayList<Song> data) {
         inflator = LayoutInflater.from(context);
         this.data = data;
+        this.context = context;
     }
 
     @Override
@@ -36,9 +37,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.track.setText(data.get(position).getTrackNumber()+"");
+        System.out.println("onBindViewHolder is called" + position);
+        holder.track.setText(data.get(position).getTrackNumber() + "");
         holder.title.setText(data.get(position).getTitle());
-        holder.freq.setText("This song has been played " + data.get(position).getFrequency()+" time(s)");
+        int freqInt = data.get(position).getFrequency();
+        String freqNumber = context.getResources().getQuantityString(R.plurals.frequency_number
+                , freqInt, freqInt);
+
+        holder.freq.setText(freqNumber);
+
+        //holder.freq.setText("This song has been played " + data.get(position).getFrequency()+" time(s)");
         if (data.get(position).getFavorite() != 0){
             holder.fav.setImageResource(R.drawable.ic_favorite_black_36dp);
 
@@ -53,7 +61,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return data.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView track;
         TextView title;
         TextView freq;
@@ -64,7 +72,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             title = (TextView)itemView.findViewById(R.id.title);
             freq = (TextView)itemView.findViewById(R.id.freq);
             fav = (ImageView)itemView.findViewById(R.id.fav_star);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            fav.setOnClickListener(this);
+            itemView.setOnClickListener(this);
+/*            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(v.getContext(), "clicked on" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
@@ -77,8 +87,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
                 }
-            });
-            fav.setOnClickListener(new View.OnClickListener() {
+            });*/
+/*            fav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //Toast.makeText(v.getContext(), "clicked on fav" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
@@ -93,11 +103,33 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     }
 
                 }
-            });
+            });*/
 
         }
 
 
+        @Override
+        public void onClick(View v) {
+            DBAdapter dbAdapter = new DBAdapter(v.getContext());
+            if (v.getId() == R.id.fav_star){
 
+                dbAdapter.flipFav(getLayoutPosition()+1);
+                int favInt = dbAdapter.getFav(getLayoutPosition()+1)? 1: 0;
+                Song song = data.get(getLayoutPosition());
+                song.setFavorite(favInt);
+                data.set(getLayoutPosition(), song);
+
+            } else {
+                System.out.println("Pressed zero based " + getLayoutPosition());
+                dbAdapter.incrementFreq(getAdapterPosition() + 1);
+                int freqInt = dbAdapter.getFreq(getAdapterPosition()+1);
+                Song song = data.get(getLayoutPosition());
+                song.setFrequency(freqInt);
+                data.set(getLayoutPosition(), song);
+
+
+            }
+            notifyItemChanged(getAdapterPosition());
+        }
     }
 }

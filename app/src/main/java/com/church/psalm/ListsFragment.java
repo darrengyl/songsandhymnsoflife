@@ -91,8 +91,6 @@ public class ListsFragment extends Fragment{
 	}
 
 	public void InsertSongs(){
-
-
 		String[] title = {
 				"荣耀荣耀归于父神"
 				,"但愿荣耀归于圣父"
@@ -683,8 +681,8 @@ public class ListsFragment extends Fragment{
 
 		};
 		for (int i = 0; i < title.length; i++){
-			if (dbAdapter.insertSongData(i+1, title[i], dbAdapter.getFreq(i+1), 0 , ""
-					, dbAdapter.getFav(i+1)? 1:0) == -1){
+			if (dbAdapter.insertSongData(i+1, title[i], 0, 0 , ""
+					, 0) == -1){
 				Log.d("Database error", "error occurred when inserting" + String.valueOf(i+1) + title[i]);
 			}
 		}
@@ -703,22 +701,6 @@ public class ListsFragment extends Fragment{
 		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE);
 		return sharedPreferences.getBoolean("databaseLoaded", false);
 	}
-
-/*
-
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser){
-		super.setUserVisibleHint(isVisibleToUser);
-		if (this.isVisible()){
-			if (!isVisibleToUser){
-				 FragmentManager manager = getActivity().getSupportFragmentManager();
-	             manager.beginTransaction()
-	             		.detach(this)
-	             		.attach(this)
-	             		.commit();
-			}
-		}
-	}*/
 
 	public class readWriteAllSongs extends AsyncTask<Void, ArrayList<Song>, Void> {
 		@Override
