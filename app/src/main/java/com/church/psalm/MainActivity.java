@@ -11,10 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity{
+import com.astuetz.PagerSlidingTabStrip;
+
+public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     ViewPager mPager;
-    SlidingTabLayout mTabs;
+    PagerSlidingTabStrip mTabs;
     DBAdapter dbAdapter;
 
 
@@ -29,21 +31,28 @@ public class MainActivity extends AppCompatActivity{
 
 
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar)findViewById(R.id.app_bar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-        mPager = (ViewPager)findViewById(R.id.pager);
-        mTabs = (SlidingTabLayout)findViewById(R.id.tabs);
-
+        mPager = (ViewPager) findViewById(R.id.pager);
+        mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        //mTabs.setCustomTabView(R.layout.custom_tab_title, R.id.tabText);
         mPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
-        mTabs.setDistributeEvenly(true);
+        //mTabs.setDistributeEvenly(true);
+        //mTabs.set
+/*        mTabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer(){
+
+            @Override
+            public int getIndicatorColor(int position) {
+                return getResources().getColor(R.color.colorAccent);
+            }
+        });*/
         mTabs.setViewPager(mPager);
 
         //mPager.setd
 
 
     }
-
 
 
     @Override
@@ -70,16 +79,17 @@ public class MainActivity extends AppCompatActivity{
 
     class MyPagerAdapter extends FragmentPagerAdapter {
         String[] tabs;
+        int icons[] = {R.drawable.ic_dialpad_white_24dp, R.drawable.ic_list_white_24dp};
 
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);
-            tabs=getResources().getStringArray(R.array.tabs);
+            tabs = getResources().getStringArray(R.array.tabs);
 
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     NumbersFragment numbersFragment = NumbersFragment.getInstance(position);
                     return numbersFragment;
@@ -92,12 +102,17 @@ public class MainActivity extends AppCompatActivity{
             }
 
 
-
-
         }
 
         @Override
-        public CharSequence getPageTitle(int position){
+        public CharSequence getPageTitle(int position) {
+/*            Drawable drawable = getDrawable(icons[position]);
+            drawable.setBounds(0 ,0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+            ImageSpan imageSpan = new ImageSpan(drawable);
+            SpannableString spannableString = new SpannableString(" " + tabs[position]);
+            spannableString.setSpan(imageSpan, 0, 1
+                    , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return spannableString;*/
             return tabs[position];
         }
 

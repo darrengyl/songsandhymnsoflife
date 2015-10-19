@@ -44,6 +44,8 @@ public class ListsFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View V = inflater.inflate(R.layout.fragment_lists, container, false);
 		recyclerView = (RecyclerView)V.findViewById(R.id.recyclerview);
+		recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()
+				, DividerItemDecoration.VERTICAL_LIST));
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		progressBarList = (MaterialProgressBar)V.findViewById(R.id.progress_bar_list);
 		dbAdapter = new DBAdapter(getContext());

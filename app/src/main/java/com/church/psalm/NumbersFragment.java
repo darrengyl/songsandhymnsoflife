@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class NumbersFragment extends Fragment{
 
@@ -43,7 +43,7 @@ public class NumbersFragment extends Fragment{
 		sBuilder = new StringBuilder();
 		display = (TextView)V.findViewById(R.id.display);
 		SpannableString hint = new SpannableString(getString(R.string.enter_track_number));
-		AbsoluteSizeSpan ass = new AbsoluteSizeSpan(25, true);
+		AbsoluteSizeSpan ass = new AbsoluteSizeSpan(20, true);
 		hint.setSpan(ass, 0, hint.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 		display.setHint(new SpannableString(hint));
 		dp0 = (Button)V.findViewById(R.id.dp0);
@@ -97,14 +97,20 @@ public class NumbersFragment extends Fragment{
 						startActivity(intent);
 						*/
 					} else {
-						Toast.makeText(getActivity(), getString(R.string.long_digits_warning)
-								, Toast.LENGTH_SHORT).show();
+						Snackbar snackbar = Snackbar.make(v, getString(R.string.long_digits_warning)
+								, Snackbar.LENGTH_SHORT);
+						snackbar.getView().setBackgroundColor(getResources()
+								.getColor(R.color.colorAccent));
+						snackbar.show();
 						sBuilder.setLength(0);
 						display.setText(null);
 					}
 				} else {
-					Toast.makeText(getActivity(), getString(R.string.network_error)
-							, Toast.LENGTH_SHORT).show();
+					Snackbar snackbar = Snackbar.make(v, getString(R.string.network_error)
+							, Snackbar.LENGTH_LONG);
+					snackbar.getView().setBackgroundColor(getResources()
+							.getColor(R.color.colorAccent));
+					snackbar.show();
 
 				}
 			}
@@ -121,14 +127,37 @@ public class NumbersFragment extends Fragment{
 			
 			@Override
 			public void onClick(View v) {
+				System.out.println("Length: " + sBuilder.length() + " button: " + button.getText());
+				if (sBuilder.length() == 0 && button.getText().equals("0")){
+					Snackbar snackbar = Snackbar.make(v, getString(R.string.number_error)
+							, Snackbar.LENGTH_SHORT);
+					snackbar.getView().setBackgroundColor(getResources()
+							.getColor(R.color.colorAccent));
+					snackbar.show();
+					return;
+
+				}
 				if (sBuilder.length() < 4){
 					sBuilder.append(button.getText());
 					display.setText(sBuilder);
 				} else {
-					sBuilder.setLength(0);
-					display.setText(null);
-					Toast.makeText(getContext(), getString(R.string.long_digits_warning)
-							, Toast.LENGTH_SHORT).show();
+/*					sBuilder.setLength(0);
+					display.setText(null);*/
+					Snackbar snackbar = Snackbar.make(v, getString(R.string.long_digits_warning)
+							, Snackbar.LENGTH_LONG)
+							.setAction(R.string.Clear, new OnClickListener(){
+
+								@Override
+								public void onClick(View v) {
+									sBuilder.setLength(0);
+									display.setText(null);
+								}
+							})
+							.setActionTextColor(getResources().getColor(R.color.white))
+							;
+					snackbar.getView().setBackgroundColor(getResources()
+							.getColor(R.color.colorAccent));
+					snackbar.show();
 				}
 
 			}
@@ -145,6 +174,7 @@ public class NumbersFragment extends Fragment{
 		boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
 		return isConnected;
 	}
+
 	
 
 	

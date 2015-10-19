@@ -33,6 +33,8 @@
     <string name="enter_track_number">Please enter track number</string>
     <string name="long_digits_warning">Please enter a number between 1 and 586</string>
     <string name="network_error">Please check your Internet connection</string>
+    <string name="number_error">Track number doesn\'t start with 0</string>
+    <string name="Clear">CLEAR</string>
     <string-array name="tabs">
         <item>Number</item>
         <item>List</item>

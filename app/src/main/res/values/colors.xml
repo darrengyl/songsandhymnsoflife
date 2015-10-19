@@ -9,6 +9,7 @@
     <color name="colorMenuText">#FFFFFF</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSeconaryText">#727272</color>
+    <color name="colorPinkHeart">#E91E63</color>
 
     <color name="white">#FFFFFF</color>
     <color name="function_button_background">#009688</color>

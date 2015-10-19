@@ -1,6 +1,7 @@
 package com.church.psalm;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+        Drawable favImage;
         System.out.println("onBindViewHolder is called" + position);
         holder.track.setText(data.get(position).getTrackNumber() + "");
         holder.title.setText(data.get(position).getTitle());
@@ -46,13 +48,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         holder.freq.setText(freqNumber);
 
-        //holder.freq.setText("This song has been played " + data.get(position).getFrequency()+" time(s)");
-        if (data.get(position).getFavorite() != 0){
-            holder.fav.setImageResource(R.drawable.ic_favorite_black_36dp);
 
+        if (data.get(position).getFavorite() != 0){
+            favImage = context.getDrawable(R.drawable.ic_favorite_black_36dp);
         } else {
-            holder.fav.setImageResource(R.drawable.ic_favorite_border_black_36dp);
+            favImage = context.getDrawable(R.drawable.ic_favorite_border_black_36dp);
         }
+        favImage.setTint(context.getResources().getColor(R.color.colorPinkHeart));
+        /*loop.setIcon(setTintDrawable(getResources()
+                .getDrawable(R.drawable.ic_repeat_one_black_24dp)));*/
+        holder.fav.setImageDrawable(favImage);
 
     }
 
@@ -74,36 +79,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             fav = (ImageView)itemView.findViewById(R.id.fav_star);
             fav.setOnClickListener(this);
             itemView.setOnClickListener(this);
-/*            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(v.getContext(), "clicked on" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(v.getContext(), ScoreActivity.class);
-                    intent.putExtra("trackNumber", getLayoutPosition() + 1);
-                    v.getContext().startActivity(intent);
-                    DBAdapter dbAdapter = new DBAdapter(v.getContext());
-                    dbAdapter.incrementFreq(getLayoutPosition());
-                    notifyItemChanged(getLayoutPosition());
 
-
-                }
-            });*/
-/*            fav.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(v.getContext(), "clicked on fav" + getLayoutPosition(), Toast.LENGTH_SHORT).show();
-                    DBAdapter dbAdapter = new DBAdapter(v.getContext());
-                    dbAdapter.flipFav(getLayoutPosition());
-                    //notifyItemChanged(getLayoutPosition());
-                    notifyDataSetChanged();
-                    if (dbAdapter.getFav(getLayoutPosition())){
-                        fav.setImageResource(R.drawable.ic_favorite_black_36dp);
-                    } else {
-                        fav.setImageResource(R.drawable.ic_favorite_border_black_36dp);
-                    }
-
-                }
-            });*/
 
         }
 
