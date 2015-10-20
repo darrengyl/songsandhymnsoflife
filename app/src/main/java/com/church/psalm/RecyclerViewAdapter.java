@@ -1,6 +1,7 @@
 package com.church.psalm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -102,10 +103,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Song song = data.get(getLayoutPosition());
                 song.setFrequency(freqInt);
                 data.set(getLayoutPosition(), song);
-
+                Intent intent = new Intent(v.getContext(), ScoreActivity.class);
+                intent.putExtra("trackNumber", getLayoutPosition() + 1);
+                v.getContext().startActivity(intent);
 
             }
             notifyItemChanged(getAdapterPosition());
+
         }
     }
 }

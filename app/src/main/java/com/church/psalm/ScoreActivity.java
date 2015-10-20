@@ -1,26 +1,26 @@
 package com.church.psalm;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
 
 import com.android.volley.VolleyError;
@@ -41,32 +41,45 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 /**
  * Created by yuanlong.gu on 10/7/2015.
  */
-public class ScoreActivity extends AppCompatActivity implements MediaPlayerControl{
+public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener
+        , MediaPlayerControl {
     Toolbar toolbar;
     SubsamplingScaleImageView imageView;
     ImageLoader imageLoader;
     MaterialProgressBar progressBarScore;
     static int screenWidth;
     static int screenHeight;
-    private MusicController controller;
+    private MediaController mediacontroller;
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound;
     private boolean paused, playbackPaused;
+    private MediaPlayer mediaPlayer;
+    Bitmap bitmap;
+    private Handler handler = new Handler();
 
     int trackNumber;
 
     BitmapFactory.Options options;
 
+    /*    @Override
+        protected void onStart() {
+            super.onStart();
+            if (playIntent == null){
+                playIntent = new Intent(this, MusicService.class);
+                //playIntent.putExtra("trackNumber", trackNumber);
+                bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
+                startService(playIntent);
+            }
+        }*/
     @Override
-    protected void onStart() {
-        super.onStart();
-        if (playIntent == null){
-            playIntent = new Intent(this, MusicService.class);
-            //playIntent.putExtra("trackNumber", trackNumber);
-            bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
-            startService(playIntent);
-        }
+    public boolean onTouchEvent(MotionEvent event) {
+        /*
+         * the MediaController will hide after 3 seconds - tap the screen to
+         * make it appear again
+         */
+        mediacontroller.show();
+        return false;
     }
 
     @Override
@@ -78,44 +91,35 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
         getScreenResolution(this);
-        progressBarScore = (MaterialProgressBar)findViewById(R.id.progress_bar_list);
+        progressBarScore = (MaterialProgressBar) findViewById(R.id.progress_bar_list);
 
         //toolbar = (Toolbar)findViewById(R.id.app_bar_score);
-
         //setSupportActionBar(toolbar);
-        imageView = (SubsamplingScaleImageView)findViewById(R.id.imageView);
+        imageView = (SubsamplingScaleImageView) findViewById(R.id.imageView);
         imageView.resetScaleAndCenter();
 
         Intent intent = getIntent();
         trackNumber = intent.getIntExtra("trackNumber", 1);
         //musicService.passTrackNum(trackNumber);
         //musicService.setTrackNumber(trackNumber);
-        if (!foundScoreInStorage(trackNumber)){
+        if (!foundScoreInStorage(trackNumber)) {
 
         }
         options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
 
-        //
-        //RequestQueue requestQueue = VolleySingleton.getInstance(this).getRequestQueue();
+
         imageLoader = VolleySingleton.getInstance(this).getImageLoader();
         Log.d("score link", getScoreLink(trackNumber));
         imageLoader.get(getScoreLink(trackNumber), new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 if (response.getBitmap() != null) {
-                    Bitmap bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
+                    bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
                             screenHeight);
                     imageView.setImage(ImageSource.bitmap(bitmap));
+
                     progressBarScore.setVisibility(View.GONE);
-                    setController();
-/*
-                    imageView.setListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                        }
-                    });
-*/
 
                 }
 
@@ -125,25 +129,48 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
             public void onErrorResponse(VolleyError error) {
             }
         });
-
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnPreparedListener(this);
+        mediacontroller = new MediaController(this);
+        try {
+            mediaPlayer.setDataSource(getMusicLink(trackNumber));
+            mediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    private ServiceConnection musicConnection = new ServiceConnection(){
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicService.MusicBinder binder = (MusicService.MusicBinder)service;
-            musicService = binder.getService();
-            musicBound = true;
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mediacontroller.hide();
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
+            bitmap = null;
         }
+        System.gc();
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            musicBound = false;
-        }
-    };
+    }
+
+    /*
+            private ServiceConnection musicConnection = new ServiceConnection(){
+
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    MusicService.MusicBinder binder = (MusicService.MusicBinder)service;
+                    musicService = binder.getService();
+                    musicBound = true;
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    musicBound = false;
+                }
+            };*/
     private static void getScreenResolution(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -154,43 +181,25 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     }
 
-    private void setController(){
-        controller = new MusicController(this);
-        controller.setPrevNextListeners(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playNext();
-            }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playPrev();
-            }
-        });
-        controller.setMediaPlayer(this);
-        controller.setAnchorView(imageView);
-        controller.setEnabled(true);
-        controller.show(0);
-    }
 
-    public String getScoreLink(int track){
+    public String getScoreLink(int track) {
         String scoreLink = "http://shengmingshige.net/blog/wp-content/gallery/c-png/cu-"
                 + new DecimalFormat("0000").format(track) + ".png";
         return scoreLink;
     }
 
-/*    public String getMusicLink(int track){
+    public String getMusicLink(int track) {
         String musicLink = "http://shengmingshige.net/hymnal/mp3/"
                 + new DecimalFormat("0000").format(track) + ".mp3";
         return musicLink;
-    }*/
+    }
 
-    public boolean foundScoreInStorage(int track){
+    public boolean foundScoreInStorage(int track) {
         File score = new File(this.getFilesDir() + "/Score" + track + ".png");
         return (score.exists());
     }
 
-    public boolean foundMusicInStorage(int track){
+    public boolean foundMusicInStorage(int track) {
         File music = new File(this.getFilesDir() + "/Music" + track + ".mp3");
         return (music.exists());
     }
@@ -205,7 +214,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            if (save !=null){
+            if (save != null) {
                 save.close();
             }
         }
@@ -223,7 +232,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            if (load != null){
+            if (load != null) {
                 load.close();
             }
 
@@ -231,16 +240,16 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         return bitmap;
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int boundWidth, int boundHeight){
+    public Bitmap getResizedBitmap(Bitmap bm, int boundWidth, int boundHeight) {
 
         int width = bm.getWidth();
         int height = bm.getHeight();
-        if (width <= boundWidth && height <= boundHeight){
+        if (width <= boundWidth && height <= boundHeight) {
             return bm;
         } else {
             float ratioW = width / boundWidth;
             float ratioH = height / boundHeight;
-            if (ratioW >= ratioH){
+            if (ratioW >= ratioH) {
                 height = Math.round(height / ratioW);
                 width = boundWidth;
             } else {
@@ -261,7 +270,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         MenuItem previous = menu.findItem(R.id.previous);
         MenuItem next = menu.findItem(R.id.next);
         MenuItem loop = menu.findItem(R.id.loop);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             play.setIcon(setTintDrawable(getResources()
                     .getDrawable(R.drawable.ic_play_circle_filled_black_24dp, getTheme())));
             previous.setIcon(setTintDrawable(getResources()
@@ -282,66 +291,12 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
         }
 
 
-
-
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (paused){
-            setController();
-            paused = false;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        stopService(playIntent);
-        super.onDestroy();
-        unbindService(musicConnection);
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
-        //super.onBackPressed();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.play:
-                return true;
-            case R.id.previous:
-
-                return true;
-            case R.id.next:
-                return true;
-            case R.id.loop:
-                return true;
-            //case R.id.ac
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    public Drawable setTintDrawable(Drawable drawable){
+    public Drawable setTintDrawable(Drawable drawable) {
         Drawable tintedDrawable = drawable;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             tintedDrawable.setTint(getResources().getColor(R.color.colorMenuIcon, getTheme()));
         } else {
             tintedDrawable.setTint(getResources().getColor(R.color.colorMenuIcon));
@@ -353,63 +308,32 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public void start() {
-        if (playbackPaused){
-            setController();
-            playbackPaused = false;
-        }
-        musicService.playSong();
+        mediaPlayer.start();
     }
 
     @Override
     public void pause() {
-        playbackPaused = true;
-        musicService.pausePlayer();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        paused = true;
-    }
-
-    @Override
-    protected void onStop() {
-        controller.hide();
-        super.onStop();
+        mediaPlayer.pause();
     }
 
     @Override
     public int getDuration() {
-        //&& musicService.isPng()
-        if (musicService != null && musicBound ){
-            return musicService.getDur();
-        } else {
-            return 0;
-        }
+        return mediaPlayer.getDuration();
     }
 
     @Override
     public int getCurrentPosition() {
-        //&& musicService.isPng()
-        if (musicService != null && musicBound ){
-            return musicService.getPos();
-        } else {
-            return 0;
-        }
+        return mediaPlayer.getCurrentPosition();
     }
 
     @Override
     public void seekTo(int pos) {
-        musicService.seek(pos);
+        mediaPlayer.seekTo(pos);
     }
 
     @Override
     public boolean isPlaying() {
-        if (musicService != null && musicBound && musicService.isPng()){
-            return musicService.isPng();
-        } else {
-            return false;
-        }
+        return mediaPlayer.isPlaying();
     }
 
     @Override
@@ -434,24 +358,39 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayerContr
 
     @Override
     public int getAudioSessionId() {
-        return 0;
+        return mediaPlayer.getAudioSessionId();
     }
 
-    private void playNext(){
-        musicService.playNext();
-        if (playbackPaused){
-            setController();
-            playbackPaused = false;
-        }
-        controller.show(0);
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        System.out.println("On prepared");
+        mediacontroller.setMediaPlayer(this);
+        mediacontroller.setAnchorView(imageView);
+        mediacontroller.setPrevNextListeners(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ScoreActivity.class);
+                intent.putExtra("trackNumber", trackNumber + 1);
+                v.getContext().startActivity(intent);
+
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ScoreActivity.class);
+                intent.putExtra("trackNumber", trackNumber - 1);
+                v.getContext().startActivity(intent);
+            }
+        });
+        mp.start();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mediacontroller.setEnabled(true);
+                mediacontroller.show();
+            }
+        });
+
     }
 
-    private void playPrev(){
-        musicService.playPrev();
-        if (playbackPaused){
-            setController();
-            playbackPaused = false;
-        }
-        controller.show(0);
-    }
 }
