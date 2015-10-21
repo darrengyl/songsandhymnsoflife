@@ -1,10 +1,11 @@
 package com.church.psalm;
 
 
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
@@ -19,7 +20,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class NumbersFragment extends Fragment{
-
+	//TODO: when user types track number, show title in real-time.
+	//TODO: create different layout in landscape orientation
 	TextView display;
 	Button dp1 ,dp2, dp3, dp4, dp5, dp6, dp7, dp8, dp9, dp0;
 	ImageButton backspace;
@@ -35,7 +37,6 @@ public class NumbersFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View V = inflater.inflate(R.layout.fragment_numbers, container, false);
-		getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		Bundle bundle = getArguments();
 		if (bundle != null){
 
@@ -91,11 +92,9 @@ public class NumbersFragment extends Fragment{
 					}
 					long number = Integer.parseInt(display.getText().toString());
 					if ((number > 0)&&(number < 587)){
-						/*
-						Intent intent = new Intent(getActivity(), pictureactivity.class);
-						intent.putExtra("link", (int)number);
+						Intent intent = new Intent(getActivity(), ScoreActivity.class);
+						intent.putExtra("trackNumber", (int)number);
 						startActivity(intent);
-						*/
 					} else {
 						Snackbar snackbar = Snackbar.make(v, getString(R.string.long_digits_warning)
 								, Snackbar.LENGTH_SHORT);
@@ -110,6 +109,13 @@ public class NumbersFragment extends Fragment{
 							, Snackbar.LENGTH_LONG);
 					snackbar.getView().setBackgroundColor(getResources()
 							.getColor(R.color.colorAccent));
+					snackbar.setAction(R.string.open_settings, new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							v.getContext().startActivity(new Intent(Settings.ACTION_SETTINGS));
+						}
+					})
+							.setActionTextColor(v.getResources().getColor(R.color.white));
 					snackbar.show();
 
 				}
@@ -141,11 +147,9 @@ public class NumbersFragment extends Fragment{
 					sBuilder.append(button.getText());
 					display.setText(sBuilder);
 				} else {
-/*					sBuilder.setLength(0);
-					display.setText(null);*/
 					Snackbar snackbar = Snackbar.make(v, getString(R.string.long_digits_warning)
 							, Snackbar.LENGTH_LONG)
-							.setAction(R.string.Clear, new OnClickListener(){
+							.setAction(R.string.clear, new OnClickListener(){
 
 								@Override
 								public void onClick(View v) {

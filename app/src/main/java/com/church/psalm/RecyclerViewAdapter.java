@@ -3,6 +3,10 @@ package com.church.psalm;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Drawable favImage;
         System.out.println("onBindViewHolder is called" + position);
+
         holder.track.setText(data.get(position).getTrackNumber() + "");
         holder.title.setText(data.get(position).getTitle());
         int freqInt = data.get(position).getFrequency();
@@ -97,19 +102,45 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 data.set(getLayoutPosition(), song);
 
             } else {
-                System.out.println("Pressed zero based " + getLayoutPosition());
-                dbAdapter.incrementFreq(getAdapterPosition() + 1);
-                int freqInt = dbAdapter.getFreq(getAdapterPosition()+1);
-                Song song = data.get(getLayoutPosition());
-                song.setFrequency(freqInt);
-                data.set(getLayoutPosition(), song);
-                Intent intent = new Intent(v.getContext(), ScoreActivity.class);
-                intent.putExtra("trackNumber", getLayoutPosition() + 1);
-                v.getContext().startActivity(intent);
+                if (isNetworkConnected()){
+                    System.out.println("Pressed zero based " + getLayoutPosition());
+                    dbAdapter.incrementFreq(getAdapterPosition() + 1);
+                    int freqInt = dbAdapter.getFreq(getAdapterPosition()+1);
+                    Song song = data.get(getLayoutPosition());
+                    song.setFrequency(freqInt);
+                    data.set(getLayoutPosition(), song);
+                    Intent intent = new Intent(v.getContext(), ScoreActivity.class);
+                    intent.putExtra("trackNumber", getLayoutPosition() + 1);
+                    v.getContext().startActivity(intent);
+                } else {
+                    Snackbar snackbar = Snackbar.make(v, v.getContext()
+                            .getString(R.string.network_error)
+                            , Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(v.getContext().getResources()
+                            .getColor(R.color.colorAccent));
+                    snackbar.setAction("Settings", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            v.getContext().startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        }
+                    })
+                            .setActionTextColor(v.getResources().getColor(R.color.white));
+                    snackbar.show();
+                }
+
 
             }
             notifyItemChanged(getAdapterPosition());
 
         }
+    }
+
+
+    public boolean isNetworkConnected(){
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(
+                context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+        return isConnected;
     }
 }

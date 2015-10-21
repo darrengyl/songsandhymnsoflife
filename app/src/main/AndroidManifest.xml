@@ -23,9 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScoreActivity">
-
-        </activity>
+        <activity
+            android:name=".ScoreActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+            android:parentActivityName=".MainActivity"></activity>
 
         <service android:name=".MusicService" />
     </application>

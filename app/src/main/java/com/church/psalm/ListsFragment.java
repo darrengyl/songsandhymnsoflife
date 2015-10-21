@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
+//TODO: searchView
 public class ListsFragment extends Fragment{
 	RecyclerView recyclerView;
 	MaterialProgressBar progressBarList;
@@ -52,7 +53,7 @@ public class ListsFragment extends Fragment{
 
 
 		new readWriteAllSongs().execute();
-
+		//recyclerView.getba
 		return V;
 	}
 

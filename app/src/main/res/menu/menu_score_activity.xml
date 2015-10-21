@@ -10,7 +10,7 @@
     <item
         android:id="@+id/previous"
         android:icon="@drawable/ic_skip_previous_black_24dp"
-        android:title="@string/previou_song"
+        android:title="@string/previous_song"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/next"

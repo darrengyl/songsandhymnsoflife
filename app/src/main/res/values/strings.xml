@@ -16,12 +16,12 @@
     <string name="_8">8</string>
     <string name="_9">9</string>
     <string name="_0">0</string>
-    <string name="contentdescription">content</string>
+    <string name="content_description">content</string>
     <string name="play_music">play/pause</string>
     <string name="loop_music">loop</string>
     <string name="search">search</string>
     <string name="search_hint">title</string>
-    <string name="previou_song">previous song</string>
+    <string name="previous_song">previous song</string>
     <string name="next_song">next_song</string>
     <string name="search_title">search title</string>
     <string name="numbers">NUMBERS</string>
@@ -34,7 +34,8 @@
     <string name="long_digits_warning">Please enter a number between 1 and 586</string>
     <string name="network_error">Please check your Internet connection</string>
     <string name="number_error">Track number doesn\'t start with 0</string>
-    <string name="Clear">CLEAR</string>
+    <string name="clear">CLEAR</string>
+    <string name="open_settings">Settings</string>
     <string-array name="tabs">
         <item>Number</item>
         <item>List</item>

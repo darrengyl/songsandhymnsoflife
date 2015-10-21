@@ -1,8 +1,6 @@
 package com.church.psalm;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.LruCache;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -20,7 +18,8 @@ public class VolleySingleton {
     private VolleySingleton(Context context) {
         mCtx = context;
         mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
-        imageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
+        imageLoader = new ImageLoader(mRequestQueue, new BitmapLruCache());
+/*                new ImageLoader.ImageCache() {
             private LruCache<String, Bitmap> cache = new LruCache<>((int) Runtime.getRuntime()
                     .maxMemory() / 1024 / 8);
 
@@ -33,7 +32,8 @@ public class VolleySingleton {
             public void putBitmap(String url, Bitmap bitmap) {
                 cache.put(url, bitmap);
             }
-        });
+        }*/
+
     }
 
     public static VolleySingleton getInstance(Context context) {
@@ -50,4 +50,6 @@ public class VolleySingleton {
     public ImageLoader getImageLoader(){
         return imageLoader;
     }
+
+
 }

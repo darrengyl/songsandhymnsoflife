@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -14,14 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
+import android.widget.SeekBar;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -42,25 +39,31 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
  * Created by yuanlong.gu on 10/7/2015.
  */
 public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener
-        , MediaPlayerControl {
+        , MediaPlayerControl{
     Toolbar toolbar;
     SubsamplingScaleImageView imageView;
     ImageLoader imageLoader;
     MaterialProgressBar progressBarScore;
     static int screenWidth;
     static int screenHeight;
+    private int oriImageWidth;
+    private int oriImageHeight;
     private MediaController mediacontroller;
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound;
     private boolean paused, playbackPaused;
     private MediaPlayer mediaPlayer;
+    private int musicPosition;
     Bitmap bitmap;
+    SeekBar seekbar;
+
     private Handler handler = new Handler();
 
     int trackNumber;
 
     BitmapFactory.Options options;
+    private int percent = 0;
 
     /*    @Override
         protected void onStart() {
@@ -86,15 +89,10 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.score_layout);
-        View decorView = getWindow().getDecorView();
-// Hide the status bar.
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+
         getScreenResolution(this);
         progressBarScore = (MaterialProgressBar) findViewById(R.id.progress_bar_list);
 
-        //toolbar = (Toolbar)findViewById(R.id.app_bar_score);
-        //setSupportActionBar(toolbar);
         imageView = (SubsamplingScaleImageView) findViewById(R.id.imageView);
         imageView.resetScaleAndCenter();
 
@@ -107,7 +105,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         }
         options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-
+//TODO: imageCache, find solutions to OutOfMemoryError, remove status bar
 
         imageLoader = VolleySingleton.getInstance(this).getImageLoader();
         Log.d("score link", getScoreLink(trackNumber));
@@ -115,11 +113,17 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 if (response.getBitmap() != null) {
-                    bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
-                            screenHeight);
-                    imageView.setImage(ImageSource.bitmap(bitmap));
+                    try {
+                        //TODO: set new decode method.
+                        bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
+                                screenHeight);
+                        imageView.setImage(ImageSource.bitmap(bitmap));
 
-                    progressBarScore.setVisibility(View.GONE);
+                        progressBarScore.setVisibility(View.GONE);
+                    } catch (OutOfMemoryError e) {
+                        e.printStackTrace();
+                    }
+
 
                 }
 
@@ -130,16 +134,47 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
             }
         });
         mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnPreparedListener(this);
         mediacontroller = new MediaController(this);
         try {
             mediaPlayer.setDataSource(getMusicLink(trackNumber));
             mediaPlayer.prepareAsync();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediacontroller.isShowing()) {
+                    mediacontroller.hide();
+                } else {
+                    mediacontroller.show(0);
+                }
+
+            }
+        });
+
+    }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("position", mediaPlayer.getCurrentPosition());
+        outState.putInt("track", trackNumber);
+        super.onSaveInstanceState(outState);
+    }
+
+    //Will only be called when activity is destroyed by OS. e.g. rotation
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (trackNumber == savedInstanceState.getInt("track")) {
+            musicPosition = savedInstanceState.getInt("position");
+        } else {
+            musicPosition = 0;
+        }
     }
 
     @Override
@@ -148,6 +183,9 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         mediacontroller.hide();
         mediaPlayer.stop();
         mediaPlayer.release();
+/*        if (!imageLoader.isCached(getScoreLink(trackNumber), 0, 0)){
+
+        }*/
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
             bitmap = null;
@@ -156,21 +194,28 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
     }
 
+    //TODO: Change to a specific fragment
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     /*
-            private ServiceConnection musicConnection = new ServiceConnection(){
+                private ServiceConnection musicConnection = new ServiceConnection(){
 
-                @Override
-                public void onServiceConnected(ComponentName name, IBinder service) {
-                    MusicService.MusicBinder binder = (MusicService.MusicBinder)service;
-                    musicService = binder.getService();
-                    musicBound = true;
-                }
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        MusicService.MusicBinder binder = (MusicService.MusicBinder)service;
+                        musicService = binder.getService();
+                        musicBound = true;
+                    }
 
-                @Override
-                public void onServiceDisconnected(ComponentName name) {
-                    musicBound = false;
-                }
-            };*/
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+                        musicBound = false;
+                    }
+                };*/
     private static void getScreenResolution(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -180,6 +225,28 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         screenHeight = metrics.heightPixels;
 
     }
+
+    /*private void getOriImageSize(int trackNumber){
+        try {
+            String url = getScoreLink(trackNumber);
+            InputStream urlInputHere = new URL(url).openStream();
+            ImageInputStream in = ImageIO.createImageInputStream(urlInputHere);
+            final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+            if (readers.hasNext()) {
+                ImageReader reader = readers.next();
+                try {
+                    reader.setInput(in);
+                    System.out.println("Width = " + reader.getWidth(0) + ", Height = " + reader.getHeight(0));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    reader.dispose();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
 
 
     public String getScoreLink(int track) {
@@ -262,49 +329,6 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         return resizedBitmap;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_score_activity, menu);
-        MenuItem play = menu.findItem(R.id.play);
-        MenuItem previous = menu.findItem(R.id.previous);
-        MenuItem next = menu.findItem(R.id.next);
-        MenuItem loop = menu.findItem(R.id.loop);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            play.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_play_circle_filled_black_24dp, getTheme())));
-            previous.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_skip_previous_black_24dp, getTheme())));
-            next.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_skip_next_black_24dp, getTheme())));
-            loop.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_repeat_one_black_24dp, getTheme())));
-        } else {
-            play.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_play_circle_filled_black_24dp)));
-            previous.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_skip_previous_black_24dp)));
-            next.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_skip_next_black_24dp)));
-            loop.setIcon(setTintDrawable(getResources()
-                    .getDrawable(R.drawable.ic_repeat_one_black_24dp)));
-        }
-
-
-        return true;
-    }
-
-    public Drawable setTintDrawable(Drawable drawable) {
-        Drawable tintedDrawable = drawable;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            tintedDrawable.setTint(getResources().getColor(R.color.colorMenuIcon, getTheme()));
-        } else {
-            tintedDrawable.setTint(getResources().getColor(R.color.colorMenuIcon));
-        }
-        return tintedDrawable;
-
-    }
-
 
     @Override
     public void start() {
@@ -361,6 +385,15 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         return mediaPlayer.getAudioSessionId();
     }
 
+/*    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int arg1) {
+
+        System.out.println("Buffer percentage :"+arg1);
+        // TODO Auto-generated method stub
+        percent = arg1;
+    }*/
+
+
     @Override
     public void onPrepared(MediaPlayer mp) {
         System.out.println("On prepared");
@@ -382,15 +415,31 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
                 v.getContext().startActivity(intent);
             }
         });
-        mp.start();
+        int topContainerId = getResources().getIdentifier("mediacontroller_progress", "id", "android");
+        seekbar = (SeekBar) mediacontroller.findViewById(topContainerId);
+        mp.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+            @Override
+            public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                if (percent < seekbar.getMax()) {
+                    seekbar.setSecondaryProgress(percent);
+                    //seekbar.setSecondaryProgress(percent / 100);
+                }
+            }
+        });
         handler.post(new Runnable() {
             @Override
             public void run() {
                 mediacontroller.setEnabled(true);
-                mediacontroller.show();
+                mediacontroller.show(5000);
+                if (musicPosition != 0) {
+                    mediaPlayer.seekTo(musicPosition);
+                    mediaPlayer.start();
+                }
+
             }
         });
 
     }
+
 
 }
