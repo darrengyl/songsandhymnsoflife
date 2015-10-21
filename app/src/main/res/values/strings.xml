@@ -20,7 +20,7 @@
     <string name="play_music">play/pause</string>
     <string name="loop_music">loop</string>
     <string name="search">search</string>
-    <string name="search_hint">title</string>
+    <string name="search_hint">Please search for title</string>
     <string name="previous_song">previous song</string>
     <string name="next_song">next_song</string>
     <string name="search_title">search title</string>

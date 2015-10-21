@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -94,23 +95,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public void onClick(View v) {
             DBAdapter dbAdapter = new DBAdapter(v.getContext());
             if (v.getId() == R.id.fav_star){
-
-                dbAdapter.flipFav(getLayoutPosition()+1);
-                int favInt = dbAdapter.getFav(getLayoutPosition()+1)? 1: 0;
-                Song song = data.get(getLayoutPosition());
+                RelativeLayout parent = (RelativeLayout)v.getParent();
+                TextView track = (TextView)parent.findViewById(R.id.tracknumber);
+                int trackNum = Integer.parseInt(track.getText().toString());
+                dbAdapter.flipFav(trackNum);
+                int favInt = dbAdapter.getFav(trackNum)? 1: 0;
+                Song song = data.get(getAdapterPosition());
                 song.setFavorite(favInt);
-                data.set(getLayoutPosition(), song);
+                data.set(getAdapterPosition(), song);
 
             } else {
                 if (isNetworkConnected()){
-                    System.out.println("Pressed zero based " + getLayoutPosition());
-                    dbAdapter.incrementFreq(getAdapterPosition() + 1);
-                    int freqInt = dbAdapter.getFreq(getAdapterPosition()+1);
-                    Song song = data.get(getLayoutPosition());
+                    View parent = (View)v.getParent();
+                    TextView track = (TextView)parent.findViewById(R.id.tracknumber);
+                    int trackNum = Integer.parseInt(track.getText().toString());
+                    System.out.println("Pressed zero based " + getAdapterPosition());
+                    dbAdapter.incrementFreq(trackNum);
+                    int freqInt = dbAdapter.getFreq(trackNum);
+                    Song song = data.get(getAdapterPosition());
                     song.setFrequency(freqInt);
-                    data.set(getLayoutPosition(), song);
+                    data.set(getAdapterPosition(), song);
                     Intent intent = new Intent(v.getContext(), ScoreActivity.class);
-                    intent.putExtra("trackNumber", getLayoutPosition() + 1);
+                    intent.putExtra("trackNumber", getAdapterPosition() + 1);
                     v.getContext().startActivity(intent);
                 } else {
                     Snackbar snackbar = Snackbar.make(v, v.getContext()

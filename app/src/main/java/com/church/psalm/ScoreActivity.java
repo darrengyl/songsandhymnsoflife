@@ -13,9 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
 import android.widget.SeekBar;
@@ -75,15 +75,6 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
                 startService(playIntent);
             }
         }*/
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        /*
-         * the MediaController will hide after 3 seconds - tap the screen to
-         * make it appear again
-         */
-        mediacontroller.show();
-        return false;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,15 +100,18 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
         imageLoader = VolleySingleton.getInstance(this).getImageLoader();
         Log.d("score link", getScoreLink(trackNumber));
+        //imageLoader.get()
         imageLoader.get(getScoreLink(trackNumber), new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                 if (response.getBitmap() != null) {
                     try {
+                        //response.
                         //TODO: set new decode method.
-                        bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
-                                screenHeight);
-                        imageView.setImage(ImageSource.bitmap(bitmap));
+                        //bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
+                        //        screenHeight);
+                        //imageView.setImage(ImageSource.bitmap(bitmap));
+                        imageView.setImage(ImageSource.bitmap(response.getBitmap()));
 
                         progressBarScore.setVisibility(View.GONE);
                     } catch (OutOfMemoryError e) {
@@ -132,7 +126,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
             @Override
             public void onErrorResponse(VolleyError error) {
             }
-        });
+        }, screenWidth, screenHeight, ImageView.ScaleType.CENTER_INSIDE);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnPreparedListener(this);
@@ -187,19 +181,20 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
         }*/
         if (bitmap != null && !bitmap.isRecycled()) {
-            bitmap.recycle();
+            //bitmap.recycle();
             bitmap = null;
         }
         System.gc();
 
     }
 
+
     //TODO: Change to a specific fragment
-    @Override
+/*    @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }
+    }*/
 
     /*
                 private ServiceConnection musicConnection = new ServiceConnection(){
@@ -225,28 +220,6 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         screenHeight = metrics.heightPixels;
 
     }
-
-    /*private void getOriImageSize(int trackNumber){
-        try {
-            String url = getScoreLink(trackNumber);
-            InputStream urlInputHere = new URL(url).openStream();
-            ImageInputStream in = ImageIO.createImageInputStream(urlInputHere);
-            final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
-            if (readers.hasNext()) {
-                ImageReader reader = readers.next();
-                try {
-                    reader.setInput(in);
-                    System.out.println("Width = " + reader.getWidth(0) + ", Height = " + reader.getHeight(0));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    reader.dispose();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
 
     public String getScoreLink(int track) {
@@ -385,15 +358,6 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         return mediaPlayer.getAudioSessionId();
     }
 
-/*    @Override
-    public void onBufferingUpdate(MediaPlayer mp, int arg1) {
-
-        System.out.println("Buffer percentage :"+arg1);
-        // TODO Auto-generated method stub
-        percent = arg1;
-    }*/
-
-
     @Override
     public void onPrepared(MediaPlayer mp) {
         System.out.println("On prepared");
@@ -422,7 +386,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
             public void onBufferingUpdate(MediaPlayer mp, int percent) {
                 if (percent < seekbar.getMax()) {
                     seekbar.setSecondaryProgress(percent);
-                    //seekbar.setSecondaryProgress(percent / 100);
+
                 }
             }
         });
@@ -430,11 +394,14 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
             @Override
             public void run() {
                 mediacontroller.setEnabled(true);
-                mediacontroller.show(5000);
+
                 if (musicPosition != 0) {
                     mediaPlayer.seekTo(musicPosition);
                     mediaPlayer.start();
+                } else {
+                    mediacontroller.show(5000);
                 }
+
 
             }
         });

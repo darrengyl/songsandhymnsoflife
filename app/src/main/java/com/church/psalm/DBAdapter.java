@@ -30,6 +30,82 @@ public class DBAdapter {
         this.context = context;
         dbHelper = new DBHelper(context);
     }
+    public ArrayList<Song> getKeywordSongs(String keyword){
+        data = new ArrayList<Song>();
+        try {
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER
+                    , COLUMN_NAME_TITLE, COLUMN_NAME_FREQUENCY, COLUMN_NAME_DOWNLOADED
+                    , COLUMN_NAME_LYRICS, COLUMN_NAME_FAVORITE}
+                    , COLUMN_NAME_TITLE + " LIKE ?", new String[]{"%" + keyword + "%"}, null, null
+                    , COLUMN_NAME_TRACKNUMBER);
+            while (cursor.moveToNext()){
+                int track = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_TRACKNUMBER));
+                String title = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE));
+                int freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
+                String dwnld = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DOWNLOADED));
+                String lyrics = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LYRICS));
+                int favourite = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
+                //System.out.println("" + track + title + freq + dwnld + lyrics);
+                Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
+                data.add(song);
+            }
+        } finally {
+            db.close();
+        }
+        return data;
+    }
+    public ArrayList<Song> getMostFavSongs(){
+        data = new ArrayList<Song>();
+        try {
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER
+                            , COLUMN_NAME_TITLE, COLUMN_NAME_FREQUENCY, COLUMN_NAME_DOWNLOADED
+                            , COLUMN_NAME_LYRICS, COLUMN_NAME_FAVORITE}
+                            , COLUMN_NAME_FAVORITE + "= 1", null, null, null
+                            , COLUMN_NAME_FREQUENCY + " DESC");
+            while (cursor.moveToNext()){
+                int track = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_TRACKNUMBER));
+                String title = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE));
+                int freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
+                String dwnld = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DOWNLOADED));
+                String lyrics = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LYRICS));
+                int favourite = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
+                //System.out.println("" + track + title + freq + dwnld + lyrics);
+                Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
+                data.add(song);
+            }
+        } finally {
+            db.close();
+        }
+        return data;
+    }
+
+    public ArrayList<Song> getMostPlayedSongs(){
+        data = new ArrayList<Song>();
+        try {
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER
+                    , COLUMN_NAME_TITLE, COLUMN_NAME_FREQUENCY, COLUMN_NAME_DOWNLOADED
+                    , COLUMN_NAME_LYRICS, COLUMN_NAME_FAVORITE}
+                    , null, null, null, null
+                    , COLUMN_NAME_FREQUENCY + " DESC");
+            while (cursor.moveToNext()){
+                int track = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_TRACKNUMBER));
+                String title = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_TITLE));
+                int freq = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FREQUENCY));
+                String dwnld = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DOWNLOADED));
+                String lyrics = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LYRICS));
+                int favourite = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
+                //System.out.println("" + track + title + freq + dwnld + lyrics);
+                Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
+                data.add(song);
+            }
+        } finally {
+            db.close();
+        }
+        return data;
+    }
     //position is one based
     public boolean getFav(int position){
         boolean favourite = false;
