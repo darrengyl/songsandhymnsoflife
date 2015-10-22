@@ -8,6 +8,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -39,7 +40,7 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
  * Created by yuanlong.gu on 10/7/2015.
  */
 public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener
-        , MediaPlayerControl{
+        , MediaPlayerControl {
     Toolbar toolbar;
     SubsamplingScaleImageView imageView;
     ImageLoader imageLoader;
@@ -94,8 +95,6 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         if (!foundScoreInStorage(trackNumber)) {
 
         }
-        options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
 //TODO: imageCache, find solutions to OutOfMemoryError, remove status bar
 
         imageLoader = VolleySingleton.getInstance(this).getImageLoader();
@@ -174,9 +173,14 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     @Override
     protected void onStop() {
         super.onStop();
-        mediacontroller.hide();
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        if (mediacontroller.isShowing()){
+            mediacontroller.hide();
+        }
+        if (mediaPlayer.isPlaying()){
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+
 /*        if (!imageLoader.isCached(getScoreLink(trackNumber), 0, 0)){
 
         }*/
@@ -188,6 +192,10 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
     //TODO: Change to a specific fragment
 /*    @Override
@@ -366,17 +374,37 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         mediacontroller.setPrevNextListeners(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ScoreActivity.class);
-                intent.putExtra("trackNumber", trackNumber + 1);
-                v.getContext().startActivity(intent);
+                if (trackNumber > 0 && trackNumber < 586) {
+                    Intent intent = new Intent(v.getContext(), ScoreActivity.class);
+                    intent.putExtra("trackNumber", trackNumber + 1);
+                    v.getContext().startActivity(intent);
+                } else {
+                    Snackbar snackbar = Snackbar.make(v, v.getContext()
+                            .getString(R.string.end_of_list)
+                            , Snackbar.LENGTH_SHORT);
+                    snackbar.getView().setBackgroundColor(v.getContext().getResources()
+                            .getColor(R.color.colorAccent));
+                    snackbar.show();
+                }
+
 
             }
         }, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ScoreActivity.class);
-                intent.putExtra("trackNumber", trackNumber - 1);
-                v.getContext().startActivity(intent);
+                if (trackNumber > 1) {
+                    Intent intent = new Intent(v.getContext(), ScoreActivity.class);
+                    intent.putExtra("trackNumber", trackNumber - 1);
+                    v.getContext().startActivity(intent);
+                } else {
+                    Snackbar snackbar = Snackbar.make(v, v.getContext()
+                            .getString(R.string.beginning_of_list)
+                            , Snackbar.LENGTH_SHORT);
+                    snackbar.getView().setBackgroundColor(v.getContext().getResources()
+                            .getColor(R.color.colorAccent));
+                    snackbar.show();
+                }
+
             }
         });
         int topContainerId = getResources().getIdentifier("mediacontroller_progress", "id", "android");

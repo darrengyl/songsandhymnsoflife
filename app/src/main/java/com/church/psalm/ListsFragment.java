@@ -10,9 +10,12 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +33,7 @@ import java.util.ArrayList;
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 
 //TODO: searchView
-public class ListsFragment extends Fragment {
+public class ListsFragment extends Fragment implements sortListener{
 	RecyclerView recyclerView;
 	MaterialProgressBar progressBarList;
 	EditText searchEditText;
@@ -58,14 +61,24 @@ public class ListsFragment extends Fragment {
 
 
 		new readWriteAllSongs().execute();
-		//recyclerView.getba
+
+
+
 		return V;
+	}
+
+
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.menu_list_fragment, menu);
-		MenuItem searchMenu = menu.findItem(R.id.search);
+		final MenuItem searchMenu = menu.findItem(R.id.search);
 		Drawable searchIcon;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			searchIcon = getResources().getDrawable(R.drawable.ic_search_black_24dp
@@ -81,36 +94,64 @@ public class ListsFragment extends Fragment {
 
 		SearchManager searchManager = (SearchManager) getActivity().getSystemService(
 				Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) searchMenu.getActionView();
+		final SearchView searchView = (SearchView) searchMenu.getActionView();
 		searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity()
 				.getComponentName()));
 		searchView.setIconifiedByDefault(false);
+
 		int searchBarId = searchView.getContext().getResources()
 				.getIdentifier("android:id/search_bar", null, null);
 		//Get the search bar Linearlayout
 		LinearLayout searchBar = (LinearLayout) searchView.findViewById(searchBarId);
 		//Give the Linearlayout a transition animation.
 		searchBar.setLayoutTransition(new LayoutTransition());
-		searchView.setSubmitButtonEnabled(true);
 		//searchEditText = (EditText)view.findViewById(R.id.search);
 		//searchEditText.setText("");
 		//searchEditText.setHint("Search Titles");
+		//searchView.requestFocusFromTouch();
+		searchView.setFocusableInTouchMode(true);
+		searchView.performClick();
 		searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (hasFocus) {
 					InputMethodManager imm = (InputMethodManager) getActivity()
 							.getSystemService(Context.INPUT_METHOD_SERVICE);
-					//imm.toggleSoftInput(InputMethodManager.SHOW_FORCED
-					//		, InputMethodManager.HIDE_IMPLICIT_ONLY);
-					imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
+					imm.toggleSoftInput(InputMethodManager.SHOW_FORCED
+							, InputMethodManager.HIDE_IMPLICIT_ONLY);
+					//imm.showSoftInput(v, InputMethodManager.SHOW_FORCED);
+				} else {
+					v.clearFocus();
+					InputMethodManager imm = (InputMethodManager) getActivity()
+							.getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 				}
 			}
 		});
 		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				return false;
+				ArrayList<Song> result = new ArrayList<Song>();
+				result = dbAdapter.getKeywordSongs(query);
+				if (result.size() > 0){
+					adapter.setData(result);
+
+				} else {
+					String warning = String.format(getString(R.string.search_result_not_found)
+							,query);
+					CharSequence styledWarning = Html.fromHtml(warning);
+					Snackbar snackbar = Snackbar.make(getView()
+							, styledWarning
+							, Snackbar.LENGTH_LONG);
+					snackbar.getView().setBackgroundColor(getView().getContext().getResources()
+							.getColor(R.color.colorAccent));
+					snackbar.show();
+				}
+				searchView.setQuery("", false);
+				searchView.clearFocus();
+				MenuItemCompat.collapseActionView(searchMenu);
+
+				return true;
 			}
 
 			@Override
@@ -119,19 +160,18 @@ public class ListsFragment extends Fragment {
 			}
 		});
 
+
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-/*        if (item.getItemId() == R.id.search) {
-			if (searchEditText.requestFocus()) {
-				InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
-			}
-			return true;
-		}*/
-		return super.onOptionsItemSelected(item);
+	public void sortByFavorite(){
+
 	}
+
+	public void sortByFrequency(){
+
+	}
+
+
 
 	public void InsertSongs() {
 		String[] title = {
@@ -743,6 +783,36 @@ public class ListsFragment extends Fragment {
 	public boolean existDatabaseSharedPreference() {
 		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(prefsName, Context.MODE_PRIVATE);
 		return sharedPreferences.getBoolean("databaseLoaded", false);
+	}
+
+	@Override
+	public void onSortByFav() {
+		ArrayList<Song> result = new ArrayList<Song>();
+		result = dbAdapter.getMostFavSongs();
+		if (result.size() > 0){
+			adapter.setData(result);
+
+		}
+	}
+
+	@Override
+	public void onSortByFreq() {
+		ArrayList<Song> result = new ArrayList<Song>();
+		result = dbAdapter.getMostPlayedSongs();
+		if (result.size() > 0){
+			adapter.setData(result);
+
+		}
+	}
+
+	@Override
+	public void onSortByTrack() {
+		ArrayList<Song> result = new ArrayList<Song>();
+		result = dbAdapter.getAllSongs();
+		if (result.size() > 0){
+			adapter.setData(result);
+
+		}
 	}
 
 	public class readWriteAllSongs extends AsyncTask<Void, ArrayList<Song>, Void> {

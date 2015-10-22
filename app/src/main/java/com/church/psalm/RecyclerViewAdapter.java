@@ -35,6 +35,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.context = context;
     }
 
+    public void setData(ArrayList<Song> data){
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflator.inflate(R.layout.eachsong, parent, false);
@@ -106,17 +111,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             } else {
                 if (isNetworkConnected()){
-                    View parent = (View)v.getParent();
-                    TextView track = (TextView)parent.findViewById(R.id.tracknumber);
+                    TextView track = (TextView)v.findViewById(R.id.tracknumber);
                     int trackNum = Integer.parseInt(track.getText().toString());
-                    System.out.println("Pressed zero based " + getAdapterPosition());
+                    System.out.println("Pressed tracknum " + trackNum);
                     dbAdapter.incrementFreq(trackNum);
                     int freqInt = dbAdapter.getFreq(trackNum);
                     Song song = data.get(getAdapterPosition());
                     song.setFrequency(freqInt);
                     data.set(getAdapterPosition(), song);
                     Intent intent = new Intent(v.getContext(), ScoreActivity.class);
-                    intent.putExtra("trackNumber", getAdapterPosition() + 1);
+                    intent.putExtra("trackNumber", trackNum);
                     v.getContext().startActivity(intent);
                 } else {
                     Snackbar snackbar = Snackbar.make(v, v.getContext()

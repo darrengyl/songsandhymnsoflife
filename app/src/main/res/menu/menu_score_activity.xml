@@ -1,26 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/play"
-        android:icon="@drawable/ic_play_circle_filled_black_24dp"
-        android:title="@string/play_music"
-        app:showAsAction="ifRoom"
-        android:tint="@color/colorAccent"/>
-    <item
-        android:id="@+id/previous"
-        android:icon="@drawable/ic_skip_previous_black_24dp"
-        android:title="@string/previous_song"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/next"
-        android:icon="@drawable/ic_skip_next_black_24dp"
-        android:title="@string/next_song"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/loop"
-        android:icon="@drawable/ic_repeat_one_black_24dp"
-        android:title="@string/loop_music"
-        app:showAsAction="ifRoom" />
 
 </menu>
