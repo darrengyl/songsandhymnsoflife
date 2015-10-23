@@ -10,16 +10,17 @@ All the images and music are coming from Internet, and the copyrights belong to 
 keyword: songs and hymns of life, Titus Chu, Watchman Nee, Christianity. "生命诗歌"，"朱韬枢"，"倪柝声"，"基督教"，"诗歌"
 
 # Screenshots
-![]({{site.baseurl}}//1.png)
+![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701987/6b0a5ade-798c-11e5-9828-23defc0249aa.png)
 
-![]({{site.baseurl}}//2.png)
+![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701988/6b0aa6e2-798c-11e5-8c10-3603e219968c.png)
 
-![]({{site.baseurl}}//3.png)
+![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701992/6b103b02-798c-11e5-9bc6-5e23ec8d13d9.png)
 
-![]({{site.baseurl}}//4.png)
+![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701990/6b0da77a-798c-11e5-9c0e-3f7ee69d65fc.png)
 
-![]({{site.baseurl}}//5.png)
+![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701989/6b0bacc2-798c-11e5-8868-4dd116bca576.png)
 
-![]({{site.baseurl}}//6.png)
+![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701991/6b0f8d38-798c-11e5-9ece-bedc403d4c97.png)
 
-![]({{site.baseurl}}//7.png)
+![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701993/6b145f2a-798c-11e5-804b-295e5fecc6f6.png)
+
