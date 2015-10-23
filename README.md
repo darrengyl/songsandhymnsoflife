@@ -10,7 +10,7 @@ All the images and music are coming from Internet, and the copyrights belong to 
 keyword: songs and hymns of life, Titus Chu, Watchman Nee, Christianity. "生命诗歌"，"朱韬枢"，"倪柝声"，"基督教"，"诗歌"
 
 # Screenshots
-![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701987/6b0a5ade-798c-11e5-9828-23defc0249aa.png)
+![](/https://cloud.githubusercontent.com/assets/4451159/10701987/6b0a5ade-798c-11e5-9828-23defc0249aa.png)
 
 ![]({{site.baseurl}}/https://cloud.githubusercontent.com/assets/4451159/10701988/6b0aa6e2-798c-11e5-8c10-3603e219968c.png)
 
