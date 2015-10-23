@@ -22,34 +22,34 @@ keyword: songs and hymns of life, Titus Chu, Watchman Nee, Christianity. "生命
 7. User is able to choose Previous Song and Next Song. And he/she can adjust the seekbar. 
 
 # Screenshots
-1. All songs. Users can set favorite flag and view the times the song is played.
+All songs. Users can set favorite flag and view the times the song is played.
 
 ![](https://cloud.githubusercontent.com/assets/4451159/10701987/6b0a5ade-798c-11e5-9828-23defc0249aa.png)
 
-2. Users can have 3 options to reorder the list. 
+Users can have 3 options to reorder the list. 
 (1) Normal order
 (2) Most played songs
 (3) Favorite songs
 
 ![](https://cloud.githubusercontent.com/assets/4451159/10701988/6b0aa6e2-798c-11e5-8c10-3603e219968c.png)
 
-3. After most played button is clicked
+After most played button is clicked
 
 ![](https://cloud.githubusercontent.com/assets/4451159/10701992/6b103b02-798c-11e5-9bc6-5e23ec8d13d9.png)
 
-4. After the most favorite button is clicked.
+After the most favorite button is clicked.
 
 ![](https://cloud.githubusercontent.com/assets/4451159/10701990/6b0da77a-798c-11e5-9c0e-3f7ee69d65fc.png)
 
-5. After a certain song is chosen.
+After a certain song is chosen.
 
 ![](https://cloud.githubusercontent.com/assets/4451159/10701989/6b0bacc2-798c-11e5-8868-4dd116bca576.png)
 
-6. Error warning. 
+Error warning. 
 
 ![](https://cloud.githubusercontent.com/assets/4451159/10701991/6b0f8d38-798c-11e5-9ece-bedc403d4c97.png)
 
-7. Users can search for title in the top search view.
+Users can search for title in the top search view.
 
 ![](https://cloud.githubusercontent.com/assets/4451159/10701993/6b145f2a-798c-11e5-804b-295e5fecc6f6.png)
 
