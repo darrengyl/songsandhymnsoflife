@@ -1,4 +1,4 @@
-package com.church.psalm;
+package com.church.psalm.model;
 
 import android.provider.BaseColumns;
 

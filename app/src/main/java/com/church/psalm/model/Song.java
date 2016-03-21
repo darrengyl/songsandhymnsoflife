@@ -1,4 +1,4 @@
-package com.church.psalm;
+package com.church.psalm.model;
 
 /**
  * Created by Darren Gu on 10/1/2015.

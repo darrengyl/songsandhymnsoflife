@@ -1,3 +1,4 @@
+/*
 package com.church.psalm;
 
 import android.graphics.Bitmap;
@@ -35,4 +36,4 @@ public class BitmapLruCache extends LruCache<String, Bitmap> implements ImageLoa
     public void putBitmap(String url, Bitmap bitmap) {
         put(url, bitmap);
     }
-}
+}*/

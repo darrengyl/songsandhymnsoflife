@@ -1,54 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
+    android:layout_height="72dp"
     android:background="@drawable/ripple_list">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="72dp"
+    <TextView
+        android:id="@+id/tracknumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="16sp"
+        tool:text="123" />
 
-        android:paddingTop="20dp">
+    <ImageView
+        android:id="@+id/fav_star"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="16dp"
+        android:background="@android:color/transparent"
+        app:srcCompat="@drawable/ic_favorite_black_24dp" />
 
-        <TextView
-            android:id="@+id/tracknumber"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="16dp"
-            android:text="123"
-            android:textSize="16sp" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="72dp"
+        android:layout_marginRight="16dp"
+        android:layout_toLeftOf="@id/fav_star"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/tracknumber"
-            android:gravity="left"
-            android:text="456"
-            android:textSize="16sp" />
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="16sp"
+            android:ellipsize="marquee"
+            tool:text="456" />
 
         <TextView
             android:id="@+id/freq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
-            android:layout_toRightOf="@id/tracknumber"
-            android:text="This song is played 2 time(s)"
-            android:textSize="14sp" />
+            android:textColor="@color/colorSeconaryText"
+            android:textSize="14sp"
+            tool:text="This song is played 2 time(s)" />
+    </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/fav_star"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_favorite_black_36dp" />
-    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
+

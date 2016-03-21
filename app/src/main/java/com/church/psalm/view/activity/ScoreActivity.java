@@ -1,4 +1,4 @@
-package com.church.psalm;
+package com.church.psalm.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,9 @@ import android.widget.SeekBar;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.church.psalm.MusicService;
+import com.church.psalm.R;
+import com.church.psalm.VolleySingleton;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
@@ -58,6 +61,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     private int musicPosition;
     Bitmap bitmap;
     SeekBar seekbar;
+    private static String TRACK = "track number";
 
     private Handler handler = new Handler();
 
@@ -66,16 +70,11 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     BitmapFactory.Options options;
     private int percent = 0;
 
-    /*    @Override
-        protected void onStart() {
-            super.onStart();
-            if (playIntent == null){
-                playIntent = new Intent(this, MusicService.class);
-                //playIntent.putExtra("trackNumber", trackNumber);
-                bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
-                startService(playIntent);
-            }
-        }*/
+    public static Intent getLaunchIntent(Context context, int track) {
+        Intent intent = new Intent(context, ScoreActivity.class);
+        intent.putExtra(TRACK, track);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

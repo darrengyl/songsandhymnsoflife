@@ -7,31 +7,35 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.util.ArrayList;
+import com.church.psalm.model.AllSongsContract;
+import com.church.psalm.model.Song;
 
-import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_DOWNLOADED;
-import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_FAVORITE;
-import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_FREQUENCY;
-import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_LYRICS;
-import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_TITLE;
-import static com.church.psalm.AllSongsContract.AllSongsEntry.COLUMN_NAME_TRACKNUMBER;
-import static com.church.psalm.AllSongsContract.AllSongsEntry.ID;
-import static com.church.psalm.AllSongsContract.AllSongsEntry.TABLE_NAME;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.COLUMN_NAME_DOWNLOADED;
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.COLUMN_NAME_FAVORITE;
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.COLUMN_NAME_FREQUENCY;
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.COLUMN_NAME_LYRICS;
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.COLUMN_NAME_TITLE;
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.COLUMN_NAME_TRACKNUMBER;
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.ID;
+import static com.church.psalm.model.AllSongsContract.AllSongsEntry.TABLE_NAME;
 
 /**
  * Created by Darren Gu on 8/20/2015.
  */
-public class DBAdapter {
-    ArrayList<Song> data;
+public class DbAdapter {
+    List<Song> data;
     DBHelper dbHelper;
     Context context;
     SQLiteDatabase db;
-    public DBAdapter(Context context){
+    public DbAdapter(Context context){
         this.context = context;
         dbHelper = new DBHelper(context);
     }
-    public ArrayList<Song> getKeywordSongs(String keyword){
-        data = new ArrayList<Song>();
+    public List<Song> getKeywordSongs(String keyword){
+        data = new ArrayList<>();
         try {
             db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER
@@ -55,8 +59,8 @@ public class DBAdapter {
         }
         return data;
     }
-    public ArrayList<Song> getMostFavSongs(){
-        data = new ArrayList<Song>();
+    public List<Song> getMostFavSongs(){
+        data = new ArrayList<>();
         try {
             db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER
@@ -81,8 +85,8 @@ public class DBAdapter {
         return data;
     }
 
-    public ArrayList<Song> getMostPlayedSongs(){
-        data = new ArrayList<Song>();
+    public List<Song> getMostPlayedSongs(){
+        data = new ArrayList<>();
         try {
             db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER
@@ -198,8 +202,8 @@ public class DBAdapter {
 
         return id;
     }
-    public ArrayList<Song> getAllSongs(){
-        data = new ArrayList<Song>();
+    public List<Song> getAllSongs(){
+        data = new ArrayList<>();
         try {
             db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(TABLE_NAME, new String[]{COLUMN_NAME_TRACKNUMBER, COLUMN_NAME_TITLE,

@@ -1,4 +1,4 @@
-package com.church.psalm;
+package com.church.psalm.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
