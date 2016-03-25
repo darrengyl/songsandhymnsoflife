@@ -10,6 +10,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by darrengu on 3/18/16.
@@ -37,4 +39,11 @@ public class DaggerModule {
     PresenterNumbersFragment providesPresenterNumbersFragment() {
         return new PresenterNumbersFragment(_app);
     }
+
+/*    @Provides
+    @Singleton
+    Realm providesRealm() {
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(_app).build();
+
+    }*/
 }

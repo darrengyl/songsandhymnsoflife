@@ -21,13 +21,10 @@ import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
 import android.widget.SeekBar;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
+
 import com.church.psalm.MusicService;
 import com.church.psalm.R;
-import com.church.psalm.VolleySingleton;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +33,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 
 /**
@@ -45,16 +44,15 @@ import me.zhanghai.android.materialprogressbar.MaterialProgressBar;
 public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener
         , MediaPlayerControl {
     Toolbar toolbar;
-    SubsamplingScaleImageView imageView;
-    ImageLoader imageLoader;
-    MaterialProgressBar progressBarScore;
+    PhotoViewAttacher mAttacher;
     static int screenWidth;
     static int screenHeight;
+    @Bind(R.id.imageView)
+    ImageView imageView;
     private int oriImageWidth;
     private int oriImageHeight;
     private MediaController mediacontroller;
     private MusicService musicService;
-    private Intent playIntent;
     private boolean musicBound;
     private boolean paused, playbackPaused;
     private MediaPlayer mediaPlayer;
@@ -67,64 +65,22 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
     int trackNumber;
 
-    BitmapFactory.Options options;
-    private int percent = 0;
-
-    public static Intent getLaunchIntent(Context context, int track) {
-        Intent intent = new Intent(context, ScoreActivity.class);
-        intent.putExtra(TRACK, track);
-        return intent;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.score_layout);
+        ButterKnife.bind(this);
 
         getScreenResolution(this);
-        progressBarScore = (MaterialProgressBar) findViewById(R.id.progress_bar_list);
 
-        imageView = (SubsamplingScaleImageView) findViewById(R.id.imageView);
-        imageView.resetScaleAndCenter();
-
+        mAttacher = new PhotoViewAttacher(imageView);
         Intent intent = getIntent();
         trackNumber = intent.getIntExtra("trackNumber", 1);
-        //musicService.passTrackNum(trackNumber);
-        //musicService.setTrackNumber(trackNumber);
-        if (!foundScoreInStorage(trackNumber)) {
 
-        }
+
 //TODO: imageCache, find solutions to OutOfMemoryError, remove status bar
 
-        imageLoader = VolleySingleton.getInstance(this).getImageLoader();
-        Log.d("score link", getScoreLink(trackNumber));
-        //imageLoader.get()
-        imageLoader.get(getScoreLink(trackNumber), new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                if (response.getBitmap() != null) {
-                    try {
-                        //response.
-                        //TODO: set new decode method.
-                        //bitmap = getResizedBitmap(response.getBitmap(), screenWidth,
-                        //        screenHeight);
-                        //imageView.setImage(ImageSource.bitmap(bitmap));
-                        imageView.setImage(ImageSource.bitmap(response.getBitmap()));
 
-                        progressBarScore.setVisibility(View.GONE);
-                    } catch (OutOfMemoryError e) {
-                        e.printStackTrace();
-                    }
-
-
-                }
-
-            }
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }, screenWidth, screenHeight, ImageView.ScaleType.CENTER_INSIDE);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnPreparedListener(this);
@@ -150,12 +106,18 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
     }
 
+    public static Intent getLaunchIntent(Context context, int track) {
+        Intent intent = new Intent(context, ScoreActivity.class);
+        intent.putExtra(TRACK, track);
+        return intent;
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         outState.putInt("position", mediaPlayer.getCurrentPosition());
         outState.putInt("track", trackNumber);
-        super.onSaveInstanceState(outState);
+
     }
 
     //Will only be called when activity is destroyed by OS. e.g. rotation
@@ -172,10 +134,10 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     @Override
     protected void onStop() {
         super.onStop();
-        if (mediacontroller.isShowing()){
+        if (mediacontroller.isShowing()) {
             mediacontroller.hide();
         }
-        if (mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
@@ -287,27 +249,6 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
         return bitmap;
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int boundWidth, int boundHeight) {
-
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        if (width <= boundWidth && height <= boundHeight) {
-            return bm;
-        } else {
-            float ratioW = width / boundWidth;
-            float ratioH = height / boundHeight;
-            if (ratioW >= ratioH) {
-                height = Math.round(height / ratioW);
-                width = boundWidth;
-            } else {
-                width = Math.round(width / ratioH);
-                height = boundHeight;
-            }
-        }
-
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bm, width, height, false);
-        return resizedBitmap;
-    }
 
 
     @Override
@@ -379,7 +320,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
                     v.getContext().startActivity(intent);
                 } else {
                     Snackbar snackbar = Snackbar.make(v, v.getContext()
-                            .getString(R.string.end_of_list)
+                                    .getString(R.string.end_of_list)
                             , Snackbar.LENGTH_SHORT);
                     snackbar.getView().setBackgroundColor(v.getContext().getResources()
                             .getColor(R.color.colorAccent));
@@ -397,7 +338,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
                     v.getContext().startActivity(intent);
                 } else {
                     Snackbar snackbar = Snackbar.make(v, v.getContext()
-                            .getString(R.string.beginning_of_list)
+                                    .getString(R.string.beginning_of_list)
                             , Snackbar.LENGTH_SHORT);
                     snackbar.getView().setBackgroundColor(v.getContext().getResources()
                             .getColor(R.color.colorAccent));

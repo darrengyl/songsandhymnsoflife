@@ -22,57 +22,43 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"
-        >
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/dp1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:text="@string/_1"
                 android:textSize="25sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/dp2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_2"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-
                 android:textSize="25sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/dp3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_3"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:textSize="25sp"
-                />
+                android:textSize="25sp" />
 
         </TableRow>
 
@@ -81,35 +67,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/dp4"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_4"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/dp5"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_5"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/dp6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -130,7 +108,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <Button
+            <TextView
                 android:id="@+id/dp7"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -144,7 +122,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/dp8"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -158,7 +136,7 @@
                 android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/dp9"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -179,23 +157,22 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/backspace"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-
                 android:gravity="center"
-                android:background="@drawable/ripple_function_button"
+                android:background="@drawable/ripple_number"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/ic_undo_white_36dp"
-
+                android:src="@drawable/ic_backspace_24dp"
+                android:tint="@color/colorAccent"
                 android:textSize="25sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/dp0"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -209,18 +186,19 @@
                 android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/accept"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/ripple_function_button"
+                android:background="@drawable/ripple_number"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:src="@drawable/ic_play_arrow_white_36dp"
+                android:src="@drawable/ic_arrow_forward_24dp"
+                android:tint="@color/colorAccent"
                 android:textSize="25sp" />
 
         </TableRow>

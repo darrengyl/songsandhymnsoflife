@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.church.psalm.DbAdapter;
 import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
@@ -54,7 +54,6 @@ import butterknife.OnItemClick;
 
 //TODO: searchView
 public class ListsFragment extends Fragment implements sortListener, ViewListFragment, OnClickInterface {
-    DbAdapter dbAdapter;
     private RecyclerViewAdapter _listAdapter;
     private MaterialDialog _dialog;
     @Bind(R.id.recyclerview)
@@ -66,16 +65,20 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((songsandhymnsoflife) getActivity().getApplication()).getComponent().inject(this);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lists, container, false);
         ButterKnife.bind(this, view);
-        recyclerview = new RecyclerView(getActivity());
         _listAdapter = new RecyclerViewAdapter(getActivity(), this);
-        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerview.setLayoutManager(linearLayoutManager);
+        recyclerview.setAdapter(_listAdapter);
+
         return view;
     }
 
@@ -90,11 +93,6 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
     public void onStop() {
         super.onStop();
         presenterListsFragment.setView(null);
-    }
-
-    @OnItemClick(R.id.recyclerview)
-    public void onItemClick(int position) {
-        presenterListsFragment.onItemClick(position);
     }
 
     @Override
@@ -116,7 +114,13 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
 
     @Override
     public void refreshListData(List<Song> songs) {
+        Log.d("Thread", String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
         _listAdapter.setData(songs);
+    }
+
+    @Override
+    public void refreshAdapter() {
+        _listAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -135,11 +139,8 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
         Snackbar snackbar = Snackbar.make(getActivity().findViewById(android.R.id.content)
                 , getResources().getString(R.string.network_error)
                 , Snackbar.LENGTH_LONG);
-        snackbar.setAction("Settings", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().startActivity(new Intent(Settings.ACTION_SETTINGS));
-            }
+        snackbar.setAction("Settings", v -> {
+            getActivity().startActivity(new Intent(Settings.ACTION_SETTINGS));
         });
         snackbar.show();
     }
@@ -189,8 +190,13 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
     }
 
     @Override
-    public void onClicked(int position) {
-        presenterListsFragment.onFavStarClicked(position);
+    public void onClickedFav(int position) {
+        //presenterListsFragment.onFavStarClicked(position);
+    }
+
+    @Override
+    public void onClickedItem(int position) {
+        //presenterListsFragment.onItemClick(position);
     }
 }
 

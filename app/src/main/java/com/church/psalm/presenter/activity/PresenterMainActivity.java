@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
-import com.church.psalm.DbAdapter;
 import com.church.psalm.R;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewMainActivity;
@@ -24,7 +23,6 @@ public class PresenterMainActivity implements Presenter {
     private Context _context;
     private boolean _doesDbExist;
     private Subscription _subscription;
-    private DbAdapter _dbAdapter;
 
     public PresenterMainActivity(Context context) {
         _context = context;
@@ -36,34 +34,7 @@ public class PresenterMainActivity implements Presenter {
 
     @Override
     public void start() {
-        _dbAdapter = new DbAdapter(_context);
-        if (!_doesDbExist) {
-            _view.showProgressDialog();
-            Observable createDatabase = Observable.create(new Observable.OnSubscribe<Boolean>() {
-                @Override
-                public void call(Subscriber<? super Boolean> subscriber) {
-                    try {
-                        boolean error = insertSongs();
-                        subscriber.onNext(error);
-                        subscriber.onCompleted();
-                    } catch (Exception e) {
-                        //TODO:Snackbar
-                        _view.dismissProgressDialog();
-                    }
-                }
-            });
-            createDatabase.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Boolean>() {
-                        @Override
-                        public void call(Boolean error) {
-                            if (!error) {
-                                _view.refreshListData();
-                            }
-                            _view.dismissProgressDialog();
-                        }
-                    });
-        }
+
     }
 
     @Override

@@ -19,6 +19,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.church.psalm.R;
@@ -41,29 +42,29 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
     @Bind(R.id.display)
     TextView display;
     @Bind(R.id.dp1)
-    Button dp1;
+    TextView dp1;
     @Bind(R.id.dp2)
-    Button dp2;
+    TextView dp2;
     @Bind(R.id.dp3)
-    Button dp3;
+    TextView dp3;
     @Bind(R.id.dp4)
-    Button dp4;
+    TextView dp4;
     @Bind(R.id.dp5)
-    Button dp5;
+    TextView dp5;
     @Bind(R.id.dp6)
-    Button dp6;
+    TextView dp6;
     @Bind(R.id.dp7)
-    Button dp7;
+    TextView dp7;
     @Bind(R.id.dp8)
-    Button dp8;
+    TextView dp8;
     @Bind(R.id.dp9)
-    Button dp9;
+    TextView dp9;
     @Bind(R.id.backspace)
-    ImageButton backspace;
+    ImageView backspace;
     @Bind(R.id.dp0)
-    Button dp0;
+    TextView dp0;
     @Bind(R.id.accept)
-    ImageButton accept;
+    ImageView accept;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +83,18 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
         hint.setSpan(ass, 0, hint.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         display.setHint(new SpannableString(hint));
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenterNumbersFragment.setView(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        presenterNumbersFragment.setView(null);
     }
 
     @OnClick({R.id.dp0, R.id.dp1, R.id.dp2, R.id.dp3, R.id.dp4, R.id.dp5

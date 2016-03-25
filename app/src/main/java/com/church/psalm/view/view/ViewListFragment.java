@@ -9,9 +9,11 @@ import java.util.List;
  */
 public interface ViewListFragment {
     void showProgressDialog();
+
     void dismissProgressDialog();
 
     void refreshListData(List<Song> songs);
+    void refreshAdapter();
 
     void startScoreActivity(int position);
 

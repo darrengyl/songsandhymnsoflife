@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.church.psalm.DbAdapter;
 import com.church.psalm.R;
 import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.view.activity.ScoreActivity;
@@ -34,8 +33,6 @@ import butterknife.OnClick;
  * Created by Darren Gu on 10/1/2015.
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
-    @Bind(R.id.fav_star)
-    ImageButton favStar;
     private List<Song> _data;
     private Context _context;
     private OnClickInterface _listener;
@@ -49,7 +46,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void setData(List<Song> data) {
         _data.clear();
         _data.addAll(data);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, data.size() - 1);
     }
 
     @Override
@@ -61,16 +58,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        Drawable favImage;
         Log.d("Recyclerview", "onBindViewHolder is called" + position);
         Song song = _data.get(position);
-        holder.track.setText(song.getTrackNumber());
-        holder.title.setText(song.getTitle());
-        int freqInt = song.getFrequency();
+        holder.track.setText(String.valueOf(song.get_trackNumber()));
+        holder.title.setText(song.get_title());
+        int freqInt = song.get_frequency();
         String freqNumber = _context.getResources().getQuantityString(R.plurals.frequency_number
                 , freqInt, freqInt);
         holder.freq.setText(freqNumber);
-        if (song.getFavorite() != 0) {
+        if (song.is_favorite()) {
             holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
         } else {
             holder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
@@ -79,12 +75,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return _data.size();
+        return (_data == null ? 0 : _data.size());
     }
 
     public void setFavStar(int position, int value) {
-        _data.get(position).setFavorite(value);
-        notifyItemChanged(position);
+/*        _data.get(position).set_favorite();
+        notifyItemChanged(position);*/
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -100,12 +96,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public MyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            fav.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    _listener.onClicked(getAdapterPosition());
-                }
-            });
+        }
+
+        @OnClick(R.id.fav_star)
+        public void onClickFav() {
+            _listener.onClickedFav(getAdapterPosition());
+        }
+
+        @OnClick(R.id.item_row)
+        public void onClickItem() {
+            _listener.onClickedItem(getAdapterPosition());
         }
     }
 }

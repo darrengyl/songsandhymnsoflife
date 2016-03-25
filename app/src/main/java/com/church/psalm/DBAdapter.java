@@ -1,3 +1,4 @@
+/*
 package com.church.psalm;
 
 import android.content.ContentValues;
@@ -22,9 +23,11 @@ import static com.church.psalm.model.AllSongsContract.AllSongsEntry.COLUMN_NAME_
 import static com.church.psalm.model.AllSongsContract.AllSongsEntry.ID;
 import static com.church.psalm.model.AllSongsContract.AllSongsEntry.TABLE_NAME;
 
+*/
 /**
  * Created by Darren Gu on 8/20/2015.
- */
+ *//*
+
 public class DbAdapter {
     List<Song> data;
     DBHelper dbHelper;
@@ -51,8 +54,8 @@ public class DbAdapter {
                 String lyrics = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_LYRICS));
                 int favourite = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_FAVORITE));
                 //System.out.println("" + track + title + freq + dwnld + lyrics);
-                Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
-                data.add(song);
+                //Song song = new Song(track, title, freq, dwnld, lyrics, favourite);
+                //data.add(song);
             }
         } finally {
             db.close();
@@ -182,9 +185,11 @@ public class DbAdapter {
 
     public long insertSongData(int track, String title, int freq, int downloaded, String text, int fav){
         long id = -1L;
-        /*if (db != null){
+        */
+/*if (db != null){
             System.out.println("get db successfully");
-        }*/
+        }*//*
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_NAME_TRACKNUMBER, track);
         contentValues.put(COLUMN_NAME_TITLE, title);
@@ -280,3 +285,4 @@ public class DbAdapter {
 
 
 }
+*/

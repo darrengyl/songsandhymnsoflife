@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/item_row"
     android:layout_width="match_parent"
     android:layout_height="72dp"
     android:background="@drawable/ripple_list">
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="72dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginRight="16dp"
         android:layout_toLeftOf="@id/fav_star"
         android:orientation="vertical">

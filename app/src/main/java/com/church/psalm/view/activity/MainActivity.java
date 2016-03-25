@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        presenterMainActivity.setDatabase(doesDatabaseExist());
-
     }
 
     public void setupFloatingButton() {

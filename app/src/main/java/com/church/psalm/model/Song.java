@@ -1,73 +1,81 @@
 package com.church.psalm.model;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Index;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
+
 /**
  * Created by Darren Gu on 10/1/2015.
  */
-public class Song {
-    //private int _id;
-    private int trackNumber;
-    private String title;
-    private int frequency;
-    private String downloaded;
-    private String lyrics;
-    private int favorite;
+public class Song extends RealmObject {
+    @PrimaryKey
+    private int _id;
+    @Index
+    private int _trackNumber;
+    @Required
+    @Index
+    private String _title;
+    private int _frequency;
+    private boolean _downloaded;
+    @Index
+    private String _lyrics;
+    private boolean _favorite;
 
-    public Song(int trackNumber, String title, int frequency, String downloaded, String lyrics,
-                int favorite){
-        this.trackNumber = trackNumber;
-        this.title = title;
-        this.frequency = frequency;
-        this.downloaded = downloaded;
-        this.lyrics = lyrics;
-        this.favorite = favorite;
 
+    public int get_trackNumber() {
+        return _trackNumber;
     }
 
-    public int getTrackNumber() {
-        return trackNumber;
+    public void set_trackNumber(int _trackNumber) {
+        this._trackNumber = _trackNumber;
     }
 
-    public void setTrackNumber(int trackNumber) {
-        this.trackNumber = trackNumber;
+    public String get_title() {
+        return _title;
     }
 
-    public String getTitle() {
-        return title;
+    public void set_title(String _title) {
+        this._title = _title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public int get_frequency() {
+        return _frequency;
     }
 
-    public int getFrequency() {
-        return frequency;
+    public void set_frequency(int _frequency) {
+        this._frequency = _frequency;
     }
 
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
+    public boolean is_downloaded() {
+        return _downloaded;
     }
 
-    public String getDownloaded() {
-        return downloaded;
+    public void set_downloaded(boolean _downloaded) {
+        this._downloaded = _downloaded;
     }
 
-    public void setDownloaded(String downloaded) {
-        this.downloaded = downloaded;
+    public String get_lyrics() {
+        return _lyrics;
     }
 
-    public String getLyrics() {
-        return lyrics;
+    public void set_lyrics(String _lyrics) {
+        this._lyrics = _lyrics;
     }
 
-    public void setLyrics(String lyrics) {
-        this.lyrics = lyrics;
+    public boolean is_favorite() {
+        return _favorite;
     }
 
-    public void setFavorite(int favorite) {
-        this.favorite = favorite;
+    public void set_favorite(boolean _favorite) {
+        this._favorite = _favorite;
     }
 
-    public int getFavorite() {
-        return favorite;
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
     }
 }
