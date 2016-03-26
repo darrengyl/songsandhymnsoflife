@@ -29,6 +29,7 @@ import io.realm.RealmResults;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -39,16 +40,13 @@ import rx.schedulers.Schedulers;
 public class PresenterListsFragment implements Presenter {
     private ViewListFragment _view;
     private Context _context;
-    private List<Song> _data;
-    private RealmChangeListener realmChangeListener;
-    private RealmChangeListener singleItemChangeListener;
+    private RealmResults<Song> _data;
     private Realm realm;
+    private boolean isChecked;
 
     public PresenterListsFragment(Context context) {
         _context = context;
         realm = Realm.getDefaultInstance();
-
-
     }
 
     public void setView(ViewListFragment view) {
@@ -57,48 +55,24 @@ public class PresenterListsFragment implements Presenter {
 
     @Override
     public void start() {
-        realm.where(Song.class).findFirstAsync().asObservable()
-                .filter(song -> song.isLoaded())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(song -> {
-                    if (!song.isValid()) {
-                        addUsers();
-                    } else {
-                        updateAllSongs();
-                    }
-                });
-        //!doesDatabaseExist()
-        /*if (!doesDatabaseExist()) {
-            _view.showProgressDialog();
-            Observable<Boolean> createDatabase = Observable.create(new Observable.OnSubscribe<Boolean>() {
-                @Override
-                public void call(Subscriber<? super Boolean> subscriber) {
-                    try {
-                        boolean error = insertSongs();
-                        subscriber.onNext(error);
-                        subscriber.onCompleted();
-                    } catch (Exception e) {
-                        subscriber.onError(e);
-                    }
-                }
-            });
-            createDatabase.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<Boolean>() {
-                        @Override
-                        public void call(Boolean error) {
-                            if (error) {
-                                Log.d("Database", "Song insertions finished with error(s)");
-                            }
-                            _data = _dbAdapter.getAllSongs();
-                            _view.refreshListData(_data);
-                            _view.dismissProgressDialog();
+        _view.showProgressDialog();
+        if (isChecked) {
+            _view.refreshListData(_data);
+            _view.dismissProgressDialog();
+        } else {
+            realm.where(Song.class).findFirstAsync().asObservable()
+                    .filter(song -> song.isLoaded())
+                    .first()
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(song -> {
+                        if (!song.isValid()) {
+                            addUsers();
+                        } else {
+                            updateAllSongs();
                         }
                     });
-        } else {
-            _data = _dbAdapter.getAllSongs();
-            _view.refreshListData(_data);
-        }*/
+            isChecked = true;
+        }
     }
 
     @Override
@@ -106,42 +80,35 @@ public class PresenterListsFragment implements Presenter {
         realm.close();
     }
 
-/*    private boolean insertSongs() {
-        boolean error = false;
-        String[] title = _context.getResources().getStringArray(R.array.song_titles);
-        for (int i = 0; i < title.length; i++) {
-            if (_dbAdapter.insertSongData(i + 1, title[i], 0, 0, "", 0) == -1) {
-                Log.d("Database error", "error occurred when inserting" + String.valueOf(i + 1) + title[i]);
-                error = true;
-            }
-        }
-        return error;
-    }*/
 
-    private boolean doesDatabaseExist() {
-        File dbFile = _context.getDatabasePath(AllSongsContract.AllSongsEntry.TABLE_NAME);
-        return dbFile.exists();
-    }
-
-/*    public void onItemClick(int position) {
+    public void onItemClick(int position) {
         if (isNetworkConnected()) {
             System.out.println("Pressed position " + position);
-            _dbAdapter.incrementFreq(position);
-            int freqInt = _dbAdapter.getFreq(position);
             Song song = _data.get(position);
-            //song.setFrequency(freqInt);
-            _data.set(position, song);
-            _view.startScoreActivity(position);
+            realm.beginTransaction();
+            song.set_frequency(song.get_frequency() + 1);
+            realm.commitTransaction();
+            _view.updateItem(position);
+            //_view.startScoreActivity(position);
         } else {
             _view.showErrorSnackbar();
         }
     }
 
     public void onFavStarClicked(int position) {
-        _dbAdapter.flipFav(position);
-        int favInt = _dbAdapter.getFav(position) ? 1 : 0;
-        _view.setFavStar(position, favInt);
-    }*/
+        Song song = _data.get(position);
+        boolean isFav = song.is_favorite();
+        realm.beginTransaction();
+        song.set_favorite(!isFav);
+        realm.commitTransaction();
+        updateItem(position);
+    }
+
+    private void updateItem(int position) {
+        if (_view != null) {
+            _view.updateItem(position);
+        }
+    }
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) _context.getSystemService(
@@ -152,7 +119,6 @@ public class PresenterListsFragment implements Presenter {
     }
 
     private void addUsers() {
-
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -180,11 +146,14 @@ public class PresenterListsFragment implements Presenter {
     private void updateAllSongs() {
         realm.where(Song.class).findAllSortedAsync("_id").asObservable()
                 .filter(song -> song.isLoaded())
+                .first()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(songs -> {
                     if (_view != null) {
                         _view.refreshListData(songs);
+                        _view.dismissProgressDialog();
                     }
+                    _data = songs;
                 });
     }
 }

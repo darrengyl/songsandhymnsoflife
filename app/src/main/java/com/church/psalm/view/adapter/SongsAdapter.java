@@ -1,82 +1,70 @@
 package com.church.psalm.view.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.provider.Settings;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.church.psalm.R;
 import com.church.psalm.interfaces.OnClickInterface;
-import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.model.Song;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.realm.RealmResults;
 
 /**
- * Created by Darren Gu on 10/1/2015.
+ * Created by darrengu on 3/26/16.
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
-    private RealmResults<Song> _data;
+public class SongsAdapter extends RealmRecyclerViewAdapter<Song> {
     private Context _context;
     private OnClickInterface _listener;
 
-    public RecyclerViewAdapter(Context context, OnClickInterface listener) {
+    public SongsAdapter(Context context) {
         _context = context;
-        _listener = listener;
-    }
-
-    public void setData(RealmResults<Song> data) {
-        _data = data;
-        notifyItemRangeChanged(0, _data.size() - 1);
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(_context).inflate(R.layout.eachsong, parent, false);
-        MyViewHolder holder = new MyViewHolder(view);
+        SongViewHolder holder = new SongViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
-        Song song = _data.get(position);
-        holder.track.setText(String.valueOf(song.get_trackNumber()));
-        holder.title.setText(song.get_title());
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        SongViewHolder viewHolder = (SongViewHolder) holder;
+        Song song = getItem(position);
+        viewHolder.track.setText(String.valueOf(song.get_trackNumber()));
+        viewHolder.title.setText(song.get_title());
         int freqInt = song.get_frequency();
         String freqNumber = _context.getResources().getQuantityString(R.plurals.frequency_number
                 , freqInt, freqInt);
-        holder.freq.setText(freqNumber);
+        viewHolder.freq.setText(freqNumber);
         if (song.is_favorite()) {
-            holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
+            viewHolder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
         } else {
-            holder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            viewHolder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
     }
 
     @Override
     public int getItemCount() {
-        return (_data == null ? 0 : _data.size());
+        if (getRealmBaseAdapter() != null) {
+            return getRealmBaseAdapter().getCount();
+        } else {
+            return 0;
+        }
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setListener(OnClickInterface listener) {
+        _listener = listener;
+    }
+
+    class SongViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tracknumber)
         TextView track;
         @Bind(R.id.title)
@@ -86,7 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Bind(R.id.fav_star)
         ImageView fav;
 
-        public MyViewHolder(View itemView) {
+        public SongViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

@@ -104,8 +104,4 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
 
     }
 
-    private boolean doesDatabaseExist() {
-        File dbFile = getDatabasePath(AllSongsContract.AllSongsEntry.TABLE_NAME);
-        return dbFile.exists();
-    }
 }

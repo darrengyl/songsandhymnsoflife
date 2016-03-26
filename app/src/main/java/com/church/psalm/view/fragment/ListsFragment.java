@@ -38,9 +38,11 @@ import com.church.psalm.songsandhymnsoflife;
 import com.church.psalm.view.DividerItemDecoration;
 import com.church.psalm.R;
 import com.church.psalm.view.activity.ScoreActivity;
+import com.church.psalm.view.adapter.RealmSongsAdapter;
 import com.church.psalm.view.adapter.RecyclerViewAdapter;
 import com.church.psalm.model.Song;
 import com.church.psalm.sortListener;
+import com.church.psalm.view.adapter.SongsAdapter;
 import com.church.psalm.view.view.ViewListFragment;
 
 import java.util.ArrayList;
@@ -51,15 +53,17 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
+import io.realm.RealmResults;
 
 //TODO: searchView
 public class ListsFragment extends Fragment implements sortListener, ViewListFragment, OnClickInterface {
-    private RecyclerViewAdapter _listAdapter;
     private MaterialDialog _dialog;
     @Bind(R.id.recyclerview)
     RecyclerView recyclerview;
     @Inject
     PresenterListsFragment presenterListsFragment;
+
+    private SongsAdapter _songsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,13 +76,10 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lists, container, false);
         ButterKnife.bind(this, view);
-        _listAdapter = new RecyclerViewAdapter(getActivity(), this);
-
+        _songsAdapter = new SongsAdapter(getContext());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerview.setLayoutManager(linearLayoutManager);
-        recyclerview.setAdapter(_listAdapter);
-
+        recyclerview.setAdapter(_songsAdapter);
         return view;
     }
 
@@ -113,25 +114,23 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
     }
 
     @Override
-    public void refreshListData(List<Song> songs) {
-        Log.d("Thread", String.valueOf(Looper.myLooper() == Looper.getMainLooper()));
-        _listAdapter.setData(songs);
+    public void refreshListData(RealmResults<Song> songs) {
+        RealmSongsAdapter realmSongsAdapter = new RealmSongsAdapter(getActivity().getApplicationContext(),
+                songs, true);
+        _songsAdapter.setRealmAdapter(realmSongsAdapter);
+        _songsAdapter.setListener(this);
+        _songsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void refreshAdapter() {
-        _listAdapter.notifyDataSetChanged();
+        _songsAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void startScoreActivity(int position) {
         Intent intent = ScoreActivity.getLaunchIntent(getActivity(), position);
         startActivity(intent);
-    }
-
-    @Override
-    public void setFavStar(int position, int value) {
-        _listAdapter.setFavStar(position, value);
     }
 
     @Override
@@ -191,12 +190,18 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
 
     @Override
     public void onClickedFav(int position) {
-        //presenterListsFragment.onFavStarClicked(position);
+        presenterListsFragment.onFavStarClicked(position);
     }
 
     @Override
     public void onClickedItem(int position) {
-        //presenterListsFragment.onItemClick(position);
+        presenterListsFragment.onItemClick(position);
     }
+
+    public void updateItem(int position) {
+        _songsAdapter.notifyItemChanged(position);
+    }
+
+
 }
 
