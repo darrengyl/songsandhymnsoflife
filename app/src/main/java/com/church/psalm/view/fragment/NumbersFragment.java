@@ -41,30 +41,6 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
     PresenterNumbersFragment presenterNumbersFragment;
     @Bind(R.id.display)
     TextView display;
-    @Bind(R.id.dp1)
-    TextView dp1;
-    @Bind(R.id.dp2)
-    TextView dp2;
-    @Bind(R.id.dp3)
-    TextView dp3;
-    @Bind(R.id.dp4)
-    TextView dp4;
-    @Bind(R.id.dp5)
-    TextView dp5;
-    @Bind(R.id.dp6)
-    TextView dp6;
-    @Bind(R.id.dp7)
-    TextView dp7;
-    @Bind(R.id.dp8)
-    TextView dp8;
-    @Bind(R.id.dp9)
-    TextView dp9;
-    @Bind(R.id.backspace)
-    ImageView backspace;
-    @Bind(R.id.dp0)
-    TextView dp0;
-    @Bind(R.id.accept)
-    ImageView accept;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +65,7 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
     public void onStart() {
         super.onStart();
         presenterNumbersFragment.setView(this);
+        presenterNumbersFragment.start();
     }
 
     @Override
@@ -100,7 +77,7 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
     @OnClick({R.id.dp0, R.id.dp1, R.id.dp2, R.id.dp3, R.id.dp4, R.id.dp5
             , R.id.dp6, R.id.dp7, R.id.dp8, R.id.dp9})
     public void onClickOnNumbers(View view) {
-        CharSequence num = ((Button) view).getText();
+        CharSequence num = ((TextView) view).getText();
         presenterNumbersFragment.numberClicked(num);
     }
 

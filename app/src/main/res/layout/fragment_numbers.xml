@@ -5,8 +5,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    >
+    android:paddingBottom="10dp" >
 
     <TextView
         android:id="@+id/display"
@@ -22,8 +21,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" >
+        android:layout_margin="15dp" >
 
         <TableRow
             android:layout_width="match_parent"
@@ -89,16 +87,12 @@
 
             <TextView
                 android:id="@+id/dp6"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_6"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
         </TableRow>
@@ -110,46 +104,33 @@
 
             <TextView
                 android:id="@+id/dp7"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_7"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/dp8"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_8"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/dp9"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_9"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp" />
-
         </TableRow>
 
         <TableRow
@@ -159,46 +140,33 @@
 
             <ImageView
                 android:id="@+id/backspace"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:layout_gravity="center"
+
                 android:background="@drawable/ripple_number"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_backspace_24dp"
-                android:tint="@color/colorAccent"
                 android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/dp0"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
                 android:gravity="center"
                 android:text="@string/_0"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
                 android:textSize="25sp" />
 
             <ImageView
                 android:id="@+id/accept"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/ripple_number"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
+                android:layout_gravity="center"
                 android:src="@drawable/ic_arrow_forward_24dp"
-                android:tint="@color/colorAccent"
                 android:textSize="25sp" />
 
         </TableRow>

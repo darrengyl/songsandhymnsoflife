@@ -1,58 +1,35 @@
 package com.church.psalm.view.fragment;
 
 
-import android.animation.LayoutTransition;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.church.psalm.interfaces.OnClickInterface;
-import com.church.psalm.presenter.Presenter;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
 import com.church.psalm.songsandhymnsoflife;
-import com.church.psalm.view.DividerItemDecoration;
 import com.church.psalm.R;
 import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.view.adapter.RealmSongsAdapter;
-import com.church.psalm.view.adapter.RecyclerViewAdapter;
 import com.church.psalm.model.Song;
 import com.church.psalm.sortListener;
 import com.church.psalm.view.adapter.SongsAdapter;
 import com.church.psalm.view.view.ViewListFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 import io.realm.RealmResults;
 
 //TODO: searchView

@@ -26,7 +26,9 @@ public class PresenterNumbersFragment implements Presenter {
 
     @Override
     public void start() {
-
+        if (_view != null) {
+            _view.updateDisplay(stringBuilder.toString());
+        }
     }
 
     @Override
@@ -35,7 +37,7 @@ public class PresenterNumbersFragment implements Presenter {
     }
 
     public void numberClicked(CharSequence num) {
-        if (stringBuilder.length() < 3) {
+        if (stringBuilder.length() < 4) {
             stringBuilder.append(num);
             _view.updateDisplay(stringBuilder.toString());
         } else {
