@@ -8,9 +8,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,7 +24,7 @@ import com.church.psalm.R;
 import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.view.adapter.RealmSongsAdapter;
 import com.church.psalm.model.Song;
-import com.church.psalm.sortListener;
+
 import com.church.psalm.view.adapter.SongsAdapter;
 import com.church.psalm.view.view.ViewListFragment;
 
@@ -33,7 +35,7 @@ import butterknife.ButterKnife;
 import io.realm.RealmResults;
 
 //TODO: searchView
-public class ListsFragment extends Fragment implements sortListener, ViewListFragment, OnClickInterface {
+public class ListsFragment extends Fragment implements ViewListFragment, OnClickInterface {
     private MaterialDialog _dialog;
     @Bind(R.id.recyclerview)
     RecyclerView recyclerview;
@@ -46,7 +48,7 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((songsandhymnsoflife) getActivity().getApplication()).getComponent().inject(this);
-        //setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -54,6 +56,7 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
         View view = inflater.inflate(R.layout.fragment_lists, container, false);
         ButterKnife.bind(this, view);
         _songsAdapter = new SongsAdapter(getContext());
+        _songsAdapter.setListener(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerview.setLayoutManager(linearLayoutManager);
         recyclerview.setAdapter(_songsAdapter);
@@ -95,7 +98,6 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
         RealmSongsAdapter realmSongsAdapter = new RealmSongsAdapter(getActivity().getApplicationContext(),
                 songs, true);
         _songsAdapter.setRealmAdapter(realmSongsAdapter);
-        _songsAdapter.setListener(this);
         _songsAdapter.notifyDataSetChanged();
     }
 
@@ -123,41 +125,36 @@ public class ListsFragment extends Fragment implements sortListener, ViewListFra
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-
+        inflater.inflate(R.menu.menu_list_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
-    public void onSortByFav() {
-/*        ArrayList<Song> result = new ArrayList<Song>();
-        result = dbAdapter.getMostFavSongs();
-        if (result.size() > 0) {
-            adapter.setData(result);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_by:
+                showSortByDialog();
+                break;
 
-        }*/
+        }
+        return true;
     }
 
-    @Override
-    public void onSortByFreq() {
-/*        ArrayList<Song> result = new ArrayList<Song>();
-        result = dbAdapter.getMostPlayedSongs();
-        if (result.size() > 0) {
-            adapter.setData(result);
-
-        }*/
+    private void showSortByDialog() {
+        new MaterialDialog.Builder(getContext())
+                .title("Sort by")
+                .items(R.array.sort_by_list)
+                .itemsCallbackSingleChoice(presenterListsFragment.getCurrentOrder(),
+                        new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+                        presenterListsFragment.sortBy(which);
+                        Log.d("Sort by dialog", "Chose " + which);
+                        return true;
+                    }
+                })
+                .show();
     }
-
-    @Override
-    public void onSortByTrack() {
-/*        ArrayList<Song> result = new ArrayList<Song>();
-        result = dbAdapter.getAllSongs();
-        if (result.size() > 0) {
-            adapter.setData(result);
-
-        }*/
-    }
-
-
 
     @Override
     public void onDestroyView() {

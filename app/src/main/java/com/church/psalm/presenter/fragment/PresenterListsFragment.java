@@ -26,6 +26,7 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -43,10 +44,12 @@ public class PresenterListsFragment implements Presenter {
     private RealmResults<Song> _data;
     private Realm realm;
     private boolean isChecked;
+    private int _currentOrder;
 
     public PresenterListsFragment(Context context) {
         _context = context;
         realm = Realm.getDefaultInstance();
+        _currentOrder = 0;
     }
 
     public void setView(ViewListFragment view) {
@@ -155,5 +158,47 @@ public class PresenterListsFragment implements Presenter {
                     }
                     _data = songs;
                 });
+    }
+
+    public void sortBy(int which) {
+        if (which != _currentOrder) {
+            switch (which) {
+                case 0:
+                    sortByTrackNumber();
+                    break;
+                case 1:
+                    sortByAlphabeticalOrder();
+                    break;
+                case 2:
+                    sortByFrequency();
+                    break;
+                default:
+                    sortByTrackNumber();
+            }
+        }
+    }
+
+    private void sortByTrackNumber() {
+        _currentOrder = 0;
+        Log.d("Sort by", "Number");
+        _data.sort("_id");
+        _view.refreshListData(_data);
+    }
+
+    private void sortByAlphabeticalOrder() {
+        _currentOrder = 1;
+    }
+
+    private void sortByFrequency() {
+        _currentOrder = 2;
+        Log.d("Sort by", "frequency");
+        _data.sort("_frequency", Sort.DESCENDING);
+        //_view.refreshAdapter();
+        _view.refreshListData(_data);
+
+    }
+
+    public int getCurrentOrder() {
+        return _currentOrder;
     }
 }

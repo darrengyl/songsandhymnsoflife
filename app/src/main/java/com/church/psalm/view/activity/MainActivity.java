@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         ButterKnife.bind(this);
         ((songsandhymnsoflife)getApplication()).getComponent().inject(this);
         setSupportActionBar(toolBar);
+        getSupportActionBar().setTitle("Hymns of Life");
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         listsFragment = new ListsFragment();
         numbersFragment = new NumbersFragment();
@@ -65,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
 
 
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
 
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
 
     @Override

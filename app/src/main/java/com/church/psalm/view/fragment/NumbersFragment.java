@@ -133,7 +133,7 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
 
     @Override
     public void startScoreActivity(int trackNumber) {
-        Intent intent = ScoreActivity.getLaunchIntent(getActivity(), trackNumber);
-        startActivity(intent);
+        /*Intent intent = ScoreActivity.getLaunchIntent(getActivity(), trackNumber);
+        startActivity(intent);*/
     }
 }
