@@ -3,6 +3,7 @@ package com.church.psalm.presenter.fragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewNumberFragment;
@@ -58,11 +59,15 @@ public class PresenterNumbersFragment implements Presenter {
     }
 
     public void acceptClicked() {
-        int trackNumber = Integer.valueOf(stringBuilder.toString());
+        int trackNumber = -1;
+        if (!TextUtils.isEmpty(stringBuilder.toString())) {
+            trackNumber = Integer.valueOf(stringBuilder.toString());
+        }
         if (isNetworkConnected()) {
             if (trackNumber > 0 && trackNumber < 587) {
                 _view.startScoreActivity(trackNumber);
                 stringBuilder.setLength(0);
+                _view.updateDisplay(stringBuilder.toString());
             } else {
                 _view.showNumberError();
             }

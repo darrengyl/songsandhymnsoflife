@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:gravity="center"
-        android:hint="@string/enter_track_number"
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/colorSeconaryText"
         android:textSize="55sp"
@@ -138,16 +137,20 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <ImageView
+            <RelativeLayout
                 android:id="@+id/backspace"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/ripple_number"
+                    android:src="@drawable/ic_backspace_24dp" />
+            </RelativeLayout>
 
-                android:background="@drawable/ripple_number"
-                android:src="@drawable/ic_backspace_24dp"
-                android:textSize="25sp" />
+
 
             <TextView
                 android:id="@+id/dp0"
@@ -159,15 +162,20 @@
                 android:text="@string/_0"
                 android:textSize="25sp" />
 
-            <ImageView
+            <RelativeLayout
                 android:id="@+id/accept"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/ripple_number"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_arrow_forward_24dp"
-                android:textSize="25sp" />
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/ripple_number"
+                    android:src="@drawable/ic_arrow_forward_24dp" />
+            </RelativeLayout>
+
+
 
         </TableRow>
     </TableLayout>

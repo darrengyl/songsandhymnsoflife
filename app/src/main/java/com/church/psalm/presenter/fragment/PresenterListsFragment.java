@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -17,7 +18,15 @@ import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.view.view.ViewListFragment;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
@@ -91,7 +100,7 @@ public class PresenterListsFragment implements Presenter {
             realm.beginTransaction();
             song.set_frequency(song.get_frequency() + 1);
             realm.commitTransaction();
-            _view.updateItem(position);
+            _view.refreshAdapter();
             //_view.startScoreActivity(position);
         } else {
             _view.showErrorSnackbar();
@@ -104,7 +113,8 @@ public class PresenterListsFragment implements Presenter {
         realm.beginTransaction();
         song.set_favorite(!isFav);
         realm.commitTransaction();
-        updateItem(position);
+        //updateItem(position);
+        _view.refreshAdapter();
     }
 
     private void updateItem(int position) {
@@ -126,11 +136,28 @@ public class PresenterListsFragment implements Presenter {
             @Override
             public void execute(Realm realm) {
                 String[] titles = _context.getResources().getStringArray(R.array.song_titles);
+                HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+                format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+                format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+                format.setVCharType(HanyuPinyinVCharType.WITH_V);
                 for (int i = 0; i < titles.length; i++) {
+                    StringBuilder title = new StringBuilder();
+                    for (char c : titles[i].toCharArray()) {
+                        if (c != ',' && c != '、' && c != '(' && c != ')' && c != '!') {
+                            try {
+                                String[] output = PinyinHelper.toHanyuPinyinStringArray(c, format);
+                                Log.d("Pinyin conversion", c + " in " + titles[i]);
+                                title.append(output[0]);
+                            } catch (BadHanyuPinyinOutputFormatCombination e) {
+                                Log.d("Pinyin Exception", e.toString());
+                            }
+                        }
+                    }
                     Song song = new Song();
                     song.set_id(i);
                     song.set_trackNumber(i + 1);
                     song.set_title(titles[i]);
+                    song.set_pinyin(title.toString());
                     song.set_favorite(false);
                     song.set_frequency(0);
                     song.set_lyrics("");
@@ -187,6 +214,9 @@ public class PresenterListsFragment implements Presenter {
 
     private void sortByAlphabeticalOrder() {
         _currentOrder = 1;
+        Log.d("Sort by", "alphabetic");
+        _data.sort("_pinyin");
+        _view.refreshListData(_data);
     }
 
     private void sortByFrequency() {

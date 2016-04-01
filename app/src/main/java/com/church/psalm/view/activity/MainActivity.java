@@ -43,13 +43,14 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     private MaterialDialog _dialog;
     private ListsFragment listsFragment;
     private NumbersFragment numbersFragment;
+    private MenuItem _sort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        ((songsandhymnsoflife)getApplication()).getComponent().inject(this);
+        ((songsandhymnsoflife) getApplication()).getComponent().inject(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setTitle("Hymns of Life");
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -59,29 +60,54 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (_sort == null) {
+                    return;
+                }
+                if (tab.getPosition() == 0) {
+                    _sort.setVisible(true);
+                } else {
+                    _sort.setVisible(false);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
     public void setupFloatingButton() {
     }
 
 
-
-/*    @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        _sort = menu.findItem(R.id.sort_by);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
-
+        switch (item.getItemId()) {
+            case R.id.sort_by:
+                if (viewPager.getCurrentItem() == 0) {
+                    listsFragment.onClickSort();
+                }
+                return true;
+        }
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 
 
     @Override

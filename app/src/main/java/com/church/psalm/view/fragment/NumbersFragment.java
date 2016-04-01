@@ -14,6 +14,8 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -46,7 +48,6 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((songsandhymnsoflife) getActivity().getApplication()).getComponent().inject(this);
-
     }
 
     @Override

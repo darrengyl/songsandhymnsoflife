@@ -16,6 +16,8 @@ public class Song extends RealmObject {
     @Required
     @Index
     private String _title;
+    @Index
+    private String _pinyin;
     private int _frequency;
     private boolean _downloaded;
     @Index
@@ -77,5 +79,13 @@ public class Song extends RealmObject {
 
     public void set_id(int _id) {
         this._id = _id;
+    }
+
+    public String get_pinyin() {
+        return _pinyin;
+    }
+
+    public void set_pinyin(String _pinyin) {
+        this._pinyin = _pinyin;
     }
 }

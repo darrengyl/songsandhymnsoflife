@@ -39,11 +39,11 @@ public class DaggerModule {
     PresenterNumbersFragment providesPresenterNumbersFragment() {
         return new PresenterNumbersFragment(_app);
     }
-
-/*    @Provides
+/*
+    @Provides
     @Singleton
     Realm providesRealm() {
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(_app).build();
-
+        return
     }*/
 }

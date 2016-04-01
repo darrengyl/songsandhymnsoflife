@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.church.psalm.R;
@@ -15,33 +16,33 @@ import com.church.psalm.model.Song;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.RealmBaseAdapter;
+import io.realm.RealmResults;
 
 /**
- * Created by darrengu on 3/26/16.
+ * Created by darrengu on 3/27/16.
  */
-public class SongsAdapter extends RealmRecyclerViewAdapter<Song> {
-    private Context _context;
+public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements ListAdapter{
     private OnClickInterface _listener;
-
-    public SongsAdapter(Context context) {
-        _context = context;
+    public RealmListviewAdapter(Context context, RealmResults<Song> realmResults, boolean automaticUpdate) {
+        super(context, realmResults, automaticUpdate);
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(_context).inflate(R.layout.eachsong, parent, false);
-        SongViewHolder holder = new SongViewHolder(view);
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        SongViewHolder viewHolder = (SongViewHolder) holder;
-        Song song = getItem(position);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        SongViewHolder viewHolder;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.eachsong, parent, false);
+            viewHolder = new SongViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (SongViewHolder) convertView.getTag();
+        }
+        Song song = realmResults.get(position);
         viewHolder.track.setText(String.valueOf(song.get_trackNumber()));
         viewHolder.title.setText(song.get_title());
         int freqInt = song.get_frequency();
-        String freqNumber = _context.getResources().getQuantityString(R.plurals.frequency_number
+        String freqNumber = context.getResources().getQuantityString(R.plurals.frequency_number
                 , freqInt, freqInt);
         viewHolder.freq.setText(freqNumber);
         if (song.is_favorite()) {
@@ -49,22 +50,23 @@ public class SongsAdapter extends RealmRecyclerViewAdapter<Song> {
         } else {
             viewHolder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
+        viewHolder.position = position;
+        return convertView;
     }
 
-    @Override
-    public int getItemCount() {
-        if (getRealmBaseAdapter() != null) {
-            return getRealmBaseAdapter().getCount();
-        } else {
-            return 0;
-        }
+    public void updateRealmResults(RealmResults<Song> queryResults) {
+        super.updateRealmResults(queryResults);
+    }
+
+    public RealmResults<Song> getRealmResults() {
+        return realmResults;
     }
 
     public void setListener(OnClickInterface listener) {
         _listener = listener;
     }
 
-    class SongViewHolder extends RecyclerView.ViewHolder {
+    class SongViewHolder{
         @Bind(R.id.tracknumber)
         TextView track;
         @Bind(R.id.title)
@@ -73,20 +75,20 @@ public class SongsAdapter extends RealmRecyclerViewAdapter<Song> {
         TextView freq;
         @Bind(R.id.fav_star)
         ImageView fav;
+        int position;
 
         public SongViewHolder(View itemView) {
-            super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
         @OnClick(R.id.fav_star_holder)
         public void onClickFav() {
-            _listener.onClickedFav(getAdapterPosition());
+            _listener.onClickedFav(position);
         }
 
         @OnClick(R.id.item_row)
         public void onClickItem() {
-            _listener.onClickedItem(getAdapterPosition());
+            _listener.onClickedItem(position);
         }
     }
 }

@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.church.psalm.interfaces.OnClickInterface;
@@ -22,10 +21,9 @@ import com.church.psalm.presenter.fragment.PresenterListsFragment;
 import com.church.psalm.songsandhymnsoflife;
 import com.church.psalm.R;
 import com.church.psalm.view.activity.ScoreActivity;
-import com.church.psalm.view.adapter.RealmSongsAdapter;
+import com.church.psalm.view.adapter.RealmListviewAdapter;
 import com.church.psalm.model.Song;
 
-import com.church.psalm.view.adapter.SongsAdapter;
 import com.church.psalm.view.view.ViewListFragment;
 
 import javax.inject.Inject;
@@ -37,29 +35,26 @@ import io.realm.RealmResults;
 //TODO: searchView
 public class ListsFragment extends Fragment implements ViewListFragment, OnClickInterface {
     private MaterialDialog _dialog;
-    @Bind(R.id.recyclerview)
-    RecyclerView recyclerview;
+    @Bind(R.id.list)
+    ListView listView;
     @Inject
     PresenterListsFragment presenterListsFragment;
 
-    private SongsAdapter _songsAdapter;
+    private RealmListviewAdapter _songsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((songsandhymnsoflife) getActivity().getApplication()).getComponent().inject(this);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lists, container, false);
         ButterKnife.bind(this, view);
-        _songsAdapter = new SongsAdapter(getContext());
+        _songsAdapter = new RealmListviewAdapter(getContext(), null, true);
         _songsAdapter.setListener(this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerview.setLayoutManager(linearLayoutManager);
-        recyclerview.setAdapter(_songsAdapter);
+        listView.setAdapter(_songsAdapter);
         return view;
     }
 
@@ -95,10 +90,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
 
     @Override
     public void refreshListData(RealmResults<Song> songs) {
-        RealmSongsAdapter realmSongsAdapter = new RealmSongsAdapter(getActivity().getApplicationContext(),
-                songs, true);
-        _songsAdapter.setRealmAdapter(realmSongsAdapter);
-        _songsAdapter.notifyDataSetChanged();
+        _songsAdapter.updateRealmResults(songs);
     }
 
     @Override
@@ -121,23 +113,6 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
             getActivity().startActivity(new Intent(Settings.ACTION_SETTINGS));
         });
         snackbar.show();
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_list_fragment, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort_by:
-                showSortByDialog();
-                break;
-
-        }
-        return true;
     }
 
     private void showSortByDialog() {
@@ -173,9 +148,12 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     }
 
     public void updateItem(int position) {
-        _songsAdapter.notifyItemChanged(position);
+        //_songsAdapter.notifyItemChanged(position);
     }
 
 
+    public void onClickSort() {
+        showSortByDialog();
+    }
 }
 
