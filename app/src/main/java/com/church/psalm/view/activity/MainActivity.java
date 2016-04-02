@@ -60,9 +60,10 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                super.onTabSelected(tab);
                 if (_sort == null) {
                     return;
                 }
@@ -72,18 +73,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                     _sort.setVisible(false);
                 }
             }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
         });
-
     }
 
     public void setupFloatingButton() {

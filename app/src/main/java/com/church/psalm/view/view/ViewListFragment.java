@@ -2,6 +2,7 @@ package com.church.psalm.view.view;
 
 import com.church.psalm.model.Song;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.RealmResults;
@@ -21,4 +22,7 @@ public interface ViewListFragment {
 
     void showErrorSnackbar();
     void updateItem(int position);
+
+    void enableFastScroll(boolean enable);
+    void setSectionIndexData(HashMap<Character, Integer> map, Character[] sections);
 }

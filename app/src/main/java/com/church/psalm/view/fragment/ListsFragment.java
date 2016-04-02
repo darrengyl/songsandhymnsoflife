@@ -26,6 +26,8 @@ import com.church.psalm.model.Song;
 
 import com.church.psalm.view.view.ViewListFragment;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -91,6 +93,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     @Override
     public void refreshListData(RealmResults<Song> songs) {
         _songsAdapter.updateRealmResults(songs);
+        listView.setSelectionAfterHeaderView();
     }
 
     @Override
@@ -149,6 +152,16 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
 
     public void updateItem(int position) {
         //_songsAdapter.notifyItemChanged(position);
+    }
+
+    @Override
+    public void enableFastScroll(boolean enable) {
+        listView.setFastScrollEnabled(enable);
+    }
+
+    @Override
+    public void setSectionIndexData(HashMap<Character, Integer> map, Character[] sections) {
+        _songsAdapter.setSectionData(map, sections);
     }
 
 

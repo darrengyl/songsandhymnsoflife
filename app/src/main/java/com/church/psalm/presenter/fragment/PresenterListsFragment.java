@@ -26,7 +26,10 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import io.realm.Realm;
@@ -54,11 +57,14 @@ public class PresenterListsFragment implements Presenter {
     private Realm realm;
     private boolean isChecked;
     private int _currentOrder;
+    private HashMap<Character, Integer> _sectionMap;
+    private Character[] _sections;
 
     public PresenterListsFragment(Context context) {
         _context = context;
         realm = Realm.getDefaultInstance();
         _currentOrder = 0;
+        _sectionMap = new HashMap<>();
     }
 
     public void setView(ViewListFragment view) {
@@ -137,7 +143,7 @@ public class PresenterListsFragment implements Presenter {
             public void execute(Realm realm) {
                 String[] titles = _context.getResources().getStringArray(R.array.song_titles);
                 HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-                format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+                format.setCaseType(HanyuPinyinCaseType.UPPERCASE);
                 format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
                 format.setVCharType(HanyuPinyinVCharType.WITH_V);
                 for (int i = 0; i < titles.length; i++) {
@@ -145,8 +151,12 @@ public class PresenterListsFragment implements Presenter {
                     for (char c : titles[i].toCharArray()) {
                         if (c != ',' && c != '、' && c != '(' && c != ')' && c != '!') {
                             try {
-                                String[] output = PinyinHelper.toHanyuPinyinStringArray(c, format);
                                 Log.d("Pinyin conversion", c + " in " + titles[i]);
+                                if (c == '哦') {
+                                    title.append("O");
+                                    continue;
+                                }
+                                String[] output = PinyinHelper.toHanyuPinyinStringArray(c, format);
                                 title.append(output[0]);
                             } catch (BadHanyuPinyinOutputFormatCombination e) {
                                 Log.d("Pinyin Exception", e.toString());
@@ -210,13 +220,16 @@ public class PresenterListsFragment implements Presenter {
         Log.d("Sort by", "Number");
         _data.sort("_id");
         _view.refreshListData(_data);
+        _view.enableFastScroll(false);
     }
 
     private void sortByAlphabeticalOrder() {
         _currentOrder = 1;
         Log.d("Sort by", "alphabetic");
         _data.sort("_pinyin");
+        setSectionIndexData();
         _view.refreshListData(_data);
+        _view.enableFastScroll(true);
     }
 
     private void sortByFrequency() {
@@ -225,10 +238,28 @@ public class PresenterListsFragment implements Presenter {
         _data.sort("_frequency", Sort.DESCENDING);
         //_view.refreshAdapter();
         _view.refreshListData(_data);
+        _view.enableFastScroll(false);
 
     }
 
     public int getCurrentOrder() {
         return _currentOrder;
+    }
+
+    private void setSectionIndexData() {
+        if (_sectionMap.size() == 0) {
+            int i = 0;
+            while (i < _data.size()) {
+                char c = _data.get(i).get_pinyin().charAt(0);
+                if (_sectionMap.get(c) == null) {
+                    _sectionMap.put(c, i);
+                }
+                i++;
+            }
+            List<Character> tempList = new ArrayList<>(_sectionMap.keySet());
+            Collections.sort(tempList);
+            _sections = tempList.toArray(new Character[_sectionMap.size()]);
+            _view.setSectionIndexData(_sectionMap, _sections);
+        }
     }
 }

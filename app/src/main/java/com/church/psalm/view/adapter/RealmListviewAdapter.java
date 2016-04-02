@@ -2,16 +2,21 @@ package com.church.psalm.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.church.psalm.R;
 import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.model.Song;
+
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,8 +27,11 @@ import io.realm.RealmResults;
 /**
  * Created by darrengu on 3/27/16.
  */
-public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements ListAdapter{
+public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements ListAdapter, SectionIndexer{
     private OnClickInterface _listener;
+    private HashMap<Character, Integer> _sectionMap;
+    private Character[] _sections;
+
     public RealmListviewAdapter(Context context, RealmResults<Song> realmResults, boolean automaticUpdate) {
         super(context, realmResults, automaticUpdate);
     }
@@ -51,10 +59,12 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
             viewHolder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
         viewHolder.position = position;
+        Log.d("Bind view", "pinyin = " + song.get_pinyin());
         return convertView;
     }
 
     public void updateRealmResults(RealmResults<Song> queryResults) {
+
         super.updateRealmResults(queryResults);
     }
 
@@ -64,6 +74,32 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
 
     public void setListener(OnClickInterface listener) {
         _listener = listener;
+    }
+
+    @Override
+    public Object[] getSections() {
+        return _sections;
+    }
+
+    @Override
+    public int getPositionForSection(int sectionIndex) {
+        return _sectionMap.get(_sections[sectionIndex]);
+    }
+
+    @Override
+    public int getSectionForPosition(int position) {
+        char c = getRealmResults().get(position).get_pinyin().charAt(0);
+        for (int i = 0; i < _sections.length; i++) {
+            if (_sections[i] == c) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public void setSectionData(HashMap<Character, Integer> map, Character[] sections) {
+        _sectionMap = map;
+        _sections = sections;
     }
 
     class SongViewHolder{
