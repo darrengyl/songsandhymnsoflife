@@ -119,14 +119,7 @@ public class PresenterListsFragment implements Presenter {
         realm.beginTransaction();
         song.set_favorite(!isFav);
         realm.commitTransaction();
-        //updateItem(position);
         _view.refreshAdapter();
-    }
-
-    private void updateItem(int position) {
-        if (_view != null) {
-            _view.updateItem(position);
-        }
     }
 
     private boolean isNetworkConnected() {
@@ -151,6 +144,7 @@ public class PresenterListsFragment implements Presenter {
                     for (char c : titles[i].toCharArray()) {
                         if (c != ',' && c != '、' && c != '(' && c != ')' && c != '!') {
                             try {
+                                //pinyin4j caused this
                                 Log.d("Pinyin conversion", c + " in " + titles[i]);
                                 if (c == '哦') {
                                     title.append("O");
@@ -221,6 +215,7 @@ public class PresenterListsFragment implements Presenter {
         _data.sort("_id");
         _view.refreshListData(_data);
         _view.enableFastScroll(false);
+        _view.showInfoSnackbar("Sorted by Track Number");
     }
 
     private void sortByAlphabeticalOrder() {
@@ -230,6 +225,7 @@ public class PresenterListsFragment implements Presenter {
         setSectionIndexData();
         _view.refreshListData(_data);
         _view.enableFastScroll(true);
+        _view.showInfoSnackbar("Sorted by Alphabetical Order");
     }
 
     private void sortByFrequency() {
@@ -239,7 +235,7 @@ public class PresenterListsFragment implements Presenter {
         //_view.refreshAdapter();
         _view.refreshListData(_data);
         _view.enableFastScroll(false);
-
+        _view.showInfoSnackbar("Sorted by Frequency");
     }
 
     public int getCurrentOrder() {

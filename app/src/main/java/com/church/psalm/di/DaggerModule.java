@@ -2,6 +2,7 @@ package com.church.psalm.di;
 
 import android.app.Application;
 
+import com.church.psalm.presenter.activity.PresenterSearchActivity;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
 import com.church.psalm.presenter.activity.PresenterMainActivity;
 import com.church.psalm.presenter.fragment.PresenterNumbersFragment;
@@ -38,6 +39,12 @@ public class DaggerModule {
     @Singleton
     PresenterNumbersFragment providesPresenterNumbersFragment() {
         return new PresenterNumbersFragment(_app);
+    }
+
+    @Provides
+    @Singleton
+    PresenterSearchActivity providesPresenterSearchActivity() {
+        return new PresenterSearchActivity(_app);
     }
 /*
     @Provides

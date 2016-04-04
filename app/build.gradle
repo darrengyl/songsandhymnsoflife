@@ -66,6 +66,7 @@ dependencies {
     compile 'com.commit451:PhotoView:1.2.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.belerweb:pinyin4j:2.5.0'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
 
 
 }

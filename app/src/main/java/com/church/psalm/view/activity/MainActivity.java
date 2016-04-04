@@ -1,6 +1,7 @@
 package com.church.psalm.view.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -94,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                 if (viewPager.getCurrentItem() == 0) {
                     listsFragment.onClickSort();
                 }
+                return true;
+            case R.id.search:
+                startActivity(new Intent(this, SearchActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

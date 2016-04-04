@@ -64,7 +64,6 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
     }
 
     public void updateRealmResults(RealmResults<Song> queryResults) {
-
         super.updateRealmResults(queryResults);
     }
 

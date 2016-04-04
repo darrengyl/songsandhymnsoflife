@@ -21,8 +21,7 @@ public interface ViewListFragment {
     void startScoreActivity(int position);
 
     void showErrorSnackbar();
-    void updateItem(int position);
-
     void enableFastScroll(boolean enable);
     void setSectionIndexData(HashMap<Character, Integer> map, Character[] sections);
+    void showInfoSnackbar(String message);
 }

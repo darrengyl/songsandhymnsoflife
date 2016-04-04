@@ -1,6 +1,7 @@
 package com.church.psalm.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.Index;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
@@ -23,6 +24,8 @@ public class Song extends RealmObject {
     @Index
     private String _lyrics;
     private boolean _favorite;
+    @Ignore
+    private int _firstOccurrence;
 
 
     public int get_trackNumber() {
@@ -87,5 +90,13 @@ public class Song extends RealmObject {
 
     public void set_pinyin(String _pinyin) {
         this._pinyin = _pinyin;
+    }
+
+    public int get_firstOccurrence() {
+        return _firstOccurrence;
+    }
+
+    public void set_firstOccurrence(int _firstOccurrence) {
+        this._firstOccurrence = _firstOccurrence;
     }
 }

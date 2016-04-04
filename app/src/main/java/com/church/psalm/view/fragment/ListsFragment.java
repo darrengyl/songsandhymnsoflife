@@ -119,7 +119,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     }
 
     private void showSortByDialog() {
-        new MaterialDialog.Builder(getContext())
+        new MaterialDialog.Builder(getActivity())
                 .title("Sort by")
                 .items(R.array.sort_by_list)
                 .itemsCallbackSingleChoice(presenterListsFragment.getCurrentOrder(),
@@ -150,10 +150,6 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
         presenterListsFragment.onItemClick(position);
     }
 
-    public void updateItem(int position) {
-        //_songsAdapter.notifyItemChanged(position);
-    }
-
     @Override
     public void enableFastScroll(boolean enable) {
         listView.setFastScrollEnabled(enable);
@@ -164,6 +160,13 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
         _songsAdapter.setSectionData(map, sections);
     }
 
+    @Override
+    public void showInfoSnackbar(String message) {
+        Snackbar.make(getActivity().findViewById(android.R.id.content)
+                , message
+                , Snackbar.LENGTH_LONG)
+                .show();
+    }
 
     public void onClickSort() {
         showSortByDialog();

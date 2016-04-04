@@ -8,6 +8,9 @@
     <item android:id="@+id/search"
         android:title="@string/search_title"
         android:icon="@drawable/ic_search_24dp"
-        app:showAsAction="collapseActionView|ifRoom"
-        app:actionViewClass="android.widget.SearchView"/>
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/acknowledgements"
+        android:title="Acknowledgements"
+        app:showAsAction="never" />
+
 </menu>
