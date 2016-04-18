@@ -8,8 +8,12 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Binder;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.PowerManager;
+import android.os.Process;
 import android.util.Log;
 
 import java.io.IOException;
@@ -21,15 +25,16 @@ import java.text.DecimalFormat;
 public class MusicService extends Service implements
         OnPreparedListener, OnErrorListener, OnCompletionListener {
     private MediaPlayer player;
-    //private String songUrl;
+    private String _songUrl;
     private int trackNumber;
     private final IBinder musicBind = new MusicBinder();
 
+    public void setSong(String url) {
+        _songUrl = url;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        trackNumber = intent.getIntExtra("trackNumber", 1);
-        Log.d("trackNum in service", String.valueOf(trackNumber));
-
         return START_STICKY;
     }
 
@@ -46,25 +51,40 @@ public class MusicService extends Service implements
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
         mp.reset();
+        switch (what) {
+            case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+                Log.d("Media Player Error", "MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK");
+                break;
+            case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+                Log.d("Media Player Error", "MEDIA_ERROR_SERVER_DIED");
+                break;
+            case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+                Log.d("Media Player Error", "MEDIA_ERROR_UNKNOWN");
+                break;
+            default:
+                Log.d("Media Player Error", "REALLY_UNKNOW");
+        }
         return false;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        //mp.getDuration();
-        //mp.getCurrentPosition();
         mp.start();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        player.stop();
-        player.release();
         return false;
     }
 
+    @Override
+    public void onDestroy() {
+        player.stop();
+        player.release();
+        super.onDestroy();
+    }
+
     public void onCreate() {
-        super.onCreate();
         player = new MediaPlayer();
         initMusicPlayer();
     }
@@ -76,87 +96,50 @@ public class MusicService extends Service implements
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
         player.reset();
-        try {
-            player.setDataSource(getMusicLink(trackNumber));
-            Log.e("DataSource is found","");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Music databinding", "Error getting data source");
-
-        }
     }
-
-    public String getMusicLink(int track) {
-        String musicLink = "http://shengmingshige.net/hymnal/mp3/"
-                + new DecimalFormat("0000").format(track) + ".mp3";
-        return musicLink;
-    }
-
 
     public void playSong() {
         player.reset();
         try {
-            player.setDataSource(getMusicLink(trackNumber));
-            Log.e("DataSource is found","");
-
+            player.setDataSource(_songUrl);
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("Music databinding", "Error getting data source");
-
         }
         player.prepareAsync();
     }
 
-    public int getPos() {
+    public int getPosn(){
         return player.getCurrentPosition();
     }
 
-    public int getDur() {
+    public int getDur(){
         return player.getDuration();
     }
 
-    public boolean isPng() {
+    public boolean isPng(){
         return player.isPlaying();
     }
 
-    public void pausePlayer() {
+    public void pausePlayer(){
         player.pause();
     }
 
-    public void seek(int pos) {
-        player.seekTo(pos);
+    public void seek(int posn){
+        player.seekTo(posn);
     }
 
-    public void go() {
+    public void go(){
         player.start();
     }
 
-    public void playPrev() {
-        trackNumber--;
-        if (trackNumber < 1) {
-            trackNumber = 586;
-        }
-        playSong();
-
-    }
-
     public void playNext() {
-        trackNumber++;
-        if (trackNumber > 586) {
-            trackNumber = 1;
-        }
-        playSong();
     }
 
-    public void passTrackNum(int trackNumber) {
-        this.trackNumber = trackNumber;
-    }
 
     public class MusicBinder extends Binder {
-        MusicService getService() {
+        public MusicService getService() {
             return MusicService.this;
         }
     }
-
 }

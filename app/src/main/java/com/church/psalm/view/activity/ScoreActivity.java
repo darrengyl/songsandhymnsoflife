@@ -47,7 +47,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     PhotoViewAttacher mAttacher;
     static int screenWidth;
     static int screenHeight;
-    @Bind(R.id.imageView)
+    @Bind(R.id.image_view)
     ImageView imageView;
     private int oriImageWidth;
     private int oriImageHeight;

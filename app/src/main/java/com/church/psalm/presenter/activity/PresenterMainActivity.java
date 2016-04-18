@@ -42,10 +42,6 @@ public class PresenterMainActivity implements Presenter {
 
     }
 
-    public void setDatabase(boolean doesDbExist) {
-        _doesDbExist = doesDbExist;
-    }
-
 
 
 

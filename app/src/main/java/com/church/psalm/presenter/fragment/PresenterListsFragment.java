@@ -65,6 +65,7 @@ public class PresenterListsFragment implements Presenter {
         realm = Realm.getDefaultInstance();
         _currentOrder = 0;
         _sectionMap = new HashMap<>();
+
     }
 
     public void setView(ViewListFragment view) {
@@ -104,9 +105,11 @@ public class PresenterListsFragment implements Presenter {
             System.out.println("Pressed position " + position);
             Song song = _data.get(position);
             realm.beginTransaction();
+            Log.d("frequency", String.valueOf(song.get_frequency()));
             song.set_frequency(song.get_frequency() + 1);
             realm.commitTransaction();
-            _view.refreshAdapter();
+            Log.d("frequency", String.valueOf(song.get_frequency()));
+            Log.d("frequency", String.valueOf(_data.get(position).get_frequency()));
             //_view.startScoreActivity(position);
         } else {
             _view.showErrorSnackbar();
@@ -119,7 +122,6 @@ public class PresenterListsFragment implements Presenter {
         realm.beginTransaction();
         song.set_favorite(!isFav);
         realm.commitTransaction();
-        _view.refreshAdapter();
     }
 
     private boolean isNetworkConnected() {
@@ -188,6 +190,12 @@ public class PresenterListsFragment implements Presenter {
                         _view.dismissProgressDialog();
                     }
                     _data = songs;
+                    _data.addChangeListener(new RealmChangeListener() {
+                        @Override
+                        public void onChange() {
+                            Log.d("Change Listenere", "data is changed");
+                        }
+                    });
                 });
     }
 
@@ -213,7 +221,7 @@ public class PresenterListsFragment implements Presenter {
         _currentOrder = 0;
         Log.d("Sort by", "Number");
         _data.sort("_id");
-        _view.refreshListData(_data);
+        _view.refreshAdapter();
         _view.enableFastScroll(false);
         _view.showInfoSnackbar("Sorted by Track Number");
     }
@@ -223,7 +231,7 @@ public class PresenterListsFragment implements Presenter {
         Log.d("Sort by", "alphabetic");
         _data.sort("_pinyin");
         setSectionIndexData();
-        _view.refreshListData(_data);
+        _view.refreshAdapter();
         _view.enableFastScroll(true);
         _view.showInfoSnackbar("Sorted by Alphabetical Order");
     }
@@ -232,8 +240,7 @@ public class PresenterListsFragment implements Presenter {
         _currentOrder = 2;
         Log.d("Sort by", "frequency");
         _data.sort("_frequency", Sort.DESCENDING);
-        //_view.refreshAdapter();
-        _view.refreshListData(_data);
+        _view.refreshAdapter();
         _view.enableFastScroll(false);
         _view.showInfoSnackbar("Sorted by Frequency");
     }

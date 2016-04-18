@@ -12,4 +12,6 @@ public interface ViewSearchActivity {
     void enableDeleteButton(boolean enable);
 
     void updateAdapter(RealmResults<Song> results);
+
+    void showEmptyView();
 }

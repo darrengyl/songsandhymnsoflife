@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -32,6 +33,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 //TODO: searchView
@@ -93,7 +95,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     @Override
     public void refreshListData(RealmResults<Song> songs) {
         _songsAdapter.updateRealmResults(songs);
-        listView.setSelectionAfterHeaderView();
+        //listView.setSelectionAfterHeaderView();
     }
 
     @Override
@@ -164,12 +166,16 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     public void showInfoSnackbar(String message) {
         Snackbar.make(getActivity().findViewById(android.R.id.content)
                 , message
-                , Snackbar.LENGTH_LONG)
+                , Snackbar.LENGTH_SHORT)
                 .show();
     }
 
     public void onClickSort() {
         showSortByDialog();
+    }
+
+    public void scrollToFirst() {
+        listView.setSelectionAfterHeaderView();
     }
 }
 

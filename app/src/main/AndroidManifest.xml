@@ -44,8 +44,13 @@
             android:name=".view.activity.ScoreActivity"
             android:parentActivityName=".view.activity.MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-
         </activity>
+        <activity
+            android:name=".view.activity.NewScoreActivity"
+            android:parentActivityName=".view.activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+
 
         <service android:name=".MusicService" />
     </application>

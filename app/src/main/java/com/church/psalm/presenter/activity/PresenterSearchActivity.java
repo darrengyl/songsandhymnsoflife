@@ -103,6 +103,8 @@ public class PresenterSearchActivity implements Presenter {
                     .subscribe(songs -> {
                         _lyricsResults = songs;
                     });*/
+        } else {
+            _view.showEmptyView();
         }
     }
 

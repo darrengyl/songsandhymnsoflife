@@ -24,4 +24,5 @@ public interface ViewListFragment {
     void enableFastScroll(boolean enable);
     void setSectionIndexData(HashMap<Character, Integer> map, Character[] sections);
     void showInfoSnackbar(String message);
+
 }

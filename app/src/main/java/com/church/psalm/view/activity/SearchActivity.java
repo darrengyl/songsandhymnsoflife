@@ -126,6 +126,18 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
                         presenter.onTextChanged(textViewTextChangeEvent.text().toString());
                     }
                 });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                _searchViewEditText.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -145,6 +157,11 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     @Override
     public void updateAdapter(RealmResults<Song> results) {
         _adapter.updateRealmResults(results);
+    }
+
+    @Override
+    public void showEmptyView() {
+        _adapter.updateRealmResults(null);
     }
 
     private void submitSearch(String keyword) {
