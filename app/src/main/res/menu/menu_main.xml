@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/sort_by"
         android:title="Sort by..."
-        android:icon="@drawable/ic_sort_24dp"
+        android:icon="@drawable/ic_sort_white_24dp"
+        android:enabled="false"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/search"
         android:title="@string/search_title"
-        android:icon="@drawable/ic_search_24dp"
+        android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom" />
     <item android:id="@+id/acknowledgements"
         android:title="Acknowledgements"

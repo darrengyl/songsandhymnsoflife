@@ -21,6 +21,7 @@ import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
 import com.church.psalm.songsandhymnsoflife;
 import com.church.psalm.R;
+import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.view.adapter.RealmListviewAdapter;
 import com.church.psalm.model.Song;
@@ -105,7 +106,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
 
     @Override
     public void startScoreActivity(int position) {
-        Intent intent = ScoreActivity.getLaunchIntent(getActivity(), position);
+        Intent intent = NewScoreActivity.getLaunchIntent(getActivity(), position);
         startActivity(intent);
     }
 
@@ -175,7 +176,12 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     }
 
     public void scrollToFirst() {
-        listView.setSelectionAfterHeaderView();
+        listView.setSelection(6);
+        listView.smoothScrollToPosition(0);
+    }
+
+    public void incrementFreq(int position) {
+        presenterListsFragment.incrementFreq(position);
     }
 }
 

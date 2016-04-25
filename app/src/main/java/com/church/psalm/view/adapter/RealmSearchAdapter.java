@@ -40,7 +40,6 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
             holder = (SongResultViewHolder) convertView.getTag();
         }
         Song song = super.getItem(position);
-        holder.position = position;
         holder.track.setText(String.valueOf(song.get_trackNumber()));
         holder.title.setText(song.get_title());
 
@@ -73,7 +72,6 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
         TextView title;
         @Bind(R.id.lyrics)
         TextView lyrics;
-        int position;
 
         public SongResultViewHolder(View itemView) {
             ButterKnife.bind(this, itemView);
@@ -81,7 +79,16 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
 
 /*        @OnClick(R.id.item_row)
         public void onClickItem() {
-            _listener.onClickedItem(position);
+            int trackNum = -1;
+            try {
+                String trackNumber = track.getText().toString();
+                trackNum = Integer.valueOf(trackNumber);
+            } catch (ClassCastException e){
+                e.printStackTrace();
+            }
+            if (trackNum != -1) {
+                _listener.onClickedItem(trackNum);
+            }
         }*/
     }
 }

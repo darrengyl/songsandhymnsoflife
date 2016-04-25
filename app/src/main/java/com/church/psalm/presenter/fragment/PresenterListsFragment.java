@@ -103,14 +103,8 @@ public class PresenterListsFragment implements Presenter {
     public void onItemClick(int position) {
         if (isNetworkConnected()) {
             System.out.println("Pressed position " + position);
-            Song song = _data.get(position);
-            realm.beginTransaction();
-            Log.d("frequency", String.valueOf(song.get_frequency()));
-            song.set_frequency(song.get_frequency() + 1);
-            realm.commitTransaction();
-            Log.d("frequency", String.valueOf(song.get_frequency()));
-            Log.d("frequency", String.valueOf(_data.get(position).get_frequency()));
-            //_view.startScoreActivity(position);
+            incrementFreq(position);
+            _view.startScoreActivity(position + 1);
         } else {
             _view.showErrorSnackbar();
         }
@@ -264,5 +258,15 @@ public class PresenterListsFragment implements Presenter {
             _sections = tempList.toArray(new Character[_sectionMap.size()]);
             _view.setSectionIndexData(_sectionMap, _sections);
         }
+    }
+
+    public void incrementFreq(int position) {
+        Song song = _data.get(position);
+        realm.beginTransaction();
+        Log.d("frequency", String.valueOf(song.get_frequency()));
+        song.set_frequency(song.get_frequency() + 1);
+        realm.commitTransaction();
+        Log.d("frequency", String.valueOf(song.get_frequency()));
+        Log.d("frequency", String.valueOf(_data.get(position).get_frequency()));
     }
 }

@@ -23,10 +23,11 @@ import java.text.DecimalFormat;
  * Created by yuanlong.gu on 10/13/2015.
  */
 public class MusicService extends Service implements
-        OnPreparedListener, OnErrorListener, OnCompletionListener {
+        OnPreparedListener, OnErrorListener, OnCompletionListener
+        , MediaPlayer.OnBufferingUpdateListener {
     private MediaPlayer player;
     private String _songUrl;
-    private int trackNumber;
+    private int _percentage;
     private final IBinder musicBind = new MusicBinder();
 
     public void setSong(String url) {
@@ -86,6 +87,7 @@ public class MusicService extends Service implements
 
     public void onCreate() {
         player = new MediaPlayer();
+        _percentage = 0;
         initMusicPlayer();
     }
 
@@ -94,6 +96,7 @@ public class MusicService extends Service implements
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
+        player.setOnBufferingUpdateListener(this);
         player.setOnErrorListener(this);
         player.reset();
     }
@@ -133,7 +136,16 @@ public class MusicService extends Service implements
         player.start();
     }
 
-    public void playNext() {
+    public int getBufferPercentage() {
+        if (player != null) {
+            return _percentage;
+        }
+        return 0;
+    }
+
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        _percentage = percent;
     }
 
 

@@ -14,6 +14,7 @@ import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -35,6 +36,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements ViewMainActivity {
     private static final String TAG_SORT_NUMBER = "sortNum";
@@ -105,10 +107,13 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                 if (viewPager.getCurrentItem() == 0) {
                     listsFragment.onClickSort();
                 }
-                return true;
+                break;
             case R.id.search:
                 startActivity(new Intent(this, SearchActivity.class));
-                return true;
+                break;
+            case R.id.acknowledgements:
+                showLicenseDialog();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -135,4 +140,14 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
 
     }
 
+    private void showLicenseDialog() {
+        new LicensesDialog.Builder(this)
+                .setNotices(R.raw.notices)
+                .build()
+                .show();
+    }
+
+    public void incrementFreq(int position) {
+        listsFragment.incrementFreq(position);
+    }
 }

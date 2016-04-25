@@ -2,6 +2,7 @@ package com.church.psalm.view.activity;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.church.psalm.R;
+import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.model.Song;
 import com.church.psalm.presenter.activity.PresenterSearchActivity;
 import com.church.psalm.songsandhymnsoflife;
@@ -33,10 +35,13 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import io.realm.Realm;
 import io.realm.RealmResults;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+
 
 /**
  * Created by darrengu on 4/2/16.
@@ -56,6 +61,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     private EditText _searchViewEditText;
     private RealmSearchAdapter _adapter;
     private Subscription _suscription;
+    private Realm _realm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,6 +74,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         setUpSearchview();
+        _realm = Realm.getDefaultInstance();
         _adapter = new RealmSearchAdapter(this, null, true);
         listView.setAdapter(_adapter);
     }
@@ -84,6 +91,16 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         super.onStop();
         presenter.setView(null);
         presenter.stop();
+        _suscription.unsubscribe();
+    }
+
+    @OnItemClick(R.id.search_result)
+    public void onClickResult(int position) {
+        incrementFreq(position);
+        int trackNumber = _adapter.getItem(position).get_trackNumber();
+        Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
+        startActivity(intent);
+        finish();
     }
 
     private void setUpSearchview() {
@@ -164,7 +181,10 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         _adapter.updateRealmResults(null);
     }
 
-    private void submitSearch(String keyword) {
-        presenter.search(keyword);
+    private void incrementFreq(int position) {
+        _realm.beginTransaction();
+        Song song = _adapter.getItem(position);
+        song.set_frequency(song.get_frequency() + 1);
+        _realm.commitTransaction();
     }
 }

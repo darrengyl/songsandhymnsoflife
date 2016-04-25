@@ -11,4 +11,6 @@ public interface ViewNumberFragment {
     void showNumberError();
 
     void showNetworkError();
+
+    void incrementFreq(int position);
 }

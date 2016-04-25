@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewNumberFragment;
 
+import io.realm.Realm;
+
 /**
  * Created by darrengu on 3/18/16.
  */
@@ -66,6 +68,7 @@ public class PresenterNumbersFragment implements Presenter {
         if (isNetworkConnected()) {
             if (trackNumber > 0 && trackNumber < 587) {
                 _view.startScoreActivity(trackNumber);
+                incrementFreq(trackNumber - 1);
                 stringBuilder.setLength(0);
                 _view.updateDisplay(stringBuilder.toString());
             } else {
@@ -83,5 +86,9 @@ public class PresenterNumbersFragment implements Presenter {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
         return isConnected;
+    }
+
+    private void incrementFreq(int position) {
+        _view.incrementFreq(position);
     }
 }

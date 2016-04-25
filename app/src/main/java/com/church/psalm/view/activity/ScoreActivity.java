@@ -107,7 +107,7 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     }
 
     public static Intent getLaunchIntent(Context context, int track) {
-        Intent intent = new Intent(context, ScoreActivity.class);
+        Intent intent = new Intent(context, NewScoreActivity.class);
         intent.putExtra(TRACK, track);
         return intent;
     }

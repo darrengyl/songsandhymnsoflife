@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.church.psalm.R;
 import com.church.psalm.presenter.fragment.PresenterNumbersFragment;
 import com.church.psalm.songsandhymnsoflife;
+import com.church.psalm.view.activity.MainActivity;
 import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.view.view.ViewNumberFragment;
@@ -126,6 +127,11 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void incrementFreq(int position) {
+        ((MainActivity) getActivity()).incrementFreq(position);
     }
 
     @Override
