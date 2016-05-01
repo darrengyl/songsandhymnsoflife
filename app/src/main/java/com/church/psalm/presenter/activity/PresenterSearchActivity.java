@@ -7,6 +7,7 @@ import android.support.annotation.MainThread;
 import android.text.TextUtils;
 
 import com.church.psalm.R;
+import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewSearchActivity;
@@ -25,7 +26,6 @@ import rx.schedulers.Schedulers;
  * Created by darrengu on 4/3/16.
  */
 public class PresenterSearchActivity implements Presenter {
-    private String _queryKeyword;
     private ViewSearchActivity _view;
     private boolean _deleteEnabled;
     private Context _context;
@@ -60,7 +60,6 @@ public class PresenterSearchActivity implements Presenter {
             _view.enableDeleteButton(false);
             _deleteEnabled = false;
         }
-        _queryKeyword = keyword;
         search(keyword);
     }
 
@@ -73,7 +72,7 @@ public class PresenterSearchActivity implements Presenter {
     public void search(String keyword) {
         if (!TextUtils.isEmpty(keyword)) {
             _realm.where(Song.class)
-                    .contains("_title", keyword)
+                    .contains(Constants.COLUMN_TITLE, keyword)
                     .findAll()
                     .asObservable()
                     .filter(new Func1<RealmResults<Song>, Boolean>() {

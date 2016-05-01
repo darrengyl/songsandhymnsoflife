@@ -176,8 +176,12 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     }
 
     public void scrollToFirst() {
-        listView.setSelection(6);
-        listView.smoothScrollToPosition(0);
+        if (listView.getFirstVisiblePosition() < 6) {
+            listView.smoothScrollToPosition(0);
+        } else {
+            listView.setSelection(6);
+            listView.smoothScrollToPosition(0);
+        }
     }
 
     public void incrementFreq(int position) {

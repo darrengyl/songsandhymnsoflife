@@ -5,6 +5,7 @@ import android.app.Application;
 import com.church.psalm.di.DaggerComponent;
 import com.church.psalm.di.DaggerDaggerComponent;
 import com.church.psalm.di.DaggerModule;
+import com.church.psalm.model.Constants;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -22,7 +23,7 @@ public class songsandhymnsoflife extends Application{
                 .daggerModule(new DaggerModule(this))
                 .build();
         RealmConfiguration realmConfig = new RealmConfiguration.Builder(this)
-                .name("database.realm").build();
+                .name(Constants.REALM_FILE).build();
         Realm.setDefaultConfiguration(realmConfig);
     }
 

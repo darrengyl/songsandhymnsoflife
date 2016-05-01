@@ -59,7 +59,7 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
             viewHolder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         }
         viewHolder.position = position;
-        Log.d("Song", song.get_trackNumber() + " " + song.get_title());
+        //Log.d("Song", song.get_trackNumber() + " " + song.get_title());
         //Log.d("Bind view", "pinyin = " + song.get_pinyin());
         return convertView;
     }

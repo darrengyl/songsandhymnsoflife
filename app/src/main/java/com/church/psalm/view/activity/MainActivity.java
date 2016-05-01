@@ -74,13 +74,12 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 super.onTabSelected(tab);
-                if (_sort == null) {
-                    return;
-                }
-                if (tab.getPosition() == 0) {
-                    _sort.setVisible(true);
-                } else {
-                    _sort.setVisible(false);
+                if (_sort != null) {
+                    if (tab.getPosition() == 0) {
+                        _sort.setVisible(true);
+                    } else {
+                        _sort.setVisible(false);
+                    }
                 }
             }
         });
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        _sort = menu.findItem(R.id.sort_by);
+        _sort = menu.getItem(0);
         return true;
     }
 
@@ -143,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     private void showLicenseDialog() {
         new LicensesDialog.Builder(this)
                 .setNotices(R.raw.notices)
+                .setIncludeOwnLicense(true)
                 .build()
                 .show();
     }
