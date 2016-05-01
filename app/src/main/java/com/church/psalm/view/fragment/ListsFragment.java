@@ -22,7 +22,6 @@ import com.church.psalm.presenter.fragment.PresenterListsFragment;
 import com.church.psalm.songsandhymnsoflife;
 import com.church.psalm.R;
 import com.church.psalm.view.activity.NewScoreActivity;
-import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.view.adapter.RealmListviewAdapter;
 import com.church.psalm.model.Song;
 

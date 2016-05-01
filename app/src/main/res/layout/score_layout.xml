@@ -7,17 +7,35 @@
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clipToPadding="false"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lyrics_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="17sp" />
+    </ScrollView>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#CC000000"
-        app:theme="@style/Theme.AppCompat.NoActionBar"
-        app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar"
         android:visibility="gone"
-        />
+        app:popupTheme="@style/Theme.AppCompat.Light.NoActionBar"
+        app:theme="@style/Theme.AppCompat.NoActionBar" />
 
     <LinearLayout
         android:id="@+id/error_view"

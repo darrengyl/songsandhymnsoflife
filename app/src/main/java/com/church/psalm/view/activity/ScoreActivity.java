@@ -1,3 +1,4 @@
+/*
 package com.church.psalm.view.activity;
 
 import android.content.Context;
@@ -38,9 +39,11 @@ import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 
+*/
 /**
  * Created by yuanlong.gu on 10/7/2015.
- */
+ *//*
+
 public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPreparedListener
         , MediaPlayerControl {
     Toolbar toolbar;
@@ -142,9 +145,11 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
             mediaPlayer.release();
         }
 
+*/
 /*        if (!imageLoader.isCached(getScoreLink(trackNumber), 0, 0)){
 
-        }*/
+        }*//*
+
         if (bitmap != null && !bitmap.isRecycled()) {
             //bitmap.recycle();
             bitmap = null;
@@ -159,13 +164,16 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
     }
 
     //TODO: Change to a specific fragment
+*/
 /*    @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }*/
+    }*//*
 
-    /*
+
+    */
+/*
                 private ServiceConnection musicConnection = new ServiceConnection(){
 
                     @Override
@@ -179,7 +187,8 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
                     public void onServiceDisconnected(ComponentName name) {
                         musicBound = false;
                     }
-                };*/
+                };*//*
+
     private static void getScreenResolution(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -378,3 +387,4 @@ public class ScoreActivity extends AppCompatActivity implements MediaPlayer.OnPr
 
 
 }
+*/

@@ -4,48 +4,57 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaPlayer;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
-import com.church.psalm.MusicController;
 import com.church.psalm.MusicService;
 import com.church.psalm.MusicService.MusicBinder;
 import com.church.psalm.R;
+import com.church.psalm.model.Constants;
+import com.church.psalm.model.Song;
 import com.church.psalm.presenter.activity.PresenterScoreActivity;
 import com.church.psalm.songsandhymnsoflife;
 import com.church.psalm.view.view.ViewScoreActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import rx.android.schedulers.AndroidSchedulers;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
@@ -65,12 +74,20 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     LinearLayout errorView;
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
-
+    @Bind(R.id.scrollView)
+    ScrollView scrollView;
+    @Bind(R.id.lyrics_textview)
+    TextView lyricsTextView;
+    private Realm _realm;
     private int _trackNumber;
     private MediaController _controller;
     private boolean musicBound = false;
     private MusicService _musicService;
     private ActionBar _toolbar;
+    private Target _imageTarget;
+    private MenuItem _lyricsMenuItem;
+    private String _lyrics;
+    private PhotoViewAttacher _attacher;
     @Inject
     PresenterScoreActivity presenter;
 
@@ -90,6 +107,39 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
             _toolbar.setDisplayShowTitleEnabled(false);
             _toolbar.setDisplayHomeAsUpEnabled(true);
         }
+        _realm = Realm.getDefaultInstance();
+        _imageTarget = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                imageView.setImageBitmap(bitmap);
+                File file = new File(getFilesDir(), Constants.SCORE_NAME);
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(file);
+                    // Use the compress method on the BitMap object to write image to the OutputStream
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
         _trackNumber = getIntent().getIntExtra(TRACK, -1);
         if (_trackNumber != -1) {
             loadImage();
@@ -107,22 +157,11 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                     public void onSuccess() {
                         imageView.setVisibility(View.VISIBLE);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
-                        PhotoViewAttacher attacher = new PhotoViewAttacher(imageView);
-                        attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+                        _attacher = new PhotoViewAttacher(imageView);
+                        _attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
                             @Override
                             public void onViewTap(View view, float x, float y) {
-                                if (imageView.getVisibility() == View.VISIBLE) {
-                                    if (_controller.isShowing()) {
-                                        _controller.hide();
-                                    } else {
-                                        _controller.show(0);
-                                    }
-                                }
-                                if (_toolbar.isShowing()) {
-                                    _toolbar.hide();
-                                } else {
-                                    _toolbar.show();
-                                }
+                                setOnClickListener();
                             }
                         });
                         if (progressBar.getVisibility() == View.VISIBLE) {
@@ -160,14 +199,35 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_score_activity, menu);
         MenuItem share = menu.findItem(R.id.share);
+        _lyricsMenuItem = menu.findItem(R.id.text_only);
         share.getIcon().setColorFilter(ContextCompat.getColor(this, R.color.colorScoreActivityToolbarIcon)
                 , PorterDuff.Mode.SRC_ATOP);
         return true;
     }
 
+    @OnClick(R.id.lyrics_textview)
+    public void onClickLyrics() {
+        setOnClickListener();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case (R.id.text_only):
+                if (imageView.getVisibility() == View.VISIBLE) {
+                    imageView.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.VISIBLE);
+                    if (_lyrics != null) {
+                        lyricsTextView.setText(_lyrics);
+                    } else {
+                        setLyricsTextView();
+                    }
+                } else {
+                    imageView.setVisibility(View.VISIBLE);
+                    scrollView.setVisibility(View.GONE);
+                }
+                flipIcon();
+                break;
             case (R.id.share):
                 if (imageView.getVisibility() == View.VISIBLE) {
                     Intent share = new Intent(Intent.ACTION_SEND);
@@ -178,12 +238,16 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                         Uri imageUri = Uri.parse(path);
                         share.setType("image/png");
                         share.putExtra(Intent.EXTRA_STREAM, imageUri);
-                        startActivity(Intent.createChooser(share, "Share via..."));
+                        if (safeIntent(share)) {
+                            startActivity(share);
+                        }
                     }
                 } else {
-                    View view = findViewById(android.R.id.content);
-                    if (view != null) {
-                        Snackbar.make(view, "Something went wrong", Snackbar.LENGTH_LONG);
+                    Intent share = new Intent(Intent.ACTION_SEND);
+                    share.putExtra(Intent.EXTRA_TEXT, _lyrics);
+                    share.setType("text/plain");
+                    if (safeIntent(share)) {
+                        startActivity(share);
                     }
                 }
                 break;
@@ -194,6 +258,14 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void flipIcon() {
+        if (imageView.getVisibility() == View.VISIBLE) {
+            _lyricsMenuItem.setIcon(R.drawable.ic_text_format_white_24dp);
+        } else {
+            _lyricsMenuItem.setIcon(R.drawable.ic_music_note_white_24dp);
+        }
     }
 
     @Override
@@ -338,5 +410,39 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    private void setLyricsTextView() {
+        _realm.where(Song.class)
+                .equalTo(Constants.COLUMN_TRACK_NUMBER, _trackNumber)
+                .findFirstAsync()
+                .asObservable()
+                .filter(song -> song.isLoaded())
+                .first()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(song -> {
+                    _lyrics = ((Song) song).get_lyrics();
+                    lyricsTextView.setText(_lyrics);
+                });
+    }
+
+    private void setOnClickListener() {
+        if (_controller.isShowing()) {
+            _controller.hide();
+        } else {
+            _controller.show(0);
+        }
+        if (_toolbar.isShowing()) {
+            _toolbar.hide();
+        } else {
+            _toolbar.show();
+        }
+    }
+
+    private boolean safeIntent(Intent intent) {
+        PackageManager packageManager = getPackageManager();
+        List activities = packageManager.queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+        return activities.size() > 0;
     }
 }

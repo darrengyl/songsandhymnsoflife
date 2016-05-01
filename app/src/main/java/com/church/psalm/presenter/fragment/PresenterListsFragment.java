@@ -20,6 +20,7 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -138,6 +139,8 @@ public class PresenterListsFragment implements Presenter {
             @Override
             public void execute(Realm realm) {
                 String[] titles = _context.getResources().getStringArray(R.array.song_titles);
+                String[] lyrics = _context.getResources().getStringArray(R.array.lyrics);
+                List<Character> exclusive = Arrays.asList(',', '、', '(', ')', '!');
                 HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
                 format.setCaseType(HanyuPinyinCaseType.UPPERCASE);
                 format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
@@ -145,7 +148,7 @@ public class PresenterListsFragment implements Presenter {
                 for (int i = 0; i < titles.length; i++) {
                     StringBuilder title = new StringBuilder();
                     for (char c : titles[i].toCharArray()) {
-                        if (c != ',' && c != '、' && c != '(' && c != ')' && c != '!') {
+                        if (!exclusive.contains(c)) {
                             try {
                                 //pinyin4j caused this
                                 Log.d("Pinyin conversion", c + " in " + titles[i]);
@@ -167,7 +170,7 @@ public class PresenterListsFragment implements Presenter {
                     song.set_pinyin(title.toString());
                     song.set_favorite(false);
                     song.set_frequency(0);
-                    song.set_lyrics("");
+                    song.set_lyrics(lyrics[i]);
                     song.set_downloaded(false);
                     realm.copyToRealm(song);
                 }

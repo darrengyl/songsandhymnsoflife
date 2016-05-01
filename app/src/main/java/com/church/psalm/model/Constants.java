@@ -6,7 +6,7 @@ package com.church.psalm.model;
  */
 public class Constants {
     public static final String REALM_FILE = "database.realm";
-    public static final String SCORE_PATH = "";
+    public static final String SCORE_NAME = "latest_score";
 
     //Columns in Songs table
     public static final String COLUMN_ID = "_id";
