@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include android:id="@+id/search_bar"
+    <include
+        android:id="@+id/search_bar"
         layout="@layout/search_bar" />
+
+    <TextView
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center_horizontal"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:visibility="gone"
+        android:text="Only showing first 40 records"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
     <ListView
         android:id="@+id/search_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
         android:clipToPadding="false"
-        android:divider="@null"/>
+        android:divider="@null"
+        android:paddingTop="8dp" />
 
 </LinearLayout>

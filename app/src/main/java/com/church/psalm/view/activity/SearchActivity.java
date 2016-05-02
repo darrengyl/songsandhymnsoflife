@@ -14,13 +14,16 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.church.psalm.R;
+import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.presenter.activity.PresenterSearchActivity;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.adapter.RealmSearchAdapter;
 import com.church.psalm.view.view.ViewSearchActivity;
+import com.hp.hpl.sparta.Text;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 
@@ -50,6 +53,8 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     SearchView searchView;
     @Bind(R.id.search_result)
     ListView listView;
+    @Bind(R.id.banner)
+    TextView banner;
     @Inject
     PresenterSearchActivity presenter;
     private ImageView _close;
@@ -175,6 +180,16 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     @Override
     public void showEmptyView() {
         _adapter.updateRealmResults(null);
+    }
+
+    @Override
+    public void showLimitBanner() {
+        banner.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLimitBanner() {
+        banner.setVisibility(View.GONE);
     }
 
     private void incrementFreq(int position) {

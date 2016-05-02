@@ -69,6 +69,7 @@ public class PresenterSearchActivity implements Presenter {
     public void onClickDelete() {
         if (_deleteEnabled) {
             _view.clearQuery();
+            _view.hideLimitBanner();
         }
     }
 
@@ -120,9 +121,15 @@ public class PresenterSearchActivity implements Presenter {
                     })
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(songs -> {
+                        if (songs.size() > Constants.SEARCH_FILTER_NUMBER) {
+                            _view.showLimitBanner();
+                        } else {
+                            _view.hideLimitBanner();
+                        }
                         _view.updateAdapter(songs);
                     });
         } else {
+            _view.hideLimitBanner();
             _view.showEmptyView();
         }
     }

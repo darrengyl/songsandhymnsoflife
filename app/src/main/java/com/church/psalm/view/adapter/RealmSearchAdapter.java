@@ -1,6 +1,8 @@
 package com.church.psalm.view.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.Spannable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -46,10 +48,14 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
         int occurrence = song.get_firstOccurrence();
         if (occurrence != -1) {
             String lyrics = song.get_lyrics();
-            int start = lyrics.lastIndexOf("\n", occurrence - 1) + 2;
+            int start = lyrics.lastIndexOf("\n", occurrence - 1) + 1;
             int end = lyrics.indexOf("\n", occurrence + 1);
             if (start < end && start * end != 1) {
-                holder.lyrics.setText(lyrics.substring(start, end));
+                String partialLyrics = lyrics.substring(start, end);
+/*                Spannable spanText = Spannable.Factory.getInstance().newSpannable(partialLyrics);
+                spanText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD)
+                        , partialLyrics.indexOf());*/
+                holder.lyrics.setText(partialLyrics);
                 holder.lyrics.setVisibility(View.VISIBLE);
             } else {
                 holder.lyrics.setVisibility(View.GONE);

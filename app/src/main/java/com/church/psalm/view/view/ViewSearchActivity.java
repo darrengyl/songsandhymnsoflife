@@ -16,4 +16,8 @@ public interface ViewSearchActivity {
     void updateAdapter(RealmResults<Song> results);
 
     void showEmptyView();
+
+    void showLimitBanner();
+
+    void hideLimitBanner();
 }
