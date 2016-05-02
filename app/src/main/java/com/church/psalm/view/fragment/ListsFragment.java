@@ -8,18 +8,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
-import com.church.psalm.songsandhymnsoflife;
+import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.R;
 import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.adapter.RealmListviewAdapter;
@@ -33,7 +29,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 //TODO: searchView
@@ -49,7 +44,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((songsandhymnsoflife) getActivity().getApplication()).getComponent().inject(this);
+        ((Songsandhymnsoflife) getActivity().getApplication()).getComponent().inject(this);
     }
 
     @Override

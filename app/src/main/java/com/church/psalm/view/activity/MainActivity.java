@@ -4,38 +4,28 @@ package com.church.psalm.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.church.psalm.R;
-import com.church.psalm.model.AllSongsContract;
 import com.church.psalm.presenter.activity.PresenterMainActivity;
-import com.church.psalm.songsandhymnsoflife;
+import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.adapter.ViewPagerAdapter;
 import com.church.psalm.view.fragment.ListsFragment;
 import com.church.psalm.view.fragment.NumbersFragment;
 import com.church.psalm.view.view.ViewMainActivity;
 
 
-import java.io.File;
-
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements ViewMainActivity {
@@ -60,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        ((songsandhymnsoflife) getApplication()).getComponent().inject(this);
+        ((Songsandhymnsoflife) getApplication()).getComponent().inject(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setTitle("Hymns of Life");
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());

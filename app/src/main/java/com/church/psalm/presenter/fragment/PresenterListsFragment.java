@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.church.psalm.R;
+import com.church.psalm.Util;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.presenter.Presenter;
@@ -90,7 +91,7 @@ public class PresenterListsFragment implements Presenter {
 
 
     public void onItemClick(int position) {
-        if (isNetworkConnected()) {
+        if (Util.isNetworkConnected()) {
             System.out.println("Pressed position " + position);
             incrementFreq(position);
             _view.startScoreActivity(_data.get(position).get_trackNumber());
@@ -124,14 +125,6 @@ public class PresenterListsFragment implements Presenter {
             case FREQ_ORDER:
                 updateAllSongsAndSort(Constants.COLUMN_FREQUENCY, Sort.DESCENDING);
         }
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) _context.getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        return isConnected;
     }
 
     private void addUsers() {
@@ -218,6 +211,7 @@ public class PresenterListsFragment implements Presenter {
                 break;
             default:
                 sortByTrackNumber();
+                Log.wtf("WTF", "This should never be called");
         }
 
     }

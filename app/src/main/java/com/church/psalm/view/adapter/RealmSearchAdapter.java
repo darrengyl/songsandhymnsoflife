@@ -43,13 +43,20 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
         holder.track.setText(String.valueOf(song.get_trackNumber()));
         holder.title.setText(song.get_title());
 
-/*        int occurrence = song.get_firstOccurrence();
+        int occurrence = song.get_firstOccurrence();
         if (occurrence != -1) {
             String lyrics = song.get_lyrics();
-            int start = occurrence - 10 < 0 ? 0 : occurrence - 10;
-            int end = occurrence + 10 > lyrics.length() ? lyrics.length() - 1 : occurrence + 10;
-            holder.lyrics.setText(lyrics.substring(start, end));
-        }*/
+            int start = lyrics.lastIndexOf("\n", occurrence - 1) + 2;
+            int end = lyrics.indexOf("\n", occurrence + 1);
+            if (start < end && start * end != 1) {
+                holder.lyrics.setText(lyrics.substring(start, end));
+                holder.lyrics.setVisibility(View.VISIBLE);
+            } else {
+                holder.lyrics.setVisibility(View.GONE);
+            }
+        } else {
+            holder.lyrics.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -63,6 +70,19 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
 
     public void setListener(OnClickInterface listener) {
         _listener = listener;
+    }
+
+    @Override
+    public int getCount() {
+        if (realmResults == null) {
+            return 0;
+        } else {
+            if (realmResults.size() > 50) {
+                return 50;
+            } else {
+                return realmResults.size();
+            }
+        }
     }
 
     class SongResultViewHolder {

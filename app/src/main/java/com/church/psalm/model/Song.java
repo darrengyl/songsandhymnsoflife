@@ -24,7 +24,6 @@ public class Song extends RealmObject {
     @Index
     private String _lyrics;
     private boolean _favorite;
-    @Ignore
     private int _firstOccurrence;
 
 

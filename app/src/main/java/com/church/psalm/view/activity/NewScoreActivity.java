@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -33,10 +32,11 @@ import android.widget.TextView;
 import com.church.psalm.MusicService;
 import com.church.psalm.MusicService.MusicBinder;
 import com.church.psalm.R;
+import com.church.psalm.Util;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.presenter.activity.PresenterScoreActivity;
-import com.church.psalm.songsandhymnsoflife;
+import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.view.ViewScoreActivity;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -94,7 +94,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((songsandhymnsoflife) getApplication()).getComponent().inject(this);
+        ((Songsandhymnsoflife) getApplication()).getComponent().inject(this);
         if (savedInstanceState != null) {
             musicBound = true;
         }
@@ -233,12 +233,11 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                     Intent share = new Intent(Intent.ACTION_SEND);
                     String path = MediaStore.Images.Media.insertImage(getContentResolver()
                             , ((BitmapDrawable) imageView.getDrawable()).getBitmap(), "Score", null);
-                    //String path = getScoreLink(_trackNumber);
                     if (path != null) {
                         Uri imageUri = Uri.parse(path);
                         share.setType("image/png");
                         share.putExtra(Intent.EXTRA_STREAM, imageUri);
-                        if (safeIntent(share)) {
+                        if (Util.safeIntent(share)) {
                             startActivity(share);
                         }
                     }
@@ -246,7 +245,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                     Intent share = new Intent(Intent.ACTION_SEND);
                     share.putExtra(Intent.EXTRA_TEXT, _lyrics);
                     share.setType("text/plain");
-                    if (safeIntent(share)) {
+                    if (Util.safeIntent(share)) {
                         startActivity(share);
                     }
                 }
@@ -439,10 +438,4 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
         }
     }
 
-    private boolean safeIntent(Intent intent) {
-        PackageManager packageManager = getPackageManager();
-        List activities = packageManager.queryIntentActivities(intent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-        return activities.size() > 0;
-    }
 }

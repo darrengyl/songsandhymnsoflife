@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.TextUtils;
 
+import com.church.psalm.Util;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewNumberFragment;
 
@@ -14,12 +15,10 @@ import io.realm.Realm;
  * Created by darrengu on 3/18/16.
  */
 public class PresenterNumbersFragment implements Presenter {
-    private Context _context;
     private StringBuilder stringBuilder;
     private ViewNumberFragment _view;
 
-    public PresenterNumbersFragment(Context context) {
-        _context = context;
+    public PresenterNumbersFragment() {
         stringBuilder = new StringBuilder();
     }
 
@@ -65,7 +64,7 @@ public class PresenterNumbersFragment implements Presenter {
         if (!TextUtils.isEmpty(stringBuilder.toString())) {
             trackNumber = Integer.valueOf(stringBuilder.toString());
         }
-        if (isNetworkConnected()) {
+        if (Util.isNetworkConnected()) {
             if (trackNumber > 0 && trackNumber < 587) {
                 _view.startScoreActivity(trackNumber);
                 incrementFreq(trackNumber - 1);
@@ -77,15 +76,6 @@ public class PresenterNumbersFragment implements Presenter {
         } else {
             _view.showNetworkError();
         }
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm =
-                (ConnectivityManager) _context.getSystemService(
-                        _context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        return isConnected;
     }
 
     private void incrementFreq(int position) {

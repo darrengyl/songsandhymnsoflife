@@ -12,7 +12,10 @@ import com.church.psalm.model.Song;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewSearchActivity;
 
+import java.util.List;
+
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 import rx.Observable;
 import rx.Subscriber;
@@ -72,8 +75,12 @@ public class PresenterSearchActivity implements Presenter {
     public void search(String keyword) {
         if (!TextUtils.isEmpty(keyword)) {
             _realm.where(Song.class)
+                    .beginGroup()
                     .contains(Constants.COLUMN_TITLE, keyword)
-                    .findAll()
+                    .or()
+                    .contains(Constants.COLUMN_LYRICS, keyword)
+                    .endGroup()
+                    .findAllSortedAsync(Constants.COLUMN_TRACK_NUMBER)
                     .asObservable()
                     .filter(new Func1<RealmResults<Song>, Boolean>() {
                         @Override
@@ -82,26 +89,39 @@ public class PresenterSearchActivity implements Presenter {
                         }
                     })
                     .first()
+                    /*.map(Songs -> {
+                        if (Songs.size() > 50) {
+                            Songs.s
+                            RealmList<Song> filtered = new RealmList<>();
+                            filtered.addAll(Songs.subList(0, 50));
+                            return filtered.where().findAll();
+                        } else {
+                            return Songs;
+                        }
+                    })*/
+                    .map(Songs -> {
+                        int limit = Songs.size() < Constants.SEARCH_FILTER_NUMBER ? Songs.size() : Constants.SEARCH_FILTER_NUMBER;
+                        for (int i = 0; i < limit; i++) {
+                            Song song = Songs.get(i);
+                            if (song.get_title().contains(keyword)) {
+                                _realm.beginTransaction();
+                                song.set_firstOccurrence(-1);
+                                _realm.commitTransaction();
+                            } else {
+                                int firstOccurrence = song.get_lyrics().indexOf(keyword);
+                                if (firstOccurrence != -1) {
+                                    _realm.beginTransaction();
+                                    song.set_firstOccurrence(firstOccurrence);
+                                    _realm.commitTransaction();
+                                }
+                            }
+                        }
+                        return Songs;
+                    })
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(songs -> {
                         _view.updateAdapter(songs);
                     });
-            /*_realm.where(Song.class)
-                    .contains("_lyrics", keyword)
-                    .findAll()
-                    .asObservable()
-                    .filter(songs -> songs.isLoaded())
-                    .first()
-                    .map(songs -> {
-                        for (Song song : songs) {
-                            song.set_firstOccurrence(song.get_lyrics().indexOf(keyword));
-                        }
-                        return songs;
-                    })
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(songs -> {
-                        _lyricsResults = songs;
-                    });*/
         } else {
             _view.showEmptyView();
         }
@@ -117,7 +137,11 @@ public class PresenterSearchActivity implements Presenter {
             public void call(Subscriber<? super RealmResults<Song>> subscriber) {
                 if (!TextUtils.isEmpty(keyword)) {
                     _realm.where(Song.class)
-                            .contains("_title", keyword)
+                            .beginGroup()
+                            .contains(Constants.COLUMN_TITLE, keyword)
+                            .or()
+                            .contains(Constants.COLUMN_LYRICS, keyword)
+                            .endGroup()
                             .findAll()
                             .asObservable()
                             .filter(new Func1<RealmResults<Song>, Boolean>() {
@@ -127,7 +151,14 @@ public class PresenterSearchActivity implements Presenter {
                                 }
                             })
                             .first()
-                            .map(songs -> _titleResults = songs);
+                            .map(new Func1<RealmResults<Song>, RealmResults<Song>>() {
+                                @Override
+                                public RealmResults<Song> call(RealmResults<Song> songs) {
+                                    _titleResults = songs;
+
+                                    return null;
+                                }
+                            });
                     /*_realm.where(Song.class)
                             .contains("_lyrics", keyword)
                             .findAll()

@@ -13,12 +13,14 @@ import io.realm.RealmConfiguration;
 /**
  * Created by darrengu on 3/18/16.
  */
-public class songsandhymnsoflife extends Application{
+public class Songsandhymnsoflife extends Application{
     private DaggerComponent component;
+    private static Songsandhymnsoflife appInstance = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        appInstance = this;
         component = DaggerDaggerComponent.builder()
                 .daggerModule(new DaggerModule(this))
                 .build();
@@ -29,5 +31,9 @@ public class songsandhymnsoflife extends Application{
 
     public DaggerComponent getComponent() {
         return component;
+    }
+
+    public static Songsandhymnsoflife getApplicationInstance() {
+        return appInstance;
     }
 }

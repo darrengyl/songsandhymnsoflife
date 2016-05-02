@@ -20,10 +20,11 @@ import io.realm.RealmConfiguration;
  */
 @Module
 public class DaggerModule {
-    private Application _app;
+    private static Application _app;
     public DaggerModule(Application app) {
         _app = app;
     }
+
     @Provides
     @Singleton
     PresenterListsFragment providesPresenterListsFragment() {
@@ -39,7 +40,7 @@ public class DaggerModule {
     @Provides
     @Singleton
     PresenterNumbersFragment providesPresenterNumbersFragment() {
-        return new PresenterNumbersFragment(_app);
+        return new PresenterNumbersFragment();
     }
 
     @Provides

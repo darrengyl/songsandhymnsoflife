@@ -8,27 +8,23 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.church.psalm.R;
-import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.model.Song;
 import com.church.psalm.presenter.activity.PresenterSearchActivity;
-import com.church.psalm.songsandhymnsoflife;
+import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.adapter.RealmSearchAdapter;
 import com.church.psalm.view.view.ViewSearchActivity;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -68,7 +64,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         ButterKnife.bind(this);
-        ((songsandhymnsoflife) getApplication()).getComponent().inject(this);
+        ((Songsandhymnsoflife) getApplication()).getComponent().inject(this);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
