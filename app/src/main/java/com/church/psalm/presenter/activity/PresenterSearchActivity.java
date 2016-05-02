@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.MainThread;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.church.psalm.R;
 import com.church.psalm.model.Constants;

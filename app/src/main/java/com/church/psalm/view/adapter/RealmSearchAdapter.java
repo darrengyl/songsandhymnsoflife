@@ -3,6 +3,7 @@ package com.church.psalm.view.adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Spannable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.church.psalm.R;
 import com.church.psalm.interfaces.OnClickInterface;
+import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 
 import java.util.zip.Inflater;
@@ -49,7 +51,10 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
         if (occurrence != -1) {
             String lyrics = song.get_lyrics();
             int start = lyrics.lastIndexOf("\n", occurrence - 1) + 1;
-            int end = lyrics.indexOf("\n", occurrence + 1);
+            int end = lyrics.indexOf("\n", occurrence);
+            if (end == -1) {
+                end = lyrics.length();
+            }
             if (start < end && start * end != 1) {
                 String partialLyrics = lyrics.substring(start, end);
 /*                Spannable spanText = Spannable.Factory.getInstance().newSpannable(partialLyrics);
@@ -83,8 +88,8 @@ public class RealmSearchAdapter extends RealmBaseAdapter<Song> implements ListAd
         if (realmResults == null) {
             return 0;
         } else {
-            if (realmResults.size() > 50) {
-                return 50;
+            if (realmResults.size() > Constants.SEARCH_FILTER_NUMBER) {
+                return Constants.SEARCH_FILTER_NUMBER;
             } else {
                 return realmResults.size();
             }
