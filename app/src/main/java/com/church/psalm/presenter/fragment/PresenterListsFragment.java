@@ -66,6 +66,9 @@ public class PresenterListsFragment implements Presenter {
         _view.showProgressDialog();
         if (_data != null) {
             _view.refreshListData(_data);
+            if (_currentOrder == ALPHA_ORDER) {
+                _view.enableFastScroll(true);
+            }
             _view.dismissProgressDialog();
         } else {
             if (doesRealmExist()) {

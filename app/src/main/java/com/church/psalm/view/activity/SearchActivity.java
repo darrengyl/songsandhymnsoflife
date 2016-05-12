@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.church.psalm.R;
+import com.church.psalm.interfaces.OnClickSongInterface;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.model.SongMatch;
@@ -47,7 +48,7 @@ import rx.android.schedulers.AndroidSchedulers;
 /**
  * Created by darrengu on 4/2/16.
  */
-public class SearchActivity extends AppCompatActivity implements ViewSearchActivity {
+public class SearchActivity extends AppCompatActivity implements ViewSearchActivity, OnClickSongInterface {
 
     @Bind(R.id.search_bar)
     Toolbar toolbar;
@@ -79,6 +80,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         setUpSearchview();
         _realm = Realm.getDefaultInstance();
         _adapter = new SearchAdapter(this);
+        _adapter.setOnClickListener(this);
         listView.setAdapter(_adapter);
     }
 
@@ -96,15 +98,6 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         presenter.setView(null);
         presenter.stop();
         //_suscription.unsubscribe();
-    }
-
-    @OnItemClick(R.id.search_result)
-    public void onClickResult(int position) {
-        incrementFreq(position);
-        int trackNumber = _adapter.getItem(position).getSong().get_trackNumber();
-        Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
-        startActivity(intent);
-        finish();
     }
 
     private void setUpSearchview() {
@@ -200,5 +193,14 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         Song song = _adapter.getItem(position).getSong();
         song.set_frequency(song.get_frequency() + 1);
         _realm.commitTransaction();
+    }
+
+    @Override
+    public void onClickedItem(int position) {
+        incrementFreq(position);
+        int trackNumber = _adapter.getItem(position).getSong().get_trackNumber();
+        Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
+        startActivity(intent);
+        finish();
     }
 }

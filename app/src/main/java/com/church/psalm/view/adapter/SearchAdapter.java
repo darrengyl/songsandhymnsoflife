@@ -1,6 +1,7 @@
 package com.church.psalm.view.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.church.psalm.R;
+import com.church.psalm.interfaces.OnClickSongInterface;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.model.SongMatch;
@@ -24,10 +26,15 @@ import butterknife.ButterKnife;
 public class SearchAdapter extends ArrayAdapter<SongMatch> {
     Context context;
     List<SongMatch> songMatchList;
+    OnClickSongInterface listener;
 
     public SearchAdapter(Context context) {
         super(context, 0);
         this.context = context;
+    }
+
+    public void setOnClickListener(OnClickSongInterface listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -47,12 +54,20 @@ public class SearchAdapter extends ArrayAdapter<SongMatch> {
 
         if (songMatch.getStart() != -1) {
             String partialLyrics = songMatch.getPartialLyrics();
-            
+
             holder.lyrics.setText(partialLyrics);
             holder.lyrics.setVisibility(View.VISIBLE);
 
         } else {
             holder.lyrics.setVisibility(View.GONE);
+        }
+        if (listener != null) {
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClickedItem(position);
+                }
+            });
         }
         return convertView;
     }
@@ -73,13 +88,15 @@ public class SearchAdapter extends ArrayAdapter<SongMatch> {
         notifyDataSetChanged();
     }
 
-    class SongResultViewHolder {
+    static class SongResultViewHolder {
         @Bind(R.id.tracknumber)
         TextView track;
         @Bind(R.id.title)
         TextView title;
         @Bind(R.id.lyrics)
         TextView lyrics;
+        @Bind(R.id.cardview)
+        CardView cardView;
 
         public SongResultViewHolder(View itemView) {
             ButterKnife.bind(this, itemView);
