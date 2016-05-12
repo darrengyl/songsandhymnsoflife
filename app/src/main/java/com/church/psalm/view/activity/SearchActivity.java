@@ -19,9 +19,11 @@ import android.widget.TextView;
 import com.church.psalm.R;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
+import com.church.psalm.model.SongMatch;
 import com.church.psalm.presenter.activity.PresenterSearchActivity;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.adapter.RealmSearchAdapter;
+import com.church.psalm.view.adapter.SearchAdapter;
 import com.church.psalm.view.view.ViewSearchActivity;
 import com.hp.hpl.sparta.Text;
 import com.jakewharton.rxbinding.widget.RxTextView;
@@ -60,7 +62,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     private ImageView _close;
     private Drawable _closeIconDrawable;
     private EditText _searchViewEditText;
-    private RealmSearchAdapter _adapter;
+    private SearchAdapter _adapter;
     private Subscription _suscription;
     private Realm _realm;
 
@@ -76,7 +78,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         }
         setUpSearchview();
         _realm = Realm.getDefaultInstance();
-        _adapter = new RealmSearchAdapter(this, null, true);
+        _adapter = new SearchAdapter(this);
         listView.setAdapter(_adapter);
     }
 
@@ -98,7 +100,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     @OnItemClick(R.id.search_result)
     public void onClickResult(int position) {
         incrementFreq(position);
-        int trackNumber = _adapter.getItem(position).get_trackNumber();
+        int trackNumber = _adapter.getItem(position).getSong().get_trackNumber();
         Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
         startActivity(intent);
         finish();
@@ -173,13 +175,13 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     }
 
     @Override
-    public void updateAdapter(RealmResults<Song> results) {
-        _adapter.updateRealmResults(results);
+    public void updateAdapter(List<SongMatch> results) {
+        _adapter.setData(results);
     }
 
     @Override
     public void showEmptyView() {
-        _adapter.updateRealmResults(null);
+
     }
 
     @Override
@@ -194,7 +196,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
 
     private void incrementFreq(int position) {
         _realm.beginTransaction();
-        Song song = _adapter.getItem(position);
+        Song song = _adapter.getItem(position).getSong();
         song.set_frequency(song.get_frequency() + 1);
         _realm.commitTransaction();
     }

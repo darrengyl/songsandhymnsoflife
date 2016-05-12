@@ -21,6 +21,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
 import io.realm.RealmResults;
 
@@ -32,8 +34,8 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
     private HashMap<Character, Integer> _sectionMap;
     private Character[] _sections;
 
-    public RealmListviewAdapter(Context context, RealmResults<Song> realmResults, boolean automaticUpdate) {
-        super(context, realmResults, automaticUpdate);
+    public RealmListviewAdapter(Context context, RealmResults<Song> realmResults) {
+        super(context, realmResults);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
         } else {
             viewHolder = (SongViewHolder) convertView.getTag();
         }
-        Song song = realmResults.get(position);
+        Song song = getItem(position);
         viewHolder.track.setText(String.valueOf(song.get_trackNumber()));
         viewHolder.title.setText(song.get_title());
         int freqInt = song.get_frequency();
@@ -65,12 +67,12 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
     }
 
     public void updateRealmResults(RealmResults<Song> queryResults) {
-        super.updateRealmResults(queryResults);
+        super.updateData(queryResults);
         Log.d("Adapter", "UpdateRealmResults is called");
     }
 
-    public RealmResults<Song> getRealmResults() {
-        return realmResults;
+    public OrderedRealmCollection<Song> getRealmResults() {
+        return adapterData;
     }
 
     public void setListener(OnClickInterface listener) {

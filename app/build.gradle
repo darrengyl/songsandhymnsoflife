@@ -58,5 +58,6 @@ dependencies {
     compile 'com.belerweb:pinyin4j:2.5.0'
     compile 'com.jakewharton.rxbinding:rxbinding:0.2.0'
     compile('de.psdev.licensesdialog:licensesdialog:1.8.1')
+    compile 'io.realm:android-adapters:1.0.1'
 
 }

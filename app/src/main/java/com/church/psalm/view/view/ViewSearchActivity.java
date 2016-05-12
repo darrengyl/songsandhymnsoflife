@@ -1,6 +1,7 @@
 package com.church.psalm.view.view;
 
 import com.church.psalm.model.Song;
+import com.church.psalm.model.SongMatch;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface ViewSearchActivity {
     void clearQuery();
     void enableDeleteButton(boolean enable);
 
-    void updateAdapter(RealmResults<Song> results);
+    void updateAdapter(List<SongMatch> results);
 
     void showEmptyView();
 

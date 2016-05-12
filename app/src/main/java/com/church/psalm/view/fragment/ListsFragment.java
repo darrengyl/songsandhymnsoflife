@@ -51,7 +51,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lists, container, false);
         ButterKnife.bind(this, view);
-        _songsAdapter = new RealmListviewAdapter(getContext(), null, true);
+        _songsAdapter = new RealmListviewAdapter(getContext(), null);
         _songsAdapter.setListener(this);
         listView.setAdapter(_songsAdapter);
         return view;

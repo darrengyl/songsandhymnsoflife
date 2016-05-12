@@ -95,9 +95,6 @@ public class PresenterListsFragment implements Presenter {
             System.out.println("Pressed position " + position);
             incrementFreq(position);
             _view.startScoreActivity(_data.get(position).get_trackNumber());
-            //reSortData needs to be called because of a bug in Realm library
-            //https://github.com/realm/realm-java/issues/2604
-            reSortData();
         } else {
             _view.showErrorSnackbar();
         }
@@ -109,21 +106,21 @@ public class PresenterListsFragment implements Presenter {
         realm.beginTransaction();
         song.set_favorite(!isFav);
         realm.commitTransaction();
-        //reSortData needs to be called because of a bug in Realm library
-        //https://github.com/realm/realm-java/issues/2604
-        reSortData();
     }
 
     private void reSortData() {
         switch (_currentOrder) {
             case TRACK_ORDER:
-                updateAllSongsAndSort(Constants.COLUMN_TRACK_NUMBER, Sort.ASCENDING);
+                //updateAllSongsAndSort(Constants.COLUMN_TRACK_NUMBER, Sort.ASCENDING);
+                sortBy(TRACK_ORDER);
                 break;
             case ALPHA_ORDER:
-                updateAllSongsAndSort(Constants.COLUMN_PINYIN, Sort.ASCENDING);
+                sortBy(ALPHA_ORDER);
+                //updateAllSongsAndSort(Constants.COLUMN_PINYIN, Sort.ASCENDING);
                 break;
             case FREQ_ORDER:
-                updateAllSongsAndSort(Constants.COLUMN_FREQUENCY, Sort.DESCENDING);
+                sortBy(FREQ_ORDER);
+                //updateAllSongsAndSort(Constants.COLUMN_FREQUENCY, Sort.DESCENDING);
         }
     }
 
@@ -189,12 +186,6 @@ public class PresenterListsFragment implements Presenter {
                         _view.dismissProgressDialog();
                     }
                     _data = songs;
-                    _data.addChangeListener(new RealmChangeListener() {
-                        @Override
-                        public void onChange() {
-                            Log.d("Change Listener", "data is changed");
-                        }
-                    });
                 });
     }
 
@@ -219,8 +210,9 @@ public class PresenterListsFragment implements Presenter {
     private void sortByTrackNumber() {
         _currentOrder = TRACK_ORDER;
         Log.d("Sort by", "Number");
-        _data.sort(Constants.COLUMN_TRACK_NUMBER);
-        _view.refreshAdapter();
+        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_TRACK_NUMBER);
+        _view.refreshListData(sortedData);
+        _data = sortedData;
         _view.enableFastScroll(false);
         _view.showInfoSnackbar("Sorted by Track Number");
     }
@@ -228,9 +220,10 @@ public class PresenterListsFragment implements Presenter {
     private void sortByAlphabeticalOrder() {
         _currentOrder = ALPHA_ORDER;
         Log.d("Sort by", "alphabetic");
-        _data.sort(Constants.COLUMN_PINYIN);
+        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_PINYIN);
+        _data = sortedData;
         setSectionIndexData();
-        _view.refreshAdapter();
+        _view.refreshListData(sortedData);
         _view.enableFastScroll(true);
         _view.showInfoSnackbar("Sorted by Alphabetical Order");
     }
@@ -238,8 +231,9 @@ public class PresenterListsFragment implements Presenter {
     private void sortByFrequency() {
         _currentOrder = FREQ_ORDER;
         Log.d("Sort by", "frequency");
-        _data.sort("_frequency", Sort.DESCENDING);
-        _view.refreshAdapter();
+        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_FREQUENCY, Sort.DESCENDING);
+        _data = sortedData;
+        _view.refreshListData(sortedData);
         _view.enableFastScroll(false);
         _view.showInfoSnackbar("Sorted by Frequency");
     }
