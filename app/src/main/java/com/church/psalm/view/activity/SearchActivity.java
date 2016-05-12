@@ -87,6 +87,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         super.onStart();
         presenter.setView(this);
         presenter.start();
+
     }
 
     @Override
@@ -94,7 +95,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         super.onStop();
         presenter.setView(null);
         presenter.stop();
-        _suscription.unsubscribe();
+        //_suscription.unsubscribe();
     }
 
     @OnItemClick(R.id.search_result)

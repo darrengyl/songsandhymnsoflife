@@ -45,24 +45,12 @@ public class SearchAdapter extends ArrayAdapter<SongMatch> {
         holder.track.setText(String.valueOf(song.get_trackNumber()));
         holder.title.setText(song.get_title());
 
-        int occurrence = song.get_firstOccurrence();
         if (songMatch.getStart() != -1) {
-            String lyrics = song.get_lyrics();
-            int start = lyrics.lastIndexOf("\n", occurrence - 1) + 1;
-            int end = lyrics.indexOf("\n", occurrence);
-            if (end == -1) {
-                end = lyrics.length();
-            }
-            if (start < end && start * end != 1) {
-                String partialLyrics = lyrics.substring(start, end);
-/*                Spannable spanText = Spannable.Factory.getInstance().newSpannable(partialLyrics);
-                spanText.setSpan(new android.text.style.StyleSpan(Typeface.BOLD)
-                        , partialLyrics.indexOf());*/
-                holder.lyrics.setText(partialLyrics);
-                holder.lyrics.setVisibility(View.VISIBLE);
-            } else {
-                holder.lyrics.setVisibility(View.GONE);
-            }
+            String partialLyrics = songMatch.getPartialLyrics();
+            
+            holder.lyrics.setText(partialLyrics);
+            holder.lyrics.setVisibility(View.VISIBLE);
+
         } else {
             holder.lyrics.setVisibility(View.GONE);
         }
