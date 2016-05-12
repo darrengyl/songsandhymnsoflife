@@ -90,9 +90,14 @@ public class PresenterSearchActivity implements Presenter {
                             Log.d("Thread_Title", String.valueOf(Thread.currentThread().getId()));
                             _count++;
                             SongMatch songMatch = new SongMatch();
+                            songMatch.setInTitle(true);
                             songMatch.setKeyword(keyword);
                             songMatch.setSong(song);
-                            songMatch.setStart(-1);
+                            int start = song.get_title().indexOf(keyword);
+                            //exclusive
+                            int end = start + keyword.length();
+                            songMatch.setStart(start);
+                            songMatch.setEnd(end);
                             return Observable.just(songMatch);
                         }
                     });
@@ -116,6 +121,7 @@ public class PresenterSearchActivity implements Presenter {
                             public Observable<SongMatch> call(Song song) {
                                 Log.d("Thread_Lyrics", String.valueOf(Thread.currentThread().getId()));
                                 SongMatch songMatch = new SongMatch();
+                                songMatch.setInTitle(false);
                                 songMatch.setKeyword(keyword);
                                 songMatch.setSong(song);
                                 String lyrics = song.get_lyrics();
@@ -128,7 +134,11 @@ public class PresenterSearchActivity implements Presenter {
                                 if (startOfSentence < endOfSentence && startOfSentence * endOfSentence != 1) {
                                     String partialLyrics = lyrics.substring(startOfSentence, endOfSentence);
                                     songMatch.setPartialLyrics(partialLyrics);
-                                    songMatch.setStart(partialLyrics.indexOf(keyword));
+                                    int start = partialLyrics.indexOf(keyword);
+                                    //exclusive
+                                    int end = start + keyword.length();
+                                    songMatch.setStart(start);
+                                    songMatch.setEnd(end);
                                 }
                                 return Observable.just(songMatch);
                             }

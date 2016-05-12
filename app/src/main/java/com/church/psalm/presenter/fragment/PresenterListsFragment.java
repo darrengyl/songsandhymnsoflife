@@ -193,6 +193,9 @@ public class PresenterListsFragment implements Presenter {
     }
 
     public void sortBy(int which) {
+        if (which == _currentOrder) {
+            return;
+        }
         switch (which) {
             case TRACK_ORDER:
                 sortByTrackNumber();
@@ -207,7 +210,6 @@ public class PresenterListsFragment implements Presenter {
                 sortByTrackNumber();
                 Log.wtf("WTF", "This should never be called");
         }
-
     }
 
     private void sortByTrackNumber() {

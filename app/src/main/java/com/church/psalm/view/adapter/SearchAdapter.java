@@ -1,7 +1,14 @@
 package com.church.psalm.view.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,16 +57,25 @@ public class SearchAdapter extends ArrayAdapter<SongMatch> {
         SongMatch songMatch = getItem(position);
         Song song = songMatch.getSong();
         holder.track.setText(String.valueOf(song.get_trackNumber()));
-        holder.title.setText(song.get_title());
-
-        if (songMatch.getStart() != -1) {
+        if (songMatch.isInTitle()) {
+            Spannable spannable = new SpannableString(song.get_title());
+            spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)),
+                    songMatch.getStart(), songMatch.getEnd(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD),
+                    songMatch.getStart(), songMatch.getEnd(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            holder.title.setText(spannable);
+            holder.lyrics.setVisibility(View.GONE);
+        } else {
             String partialLyrics = songMatch.getPartialLyrics();
-
-            holder.lyrics.setText(partialLyrics);
+            Spannable spannable = new SpannableString(partialLyrics);
+            spannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, R.color.colorAccent)),
+                    songMatch.getStart(), songMatch.getEnd(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD),
+                    songMatch.getStart(), songMatch.getEnd(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            holder.title.setText(song.get_title());
+            holder.lyrics.setText(spannable);
             holder.lyrics.setVisibility(View.VISIBLE);
 
-        } else {
-            holder.lyrics.setVisibility(View.GONE);
         }
         if (listener != null) {
             holder.cardView.setOnClickListener(new View.OnClickListener() {

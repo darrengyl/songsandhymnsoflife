@@ -6,8 +6,10 @@ package com.church.psalm.model;
 public class SongMatch implements Comparable<SongMatch>{
     private String keyword;
     private int start;
+    private int end;
     private String partialLyrics;
     private Song song;
+    private boolean inTitle;
 
     public SongMatch() {}
 
@@ -54,5 +56,21 @@ public class SongMatch implements Comparable<SongMatch>{
     @Override
     public int compareTo(SongMatch another) {
         return song.get_trackNumber() - another.getSong().get_trackNumber();
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
+    public boolean isInTitle() {
+        return inTitle;
+    }
+
+    public void setInTitle(boolean inTitle) {
+        this.inTitle = inTitle;
     }
 }
