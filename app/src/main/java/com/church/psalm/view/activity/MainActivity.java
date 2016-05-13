@@ -1,9 +1,12 @@
 package com.church.psalm.view.activity;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,9 +32,6 @@ import butterknife.OnClick;
 import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements ViewMainActivity {
-    private static final String TAG_SORT_NUMBER = "sortNum";
-    private static final String TAG_SORT_FREQ = "sortFreq";
-    private static final String TAG_SORT_FAV = "sortFav";
     @Bind(R.id.tool_bar)
     Toolbar toolBar;
     @Bind(R.id.tab_layout)
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     private ListsFragment listsFragment;
     private NumbersFragment numbersFragment;
     private MenuItem _sort;
+    private MenuItem _search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    public void setOnTabSelectedListener() {
         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -70,7 +74,10 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                     } else {
                         _sort.setVisible(false);
                     }
+                    _search.setVisible(true);
                 }
+
+
             }
         });
     }
@@ -86,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         _sort = menu.getItem(0);
+        _search = menu.getItem(1);
         return true;
     }
 
@@ -139,5 +147,10 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
 
     public void incrementFreq(int position) {
         listsFragment.incrementFreq(position);
+    }
+
+    public void removeMenuItem() {
+        _sort.setVisible(false);
+        _search.setVisible(false);
     }
 }

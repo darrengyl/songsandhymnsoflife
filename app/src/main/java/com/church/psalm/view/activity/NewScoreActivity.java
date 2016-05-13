@@ -1,5 +1,6 @@
 package com.church.psalm.view.activity;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,8 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.church.psalm.MusicService;
 import com.church.psalm.MusicService.MusicBinder;
 import com.church.psalm.R;
@@ -66,6 +71,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     public static final String SCORELINK =
             "http://shengmingshige.net/blog/wp-content/gallery/c-png/cu-%1$s.png";
     public static final String MUSICLINK = "http://shengmingshige.net/hymnal/mp3/%1$s.mp3";
+    private static final int MY_PERMISSIONS_REQUEST = 1;
     @Bind(R.id.image_view)
     ImageView imageView;
     @Bind(R.id.progress_bar)
@@ -103,11 +109,17 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
         presenter.setView(this);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            _toolbar = getSupportActionBar();
-            _toolbar.setDisplayShowTitleEnabled(false);
-            _toolbar.setDisplayHomeAsUpEnabled(true);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                _realm = Realm.getDefaultInstance();
+                _toolbar = getSupportActionBar();
+                _toolbar.setDisplayShowTitleEnabled(false);
+                _toolbar.setDisplayHomeAsUpEnabled(true);
+            } else {
+                getSupportActionBar().hide();
+            }
+
         }
-        _realm = Realm.getDefaultInstance();
         _imageTarget = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -197,11 +209,14 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_score_activity, menu);
-        MenuItem share = menu.findItem(R.id.share);
-        _lyricsMenuItem = menu.findItem(R.id.text_only);
-        share.getIcon().setColorFilter(ContextCompat.getColor(this, R.color.colorScoreActivityToolbarIcon)
-                , PorterDuff.Mode.SRC_ATOP);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            getMenuInflater().inflate(R.menu.menu_score_activity, menu);
+            MenuItem share = menu.findItem(R.id.share);
+            _lyricsMenuItem = menu.findItem(R.id.text_only);
+            share.getIcon().setColorFilter(ContextCompat.getColor(this, R.color.colorScoreActivityToolbarIcon)
+                    , PorterDuff.Mode.SRC_ATOP);
+        }
         return true;
     }
 
@@ -403,7 +418,8 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             if (_toolbar.isShowing()) {
                 _toolbar.hide();
             }
@@ -431,11 +447,13 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
         } else {
             _controller.show(0);
         }
-        if (_toolbar.isShowing()) {
-            _toolbar.hide();
-        } else {
-            _toolbar.show();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            if (_toolbar.isShowing()) {
+                _toolbar.hide();
+            } else {
+                _toolbar.show();
+            }
         }
     }
-
 }

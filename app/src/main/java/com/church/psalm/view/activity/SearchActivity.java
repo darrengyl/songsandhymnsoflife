@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.church.psalm.R;
+import com.church.psalm.Util;
 import com.church.psalm.interfaces.OnClickSongInterface;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
@@ -197,10 +200,23 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
 
     @Override
     public void onClickedItem(int position) {
-        incrementFreq(position);
-        int trackNumber = _adapter.getItem(position).getSong().get_trackNumber();
-        Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
-        startActivity(intent);
-        finish();
+        if (Util.isNetworkConnected()) {
+            incrementFreq(position);
+            int trackNumber = _adapter.getItem(position).getSong().get_trackNumber();
+            Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
+            startActivity(intent);
+            finish();
+        } else {
+            Snackbar.make(findViewById(android.R.id.content)
+                    , getString(R.string.network_error)
+                    , Snackbar.LENGTH_LONG)
+                    .setAction(R.string.open_settings, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        }
+                    })
+                    .show();
+        }
     }
 }

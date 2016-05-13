@@ -89,7 +89,9 @@ public class PresenterListsFragment implements Presenter {
         if (!_subscription.isUnsubscribed()) {
             _subscription.unsubscribe();
         }
-        realm.close();
+        if (realm != null && !realm.isClosed()) {
+            realm.close();
+        }
     }
 
 

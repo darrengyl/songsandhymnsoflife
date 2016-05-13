@@ -1,12 +1,15 @@
 package com.church.psalm.view.fragment;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
@@ -122,7 +125,10 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
 
     @Override
     public void incrementFreq(int position) {
-        ((MainActivity) getActivity()).incrementFreq(position);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED) {
+            ((MainActivity) getActivity()).incrementFreq(position);
+        }
     }
 
     @Override

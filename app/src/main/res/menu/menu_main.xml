@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/sort_by"
-        android:title="Sort by..."
+    <item
+        android:id="@+id/sort_by"
         android:icon="@drawable/ic_sort_white_24dp"
+        android:title="Sort by..."
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/search"
-        android:title="@string/search_title"
+    <item
+        android:id="@+id/search"
         android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search_title"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/acknowledgements"
+    <item
+        android:id="@+id/acknowledgements"
         android:title="Acknowledgements"
         app:showAsAction="never" />
 
