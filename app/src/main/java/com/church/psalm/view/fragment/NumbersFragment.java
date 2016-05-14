@@ -124,10 +124,10 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment {
     }
 
     @Override
-    public void incrementFreq(int position) {
+    public void incrementFreq(int trackNumber) {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
-            ((MainActivity) getActivity()).incrementFreq(position);
+            presenterNumbersFragment.incrementFreq(trackNumber);
         }
     }
 

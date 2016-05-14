@@ -12,5 +12,5 @@ public interface ViewNumberFragment {
 
     void showNetworkError();
 
-    void incrementFreq(int position);
+    void incrementFreq(int trackNumber);
 }

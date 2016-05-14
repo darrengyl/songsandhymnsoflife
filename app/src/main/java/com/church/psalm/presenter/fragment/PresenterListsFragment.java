@@ -1,8 +1,6 @@
 package com.church.psalm.presenter.fragment;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.church.psalm.R;
@@ -28,7 +26,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
-import io.realm.RealmChangeListener;
+
 import io.realm.RealmResults;
 import io.realm.Sort;
 import rx.Subscription;
@@ -54,7 +52,6 @@ public class PresenterListsFragment implements Presenter {
         _context = context;
         _currentOrder = TRACK_ORDER;
         _sectionMap = new HashMap<>();
-
     }
 
     public void setView(ViewListFragment view) {
@@ -111,22 +108,6 @@ public class PresenterListsFragment implements Presenter {
         realm.beginTransaction();
         song.set_favorite(!isFav);
         realm.commitTransaction();
-    }
-
-    private void reSortData() {
-        switch (_currentOrder) {
-            case TRACK_ORDER:
-                //updateAllSongsAndSort(Constants.COLUMN_TRACK_NUMBER, Sort.ASCENDING);
-                sortBy(TRACK_ORDER);
-                break;
-            case ALPHA_ORDER:
-                sortBy(ALPHA_ORDER);
-                //updateAllSongsAndSort(Constants.COLUMN_PINYIN, Sort.ASCENDING);
-                break;
-            case FREQ_ORDER:
-                sortBy(FREQ_ORDER);
-                //updateAllSongsAndSort(Constants.COLUMN_FREQUENCY, Sort.DESCENDING);
-        }
     }
 
     private void addUsers() {
@@ -266,6 +247,7 @@ public class PresenterListsFragment implements Presenter {
         }
     }
 
+    //TODO: move this. duplicate method
     public void incrementFreq(int position) {
         Song song = _data.get(position);
         realm.beginTransaction();

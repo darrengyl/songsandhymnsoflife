@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import com.church.psalm.Util;
+import com.church.psalm.model.Constants;
+import com.church.psalm.model.Song;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewNumberFragment;
 
@@ -67,7 +69,7 @@ public class PresenterNumbersFragment implements Presenter {
         if (Util.isNetworkConnected()) {
             if (trackNumber > 0 && trackNumber < 587) {
                 _view.startScoreActivity(trackNumber);
-                incrementFreq(trackNumber - 1);
+                _view.incrementFreq(trackNumber);
                 stringBuilder.setLength(0);
                 _view.updateDisplay(stringBuilder.toString());
             } else {
@@ -78,7 +80,16 @@ public class PresenterNumbersFragment implements Presenter {
         }
     }
 
-    private void incrementFreq(int position) {
-        _view.incrementFreq(position);
+    public void incrementFreq(int trackNumber) {
+        Realm.getDefaultInstance()
+                .executeTransactionAsync(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        Song song = realm.where(Song.class)
+                                .equalTo(Constants.COLUMN_TRACK_NUMBER, trackNumber)
+                                .findFirst();
+                        song.set_frequency(song.get_frequency() + 1);
+                    }
+                });
     }
 }

@@ -58,18 +58,16 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         ButterKnife.bind(this);
         ((Songsandhymnsoflife) getApplication()).getComponent().inject(this);
         setSupportActionBar(toolBar);
-        getSupportActionBar().setTitle("Hymns of Life");
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Hymns of Life");
+        }
         _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         numbersFragment = new NumbersFragment();
         _viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
                 new MaterialDialog.Builder(this)
                         .title("Permission Needed")
                         .content("Without the permission to write data to your storage, none of song info can be stored. " +
@@ -86,8 +84,6 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                         })
                         .show();
             } else {
-                // No explanation needed, we can request the permission.
-                //
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST);
             }
@@ -103,16 +99,12 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST) {
-            // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 listsFragment = new ListsFragment();
                 _viewPagerAdapter.addFragment(listsFragment, "LIST");
-
                 setOnTabSelectedListener();
             } else {
-                // permission denied, boo! Disable the
-                // functionality that depends on this permission.
                 removeMenuItem();
             }
             viewPager.setAdapter(_viewPagerAdapter);
@@ -133,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                     }
                     _search.setVisible(true);
                 }
-
-
             }
         });
     }
@@ -161,9 +151,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_by:
-                if (viewPager.getCurrentItem() == 1) {
-                    listsFragment.onClickSort();
-                }
+                listsFragment.onClickSort();
                 break;
             case R.id.search:
                 startActivity(new Intent(this, SearchActivity.class));
@@ -192,21 +180,12 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         }
     }
 
-    @Override
-    public void refreshListData() {
-
-    }
-
     private void showLicenseDialog() {
         new LicensesDialog.Builder(this)
                 .setNotices(R.raw.notices)
                 .setIncludeOwnLicense(true)
                 .build()
                 .show();
-    }
-
-    public void incrementFreq(int position) {
-        listsFragment.incrementFreq(position);
     }
 
     public void removeMenuItem() {

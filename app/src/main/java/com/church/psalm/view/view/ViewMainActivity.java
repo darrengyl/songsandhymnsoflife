@@ -6,5 +6,4 @@ package com.church.psalm.view.view;
 public interface ViewMainActivity {
     void showProgressDialog();
     void dismissProgressDialog();
-    void refreshListData();
 }

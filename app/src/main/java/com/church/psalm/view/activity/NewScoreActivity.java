@@ -71,7 +71,6 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     public static final String SCORELINK =
             "http://shengmingshige.net/blog/wp-content/gallery/c-png/cu-%1$s.png";
     public static final String MUSICLINK = "http://shengmingshige.net/hymnal/mp3/%1$s.mp3";
-    private static final int MY_PERMISSIONS_REQUEST = 1;
     @Bind(R.id.image_view)
     ImageView imageView;
     @Bind(R.id.progress_bar)
