@@ -30,8 +30,6 @@ public class PresenterSearchActivity implements Presenter {
     private boolean _deleteEnabled;
     private Context _context;
     private Realm _realm;
-    private RealmResults<Song> _titleResults;
-    private RealmResults<Song> _lyricsResults;
     private Subscription _subscription;
     private int _count;
 
@@ -155,9 +153,14 @@ public class PresenterSearchActivity implements Presenter {
                             }
                         })
                         .subscribe(songs -> {
-                            if (songs.size() == Constants.SEARCH_FILTER_NUMBER) {
+                            if (songs.size() == 0) {
+                                _view.showEmptyView();
+                                _view.hideLimitBanner();
+                            } else if (songs.size() == Constants.SEARCH_FILTER_NUMBER) {
+                                _view.hideEmptyView();
                                 _view.showLimitBanner();
                             } else {
+                                _view.hideEmptyView();
                                 _view.hideLimitBanner();
                             }
                             _view.updateAdapter(songs);
@@ -176,12 +179,13 @@ public class PresenterSearchActivity implements Presenter {
                             } else {
                                 _view.hideLimitBanner();
                             }
+                            _view.hideEmptyView();
                             _view.updateAdapter(songs);
                         });
             }
         } else {
             _view.hideLimitBanner();
-            _view.showEmptyView();
+            _view.hideEmptyView();
         }
     }
 }

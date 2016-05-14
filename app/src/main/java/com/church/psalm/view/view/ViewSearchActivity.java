@@ -17,6 +17,7 @@ public interface ViewSearchActivity {
     void updateAdapter(List<SongMatch> results);
 
     void showEmptyView();
+    void hideEmptyView();
 
     void showLimitBanner();
 

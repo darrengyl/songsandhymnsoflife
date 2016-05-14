@@ -76,7 +76,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     @Bind(R.id.progress_bar)
     ProgressBar progressBar;
     @Bind(R.id.error_view)
-    LinearLayout errorView;
+    TextView errorView;
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
     @Bind(R.id.scrollView)
@@ -166,7 +166,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                 .into(imageView, new Callback() {
                     @Override
                     public void onSuccess() {
-                        imageView.setVisibility(View.VISIBLE);
+                        errorView.setVisibility(View.GONE);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
                         _attacher = new PhotoViewAttacher(imageView);
                         _attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {

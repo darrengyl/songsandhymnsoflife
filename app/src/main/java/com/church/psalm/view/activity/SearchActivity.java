@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.church.psalm.R;
@@ -61,6 +62,8 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     ListView listView;
     @Bind(R.id.banner)
     TextView banner;
+    @Bind(R.id.empty_view)
+    RelativeLayout emptyView;
     @Inject
     PresenterSearchActivity presenter;
     private ImageView _close;
@@ -179,7 +182,12 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
 
     @Override
     public void showEmptyView() {
+        emptyView.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void hideEmptyView() {
+        emptyView.setVisibility(View.GONE);
     }
 
     @Override
