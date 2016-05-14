@@ -5,7 +5,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.church.psalm.R;
@@ -32,6 +35,7 @@ import butterknife.OnClick;
 import de.psdev.licensesdialog.LicensesDialog;
 
 public class MainActivity extends AppCompatActivity implements ViewMainActivity {
+    private static final int MY_PERMISSIONS_REQUEST = 1;
     @Bind(R.id.tool_bar)
     Toolbar toolBar;
     @Bind(R.id.tab_layout)
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     private NumbersFragment numbersFragment;
     private MenuItem _sort;
     private MenuItem _search;
+    private ViewPagerAdapter _viewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +59,65 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         ((Songsandhymnsoflife) getApplication()).getComponent().inject(this);
         setSupportActionBar(toolBar);
         getSupportActionBar().setTitle("Hymns of Life");
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        listsFragment = new ListsFragment();
+        _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         numbersFragment = new NumbersFragment();
-        viewPagerAdapter.addFragment(listsFragment, "LIST");
-        viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
-        viewPager.setAdapter(viewPagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
+        _viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                new MaterialDialog.Builder(this)
+                        .title("Permission Needed")
+                        .content("Without the permission to write data to your storage, none of song info can be stored. " +
+                                "In that case not all functions will be available")
+                        .positiveText("OK")
+                        .cancelable(false)
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        MY_PERMISSIONS_REQUEST);
+                            }
+                        })
+                        .show();
+            } else {
+                // No explanation needed, we can request the permission.
+                //
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST);
+            }
+        } else {
+            listsFragment = new ListsFragment();
+            _viewPagerAdapter.addFragment(listsFragment, "LIST");
+            viewPager.setAdapter(_viewPagerAdapter);
+            tabLayout.setupWithViewPager(viewPager);
+            setOnTabSelectedListener();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                listsFragment = new ListsFragment();
+                _viewPagerAdapter.addFragment(listsFragment, "LIST");
+
+                setOnTabSelectedListener();
+            } else {
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+                removeMenuItem();
+            }
+            viewPager.setAdapter(_viewPagerAdapter);
+            tabLayout.setupWithViewPager(viewPager);
+        }
     }
 
     public void setOnTabSelectedListener() {
@@ -69,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
             public void onTabSelected(TabLayout.Tab tab) {
                 super.onTabSelected(tab);
                 if (_sort != null) {
-                    if (tab.getPosition() == 0) {
+                    if (tab.getPosition() == 1) {
                         _sort.setVisible(true);
                     } else {
                         _sort.setVisible(false);
@@ -94,6 +151,9 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         getMenuInflater().inflate(R.menu.menu_main, menu);
         _sort = menu.getItem(0);
         _search = menu.getItem(1);
+        if (tabLayout != null && tabLayout.getSelectedTabPosition() == 1) {
+            _sort.setVisible(true);
+        }
         return true;
     }
 
@@ -101,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_by:
-                if (viewPager.getCurrentItem() == 0) {
+                if (viewPager.getCurrentItem() == 1) {
                     listsFragment.onClickSort();
                 }
                 break;

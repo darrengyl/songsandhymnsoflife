@@ -69,7 +69,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     public void onStart() {
         super.onStart();
         presenterListsFragment.setView(this);
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+/*        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
@@ -95,12 +95,12 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST);
             }
-        } else {
+        } else {*/
             presenterListsFragment.start();
-        }
+        //}
     }
 
-    @Override
+/*    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST)
@@ -118,7 +118,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
                     ((MainActivity) getActivity()).removeMenuItem();
                 }
             }
-    }
+    }*/
 
 
     @Override
@@ -147,7 +147,6 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     @Override
     public void refreshListData(RealmResults<Song> songs) {
         _songsAdapter.updateRealmResults(songs);
-        //listView.setSelectionAfterHeaderView();
     }
 
     @Override

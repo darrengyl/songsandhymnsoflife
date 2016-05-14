@@ -5,6 +5,7 @@
         android:id="@+id/sort_by"
         android:icon="@drawable/ic_sort_white_24dp"
         android:title="Sort by..."
+        android:visible="false"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/search"

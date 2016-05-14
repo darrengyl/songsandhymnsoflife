@@ -25,6 +25,8 @@ public class Song extends RealmObject {
     private String _lyrics;
     private boolean _favorite;
     private int _firstOccurrence;
+    private int _category;
+    private int _subcategory;
 
 
     public int get_trackNumber() {
@@ -97,5 +99,21 @@ public class Song extends RealmObject {
 
     public void set_firstOccurrence(int _firstOccurrence) {
         this._firstOccurrence = _firstOccurrence;
+    }
+
+    public int get_category() {
+        return _category;
+    }
+
+    public void set_category(int _category) {
+        this._category = _category;
+    }
+
+    public int get_subcategory() {
+        return _subcategory;
+    }
+
+    public void set_subcategory(int _subcategory) {
+        this._subcategory = _subcategory;
     }
 }
