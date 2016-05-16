@@ -17,10 +17,12 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -169,11 +171,22 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                         errorView.setVisibility(View.GONE);
                         imageView.setScaleType(ImageView.ScaleType.CENTER);
                         _attacher = new PhotoViewAttacher(imageView);
-                        _attacher.setOnViewTapListener(new PhotoViewAttacher.OnViewTapListener() {
+                        _attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
                             @Override
-                            public void onViewTap(View view, float x, float y) {
+                            public void onPhotoTap(View view, float x, float y) {
+                                Log.d("onclick", "photoview is clicked");
                                 setOnClickListener();
                             }
+
+                            @Override
+                            public void onOutsidePhotoTap() {
+
+                            }
+
+                            /*@Override
+                            public void onViewTap(View view, float x, float y) {
+
+                            }*/
                         });
                         if (progressBar.getVisibility() == View.VISIBLE) {
                             progressBar.setVisibility(View.GONE);
@@ -221,6 +234,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
 
     @OnClick(R.id.lyrics_textview)
     public void onClickLyrics() {
+        Log.d("onclick", "lyrics is clicked");
         setOnClickListener();
     }
 
@@ -265,9 +279,9 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                 }
                 break;
             case android.R.id.home:
-                /*stopService(new Intent(getApplicationContext(), MusicService.class));
-                //_musicService = null;
-                NavUtils.navigateUpFromSameTask(this);*/
+                _controller.hide();
+                stopService(new Intent(getApplicationContext(), MusicService.class));
+                _musicService = null;
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -374,12 +388,12 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                 if (_trackNumber < 586) {
                     _trackNumber++;
                 }
-                imageView.setVisibility(View.INVISIBLE);
+                //imageView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 loadImage();
                 _musicService.setSong(getMusicLink(_trackNumber));
                 _musicService.playSong();
-                _controller.show(0);
+                //_controller.show(0);
             }
         }, new View.OnClickListener() {
             @Override
@@ -387,18 +401,17 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                 if (_trackNumber > 1) {
                     _trackNumber--;
                 }
-                imageView.setVisibility(View.INVISIBLE);
+                //imageView.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
                 loadImage();
                 _musicService.setSong(getMusicLink(_trackNumber));
                 _musicService.playSong();
-                _controller.show(0);
+                //_controller.show(0);
             }
         });
         _controller.setMediaPlayer(this);
         _controller.setAnchorView(imageView);
         _controller.setEnabled(true);
-        //_controller.show(0);
     }
 
     private String getScoreLink(int trackNumber) {
