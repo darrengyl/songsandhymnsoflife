@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,10 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,15 +26,13 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.church.psalm.MusicService;
 import com.church.psalm.MusicService.MusicBinder;
 import com.church.psalm.R;
@@ -53,7 +50,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -61,13 +57,28 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import rx.Observable;
+import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 import uk.co.senab.photoview.PhotoViewAttacher;
+
+import static android.R.attr.maxHeight;
+import static android.R.attr.maxWidth;
+import static android.R.attr.path;
+import static android.R.attr.viewportWidth;
+import static android.R.attr.width;
+import static android.os.Build.VERSION_CODES.M;
+import static com.church.psalm.R.id.image;
+import static com.church.psalm.R.id.image_view;
+import static com.church.psalm.R.id.share;
 
 /**
  * Created by darrengu on 4/14/16.
  */
-public class NewScoreActivity extends AppCompatActivity implements MediaController.MediaPlayerControl, ViewScoreActivity {
+public class NewScoreActivity extends AppCompatActivity implements ViewScoreActivity {
     public static final String TRACK = "Track";
     public static final String MUSICBOUNDED = "Music Bound";
     public static final String SCORELINK =
@@ -87,14 +98,17 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     TextView lyricsTextView;
     private Realm _realm;
     private int _trackNumber;
-    private MediaController _controller;
+    private CustomMediaController _controller;
     private boolean musicBound = false;
     private MusicService _musicService;
     private ActionBar _toolbar;
     private Target _imageTarget;
     private MenuItem _lyricsMenuItem;
+    private MenuItem _share;
     private String _lyrics;
     private PhotoViewAttacher _attacher;
+    private File file;
+
     @Inject
     PresenterScoreActivity presenter;
 
@@ -119,33 +133,40 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
             } else {
                 getSupportActionBar().hide();
             }
-
         }
+
         _imageTarget = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                imageView.setImageBitmap(bitmap);
-                File file = new File(getFilesDir(), Constants.SCORE_NAME);
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file);
-                    // Use the compress method on the BitMap object to write image to the OutputStream
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        fos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
+                imageView.setImageBitmap(scaledBitmap);
+                saveBitmapInBackground(scaledBitmap);
+                errorView.setVisibility(View.GONE);
+                _attacher = new PhotoViewAttacher(imageView);
+                _attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                    @Override
+                    public void onPhotoTap(View view, float x, float y) {
+                        Log.d("onclick", "photoview is clicked");
+                        setOnClickListener();
                     }
-                }
 
+                    @Override
+                    public void onOutsidePhotoTap() {
+
+                    }
+                });
+                if (progressBar.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-
+                errorView.setVisibility(View.VISIBLE);
+                if (progressBar.getVisibility() == View.VISIBLE) {
+                    progressBar.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -153,6 +174,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
 
             }
         };
+
         _trackNumber = getIntent().getIntExtra(TRACK, -1);
         if (_trackNumber != -1) {
             loadImage();
@@ -160,47 +182,47 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
         }
     }
 
-    private void loadImage() {
-        Picasso.with(this)
-                .load(getScoreLink(_trackNumber))
-                .fit()
-                .centerInside()
-                .into(imageView, new Callback() {
+    private void saveBitmapInBackground(Bitmap scaledBitmap) {
+        Observable.just(scaledBitmap)
+                .map(new Func1<Bitmap, Object>() {
                     @Override
-                    public void onSuccess() {
-                        errorView.setVisibility(View.GONE);
-                        imageView.setScaleType(ImageView.ScaleType.CENTER);
-                        _attacher = new PhotoViewAttacher(imageView);
-                        _attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
-                            @Override
-                            public void onPhotoTap(View view, float x, float y) {
-                                Log.d("onclick", "photoview is clicked");
-                                setOnClickListener();
+                    public Object call(Bitmap bitmap) {
+                        file = new File(getFilesDir(), Constants.SCORE_NAME);
+                        FileOutputStream fos = null;
+                        try {
+                            fos = new FileOutputStream(file);
+                            // Use the compress method on the BitMap object to write image to the OutputStream
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                fos.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-
-                            @Override
-                            public void onOutsidePhotoTap() {
-
-                            }
-
-                            /*@Override
-                            public void onViewTap(View view, float x, float y) {
-
-                            }*/
-                        });
-                        if (progressBar.getVisibility() == View.VISIBLE) {
-                            progressBar.setVisibility(View.GONE);
                         }
+                        return null;
                     }
-
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<Object>() {
                     @Override
-                    public void onError() {
-                        errorView.setVisibility(View.VISIBLE);
-                        if (progressBar.getVisibility() == View.VISIBLE) {
-                            progressBar.setVisibility(View.GONE);
+                    public void call(Object o) {
+                        if (_share != null) {
+                            _share.setVisible(true);
+                        } else {
+                            Log.d("Share", "Not ready yet");
                         }
                     }
                 });
+    }
+
+    private void loadImage() {
+        Picasso.with(this)
+                .load(getScoreLink(_trackNumber))
+                .into(_imageTarget);
     }
 
     @Override
@@ -224,10 +246,10 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             getMenuInflater().inflate(R.menu.menu_score_activity, menu);
-            MenuItem share = menu.findItem(R.id.share);
+            _share = menu.findItem(R.id.share);
             _lyricsMenuItem = menu.findItem(R.id.text_only);
-            share.getIcon().setColorFilter(ContextCompat.getColor(this, R.color.colorScoreActivityToolbarIcon)
-                    , PorterDuff.Mode.SRC_ATOP);
+            //_share.getIcon().setColorFilter(ContextCompat.getColor(this, R.color.colorScoreActivityToolbarIcon)
+            //        , PorterDuff.Mode.SRC_ATOP);
         }
         return true;
     }
@@ -241,7 +263,7 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case (R.id.text_only):
+            case R.id.text_only:
                 if (imageView.getVisibility() == View.VISIBLE) {
                     imageView.setVisibility(View.GONE);
                     scrollView.setVisibility(View.VISIBLE);
@@ -256,27 +278,8 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
                 }
                 flipIcon();
                 break;
-            case (R.id.share):
-                if (imageView.getVisibility() == View.VISIBLE) {
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    String path = MediaStore.Images.Media.insertImage(getContentResolver()
-                            , ((BitmapDrawable) imageView.getDrawable()).getBitmap(), "Score", null);
-                    if (path != null) {
-                        Uri imageUri = Uri.parse(path);
-                        share.setType("image/png");
-                        share.putExtra(Intent.EXTRA_STREAM, imageUri);
-                        if (Util.safeIntent(share)) {
-                            startActivity(share);
-                        }
-                    }
-                } else {
-                    Intent share = new Intent(Intent.ACTION_SEND);
-                    share.putExtra(Intent.EXTRA_TEXT, _lyrics);
-                    share.setType("text/plain");
-                    if (Util.safeIntent(share)) {
-                        startActivity(share);
-                    }
-                }
+            case share:
+                shareScore();
                 break;
             case android.R.id.home:
                 _controller.hide();
@@ -292,6 +295,29 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
             _lyricsMenuItem.setIcon(R.drawable.ic_text_format_white_24dp);
         } else {
             _lyricsMenuItem.setIcon(R.drawable.ic_music_note_white_24dp);
+        }
+    }
+
+    private void shareScore() {
+        if (imageView.getVisibility() == View.VISIBLE) {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            /*String path = MediaStore.Images.Media.insertImage(getContentResolver()
+                    , ((BitmapDrawable) imageView.getDrawable()).getBitmap(), Constants.SCORE_NAME, null);*/
+            //if (path != null) {
+                Uri imageUri = Uri.fromFile(file);
+                share.setType("image/png");
+                share.putExtra(Intent.EXTRA_STREAM, imageUri);
+                if (Util.safeIntent(share)) {
+                    startActivity(share);
+            //    }
+            }
+        } else {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.putExtra(Intent.EXTRA_TEXT, _lyrics);
+            share.setType("text/plain");
+            if (Util.safeIntent(share)) {
+                startActivity(share);
+            }
         }
     }
 
@@ -325,93 +351,36 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
         }
     };
 
-    @Override
-    public void start() {
-        _musicService.go();
-    }
-
-    @Override
-    public void pause() {
-        _musicService.pausePlayer();
-    }
-
-    @Override
-    public int getDuration() {
-        return _musicService.getDur();
-    }
-
-    @Override
-    public int getCurrentPosition() {
-        return _musicService.getPosn();
-    }
-
-    @Override
-    public void seekTo(int pos) {
-        _musicService.seek(pos);
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return _musicService.isPng();
-    }
-
-    @Override
-    public int getBufferPercentage() {
-        return _musicService.getBufferPercentage();
-    }
-
-    @Override
-    public boolean canPause() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekBackward() {
-        return true;
-    }
-
-    @Override
-    public boolean canSeekForward() {
-        return true;
-    }
-
-    @Override
-    public int getAudioSessionId() {
-        return 0;
-    }
-
     private void setController() {
-        _controller = new MediaController(this);
+        _controller = new CustomMediaController(this);
         _controller.setPrevNextListeners(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (_trackNumber < 586) {
                     _trackNumber++;
+                    onPrevNextClicked();
                 }
-                //imageView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-                loadImage();
-                _musicService.setSong(getMusicLink(_trackNumber));
-                _musicService.playSong();
-                //_controller.show(0);
             }
         }, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (_trackNumber > 1) {
                     _trackNumber--;
+                    onPrevNextClicked();
                 }
-                //imageView.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
-                loadImage();
-                _musicService.setSong(getMusicLink(_trackNumber));
-                _musicService.playSong();
-                //_controller.show(0);
             }
         });
-        _controller.setMediaPlayer(this);
+        _controller.setMediaPlayer(_controller);
         _controller.setAnchorView(imageView);
         _controller.setEnabled(true);
+    }
+
+    private void onPrevNextClicked() {
+        _share.setVisible(false);
+        progressBar.setVisibility(View.VISIBLE);
+        loadImage();
+        _musicService.setSong(getMusicLink(_trackNumber));
+        _musicService.playSong();
     }
 
     private String getScoreLink(int trackNumber) {
@@ -466,6 +435,68 @@ public class NewScoreActivity extends AppCompatActivity implements MediaControll
             } else {
                 _toolbar.show();
             }
+        }
+    }
+
+    private class CustomMediaController extends android.widget.MediaController implements android.widget.MediaController.MediaPlayerControl {
+
+        public CustomMediaController(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void start() {
+            _musicService.go();
+        }
+
+        @Override
+        public void pause() {
+            _musicService.pausePlayer();
+        }
+
+        @Override
+        public int getDuration() {
+            return _musicService.getDur();
+        }
+
+        @Override
+        public int getCurrentPosition() {
+            return _musicService.getPosn();
+        }
+
+        @Override
+        public void seekTo(int pos) {
+            _musicService.seek(pos);
+        }
+
+        @Override
+        public boolean isPlaying() {
+            return _musicService.isPng();
+        }
+
+        @Override
+        public int getBufferPercentage() {
+            return _musicService.getBufferPercentage();
+        }
+
+        @Override
+        public boolean canPause() {
+            return true;
+        }
+
+        @Override
+        public boolean canSeekBackward() {
+            return true;
+        }
+
+        @Override
+        public boolean canSeekForward() {
+            return true;
+        }
+
+        @Override
+        public int getAudioSessionId() {
+            return 0;
         }
     }
 }

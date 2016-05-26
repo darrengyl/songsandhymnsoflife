@@ -105,11 +105,11 @@ public class MusicService extends Service implements
         player.reset();
         try {
             player.setDataSource(_songUrl);
+            player.prepare();
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("Music databinding", "Error getting data source");
         }
-        player.prepareAsync();
     }
 
     public int getPosn(){
