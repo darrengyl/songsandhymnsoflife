@@ -6,7 +6,7 @@ package com.church.psalm.model;
  */
 public class Constants {
     public static final String REALM_FILE = "database.realm";
-    public static final String SCORE_NAME = "latest_score";
+    public static final String SCORE_NAME = "latest_score.png";
     public static final int SEARCH_FILTER_NUMBER = 40;
 
     //Columns in Songs table

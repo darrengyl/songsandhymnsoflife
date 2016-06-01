@@ -7,15 +7,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -26,9 +23,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -42,7 +37,6 @@ import com.church.psalm.model.Song;
 import com.church.psalm.presenter.activity.PresenterScoreActivity;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.view.ViewScoreActivity;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -58,21 +52,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-import static android.R.attr.maxHeight;
-import static android.R.attr.maxWidth;
-import static android.R.attr.path;
-import static android.R.attr.viewportWidth;
-import static android.R.attr.width;
-import static android.os.Build.VERSION_CODES.M;
-import static com.church.psalm.R.id.image;
-import static com.church.psalm.R.id.image_view;
+import static android.os.Build.VERSION.CODENAME;
+import static android.os.Build.VERSION.SDK;
 import static com.church.psalm.R.id.share;
 
 /**
@@ -139,9 +126,12 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2, bitmap.getHeight() / 2, false);
                 imageView.setImageBitmap(scaledBitmap);
-                saveBitmapInBackground(scaledBitmap);
+                if (ContextCompat.checkSelfPermission(NewScoreActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    saveBitmapInBackground(scaledBitmap);
+                }
                 errorView.setVisibility(View.GONE);
                 _attacher = new PhotoViewAttacher(imageView);
                 _attacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
@@ -187,7 +177,7 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
                 .map(new Func1<Bitmap, Object>() {
                     @Override
                     public Object call(Bitmap bitmap) {
-                        file = new File(getFilesDir(), Constants.SCORE_NAME);
+                        file = new File(getExternalFilesDir(null), Constants.SCORE_NAME);
                         FileOutputStream fos = null;
                         try {
                             fos = new FileOutputStream(file);
@@ -248,8 +238,9 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
             getMenuInflater().inflate(R.menu.menu_score_activity, menu);
             _share = menu.findItem(R.id.share);
             _lyricsMenuItem = menu.findItem(R.id.text_only);
-            //_share.getIcon().setColorFilter(ContextCompat.getColor(this, R.color.colorScoreActivityToolbarIcon)
-            //        , PorterDuff.Mode.SRC_ATOP);
+            Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+            upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
         return true;
     }
@@ -301,15 +292,11 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
     private void shareScore() {
         if (imageView.getVisibility() == View.VISIBLE) {
             Intent share = new Intent(Intent.ACTION_SEND);
-            /*String path = MediaStore.Images.Media.insertImage(getContentResolver()
-                    , ((BitmapDrawable) imageView.getDrawable()).getBitmap(), Constants.SCORE_NAME, null);*/
-            //if (path != null) {
-                Uri imageUri = Uri.fromFile(file);
-                share.setType("image/png");
-                share.putExtra(Intent.EXTRA_STREAM, imageUri);
-                if (Util.safeIntent(share)) {
-                    startActivity(share);
-            //    }
+            Uri imageUri = Uri.fromFile(file);
+            share.setType("image/png");
+            share.putExtra(Intent.EXTRA_STREAM, imageUri);
+            if (Util.safeIntent(share)) {
+                startActivity(share);
             }
         } else {
             Intent share = new Intent(Intent.ACTION_SEND);
@@ -378,6 +365,9 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
     private void onPrevNextClicked() {
         _share.setVisible(false);
         progressBar.setVisibility(View.VISIBLE);
+        _toolbar.hide();
+        _controller.hide();
+        _attacher.setOnPhotoTapListener(null);
         loadImage();
         _musicService.setSong(getMusicLink(_trackNumber));
         _musicService.playSong();
@@ -399,8 +389,7 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) && event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && _toolbar != null) {
             if (_toolbar.isShowing()) {
                 _toolbar.hide();
             }
@@ -423,16 +412,17 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
     }
 
     private void setOnClickListener() {
+        boolean granted = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
+
         if (_controller.isShowing()) {
             _controller.hide();
+            if (granted) {
+                _toolbar.hide();
+            }
         } else {
             _controller.show(0);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_GRANTED) {
-            if (_toolbar.isShowing()) {
-                _toolbar.hide();
-            } else {
+            if (granted) {
                 _toolbar.show();
             }
         }

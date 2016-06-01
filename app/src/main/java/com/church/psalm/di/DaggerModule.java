@@ -54,11 +54,4 @@ public class DaggerModule {
     PresenterScoreActivity providesPresenterScoreActivity() {
         return new PresenterScoreActivity();
     }
-/*
-    @Provides
-    @Singleton
-    Realm providesRealm() {
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(_app).build();
-        return
-    }*/
 }

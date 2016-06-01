@@ -46,7 +46,6 @@ public class MusicService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-
     }
 
     @Override
