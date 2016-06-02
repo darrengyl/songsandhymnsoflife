@@ -64,7 +64,7 @@ public class MusicService extends Service implements
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        mp.start();
+        //mp.start();
     }
 
     @Override

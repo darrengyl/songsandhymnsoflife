@@ -39,6 +39,7 @@ public class PresenterListsFragment implements Presenter {
     private static final int TRACK_ORDER = 0;
     private static final int ALPHA_ORDER = 1;
     private static final int FREQ_ORDER = 2;
+    private static final int FAV_ORDER = 3;
     private ViewListFragment _view;
     private Context _context;
     private RealmResults<Song> _data;
@@ -189,10 +190,23 @@ public class PresenterListsFragment implements Presenter {
             case FREQ_ORDER:
                 sortByFrequency();
                 break;
+            case FAV_ORDER:
+                sortByFav();
+                break;
             default:
                 sortByTrackNumber();
                 Log.wtf("WTF", "This should never be called");
         }
+    }
+
+    private void sortByFav() {
+        _currentOrder = FAV_ORDER;
+        Log.d("Sort by", "Favorite");
+        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_FAVORITE, Sort.ASCENDING,
+                Constants.COLUMN_TRACK_NUMBER, Sort.ASCENDING);
+        _view.refreshListData(sortedData);
+        _data = sortedData;
+        _view.enableFastScroll(false);
     }
 
     private void sortByTrackNumber() {

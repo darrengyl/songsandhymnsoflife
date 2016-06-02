@@ -632,5 +632,6 @@
         <item>Track number</item>
         <item>Alphabetical order</item>
         <item>Frequency</item>
+        <item>Favorites</item>
     </string-array>
 </resources>
