@@ -11,13 +11,11 @@ import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewSearchActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+
+import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -28,13 +26,12 @@ import rx.functions.Func2;
 public class PresenterSearchActivity implements Presenter {
     private ViewSearchActivity _view;
     private boolean _deleteEnabled;
-    private Context _context;
     private Realm _realm;
     private Subscription _subscription;
     private int _count;
 
-    public PresenterSearchActivity(Context context) {
-        _context = context;
+    @Inject
+    public PresenterSearchActivity() {
         _realm = Realm.getDefaultInstance();
     }
 

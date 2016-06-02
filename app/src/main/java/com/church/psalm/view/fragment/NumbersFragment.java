@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.church.psalm.R;
 import com.church.psalm.presenter.fragment.PresenterNumbersFragment;
 import com.church.psalm.Songsandhymnsoflife;
-import com.church.psalm.view.activity.MainActivity;
 import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.view.ViewNumberFragment;
 

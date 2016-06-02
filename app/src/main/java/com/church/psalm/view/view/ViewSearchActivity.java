@@ -1,11 +1,8 @@
 package com.church.psalm.view.view;
 
-import com.church.psalm.model.Song;
 import com.church.psalm.model.SongMatch;
 
 import java.util.List;
-
-import io.realm.RealmResults;
 
 /**
  * Created by darrengu on 4/3/16.

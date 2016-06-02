@@ -8,8 +8,6 @@ import android.net.NetworkInfo;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
 /**
  * Created by darrengu on 5/1/16.
  */
@@ -19,8 +17,7 @@ public class Util {
                 .getApplicationInstance()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
-        return isConnected;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     public static boolean safeIntent(Intent intent) {

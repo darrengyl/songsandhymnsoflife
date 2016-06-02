@@ -1,8 +1,5 @@
 package com.church.psalm.presenter.fragment;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.text.TextUtils;
 
 import com.church.psalm.Util;

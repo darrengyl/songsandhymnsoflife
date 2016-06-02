@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/cropped_no_result"
             android:gravity="center"
-            android:text="Sadly no result"
+            android:text="@string/search_no_result"
             android:textColor="@color/colorAccent" />
     </RelativeLayout>
 

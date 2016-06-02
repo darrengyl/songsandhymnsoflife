@@ -19,12 +19,6 @@ public class PresenterScoreActivity implements Presenter {
 
     }
 
-    public void playNext() {
-    }
-
-    public void playPrev() {
-    }
-
     public void setView(ViewScoreActivity view) {
         _view = view;
     }

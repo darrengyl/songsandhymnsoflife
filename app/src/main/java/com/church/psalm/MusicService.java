@@ -8,16 +8,11 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Binder;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.PowerManager;
-import android.os.Process;
 import android.util.Log;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 
 /**
  * Created by yuanlong.gu on 10/13/2015.

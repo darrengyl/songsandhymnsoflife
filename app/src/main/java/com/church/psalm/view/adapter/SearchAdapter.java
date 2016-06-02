@@ -13,12 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.church.psalm.R;
 import com.church.psalm.interfaces.OnClickSongInterface;
-import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.model.SongMatch;
 

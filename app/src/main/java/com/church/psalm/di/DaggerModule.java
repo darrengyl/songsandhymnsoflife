@@ -12,8 +12,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 /**
  * Created by darrengu on 3/18/16.
@@ -46,7 +44,7 @@ public class DaggerModule {
     @Provides
     @Singleton
     PresenterSearchActivity providesPresenterSearchActivity() {
-        return new PresenterSearchActivity(_app);
+        return new PresenterSearchActivity();
     }
 
     @Provides

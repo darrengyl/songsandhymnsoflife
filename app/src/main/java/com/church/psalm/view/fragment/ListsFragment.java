@@ -1,29 +1,22 @@
 package com.church.psalm.view.fragment;
 
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.R;
-import com.church.psalm.view.activity.MainActivity;
 import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.adapter.RealmListviewAdapter;
 import com.church.psalm.model.Song;

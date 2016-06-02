@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     PresenterMainActivity presenterMainActivity;
     private MaterialDialog _dialog;
     private ListsFragment listsFragment;
-    private NumbersFragment numbersFragment;
     private MenuItem _sort;
     private MenuItem _search;
     private ViewPagerAdapter _viewPagerAdapter;
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
             getSupportActionBar().setTitle("Hymns of Life");
         }
         _viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        numbersFragment = new NumbersFragment();
+        NumbersFragment numbersFragment = new NumbersFragment();
         _viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

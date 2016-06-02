@@ -27,10 +27,8 @@ import com.church.psalm.model.Song;
 import com.church.psalm.model.SongMatch;
 import com.church.psalm.presenter.activity.PresenterSearchActivity;
 import com.church.psalm.Songsandhymnsoflife;
-import com.church.psalm.view.adapter.RealmSearchAdapter;
 import com.church.psalm.view.adapter.SearchAdapter;
 import com.church.psalm.view.view.ViewSearchActivity;
-import com.hp.hpl.sparta.Text;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewTextChangeEvent;
 
@@ -41,9 +39,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -70,7 +66,6 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     private Drawable _closeIconDrawable;
     private EditText _searchViewEditText;
     private SearchAdapter _adapter;
-    private Subscription _suscription;
     private Realm _realm;
 
     @Override
@@ -128,7 +123,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         });
         enableDeleteButton(false);
         searchView.setIconifiedByDefault(false);
-        _suscription = RxTextView.textChangeEvents(_searchViewEditText)
+        RxTextView.textChangeEvents(_searchViewEditText)
                 .debounce(400, TimeUnit.MICROSECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<TextViewTextChangeEvent>() {
@@ -216,7 +211,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
             startActivity(intent);
             finish();
         } else {
-            Snackbar.make(findViewById(android.R.id.content)
+            Snackbar.make(toolbar
                     , getString(R.string.network_error)
                     , Snackbar.LENGTH_LONG)
                     .setAction(R.string.open_settings, new View.OnClickListener() {

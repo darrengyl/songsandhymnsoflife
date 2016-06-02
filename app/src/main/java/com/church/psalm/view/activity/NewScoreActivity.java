@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -58,8 +57,6 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-import static android.os.Build.VERSION.CODENAME;
-import static android.os.Build.VERSION.SDK;
 import static com.church.psalm.R.id.share;
 
 /**
@@ -67,7 +64,6 @@ import static com.church.psalm.R.id.share;
  */
 public class NewScoreActivity extends AppCompatActivity implements ViewScoreActivity {
     public static final String TRACK = "Track";
-    public static final String MUSICBOUNDED = "Music Bound";
     public static final String SCORELINK =
             "http://shengmingshige.net/blog/wp-content/gallery/c-png/cu-%1$s.png";
     public static final String MUSICLINK = "http://shengmingshige.net/hymnal/mp3/%1$s.mp3";
@@ -238,9 +234,9 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
             getMenuInflater().inflate(R.menu.menu_score_activity, menu);
             _share = menu.findItem(R.id.share);
             _lyricsMenuItem = menu.findItem(R.id.text_only);
-            Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-            upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+            //Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+            //upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
+            //getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
         return true;
     }
@@ -290,21 +286,17 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
     }
 
     private void shareScore() {
+        Intent share = new Intent(Intent.ACTION_SEND);
         if (imageView.getVisibility() == View.VISIBLE) {
-            Intent share = new Intent(Intent.ACTION_SEND);
             Uri imageUri = Uri.fromFile(file);
             share.setType("image/png");
             share.putExtra(Intent.EXTRA_STREAM, imageUri);
-            if (Util.safeIntent(share)) {
-                startActivity(share);
-            }
         } else {
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.putExtra(Intent.EXTRA_TEXT, _lyrics);
             share.setType("text/plain");
-            if (Util.safeIntent(share)) {
-                startActivity(share);
-            }
+            share.putExtra(Intent.EXTRA_TEXT, _lyrics);
+        }
+        if (Util.safeIntent(share)) {
+            startActivity(share);
         }
     }
 

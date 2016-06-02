@@ -1,9 +1,7 @@
 package com.church.psalm.view.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,7 +14,6 @@ import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.model.Song;
 
 import java.util.HashMap;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

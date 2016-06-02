@@ -1,19 +1,11 @@
 package com.church.psalm.presenter.activity;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.View;
 
-import com.church.psalm.R;
 import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewMainActivity;
 
-import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by darrengu on 3/18/16.
