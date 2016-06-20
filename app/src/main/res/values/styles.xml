@@ -11,10 +11,14 @@
 
     <style name="ScoreActivityTheme" parent="Theme.AppCompat.NoActionBar" />
 
-    <style name="customToolbar" parent="AppTheme.Base">
+    <style name="customToolbar" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColorPrimary">#FFFFFF</item>
         <item name="android:textColorSecondary">#FFFFFF</item>
+    </style>
+
+    <style name="customPopUp" parent="@android:style/Widget.PopupMenu">
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="Widget.MaterialProgressBar.ProgressBar.Horizontal" parent="android:Widget.ProgressBar.Horizontal">

@@ -92,7 +92,6 @@ public class PresenterListsFragment implements Presenter {
         }
     }
 
-
     public void onItemClick(int position) {
         if (Util.isNetworkConnected()) {
             System.out.println("Pressed position " + position);
@@ -197,46 +196,38 @@ public class PresenterListsFragment implements Presenter {
                 sortByTrackNumber();
                 Log.wtf("WTF", "This should never be called");
         }
+        _view.refreshListData(_data);
+        _view.enableFastScroll(getCurrentOrder() == ALPHA_ORDER);
+
     }
 
     private void sortByFav() {
         _currentOrder = FAV_ORDER;
         Log.d("Sort by", "Favorite");
-        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_FAVORITE, Sort.ASCENDING,
+        _data = _data.sort(Constants.COLUMN_FAVORITE, Sort.DESCENDING,
                 Constants.COLUMN_TRACK_NUMBER, Sort.ASCENDING);
-        _view.refreshListData(sortedData);
-        _data = sortedData;
-        _view.enableFastScroll(false);
+        _view.showInfoSnackbar("Sorted by Favorites");
     }
 
     private void sortByTrackNumber() {
         _currentOrder = TRACK_ORDER;
         Log.d("Sort by", "Number");
-        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_TRACK_NUMBER);
-        _view.refreshListData(sortedData);
-        _data = sortedData;
-        _view.enableFastScroll(false);
+        _data = _data.sort(Constants.COLUMN_TRACK_NUMBER);
         _view.showInfoSnackbar("Sorted by Track Number");
     }
 
     private void sortByAlphabeticalOrder() {
         _currentOrder = ALPHA_ORDER;
         Log.d("Sort by", "alphabetic");
-        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_PINYIN);
-        _data = sortedData;
+        _data = _data.sort(Constants.COLUMN_PINYIN);
         setSectionIndexData();
-        _view.refreshListData(sortedData);
-        _view.enableFastScroll(true);
         _view.showInfoSnackbar("Sorted by Alphabetical Order");
     }
 
     private void sortByFrequency() {
         _currentOrder = FREQ_ORDER;
         Log.d("Sort by", "frequency");
-        RealmResults<Song> sortedData = _data.sort(Constants.COLUMN_FREQUENCY, Sort.DESCENDING);
-        _data = sortedData;
-        _view.refreshListData(sortedData);
-        _view.enableFastScroll(false);
+        _data = _data.sort(Constants.COLUMN_FREQUENCY, Sort.DESCENDING);
         _view.showInfoSnackbar("Sorted by Frequency");
     }
 

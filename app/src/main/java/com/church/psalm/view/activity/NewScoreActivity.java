@@ -234,9 +234,6 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
             getMenuInflater().inflate(R.menu.menu_score_activity, menu);
             _share = menu.findItem(R.id.share);
             _lyricsMenuItem = menu.findItem(R.id.text_only);
-            //Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-            //upArrow.setColorFilter(ContextCompat.getColor(this, R.color.white), PorterDuff.Mode.SRC_ATOP);
-            //getSupportActionBar().setHomeAsUpIndicator(upArrow);
         }
         return true;
     }
