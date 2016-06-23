@@ -42,7 +42,7 @@ public class CatBaseFragment extends Fragment implements ViewCategoryFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
-        //ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);
         adapter = new CategoryAdapter(getContext(), null);
         return view;
     }

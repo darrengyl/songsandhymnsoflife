@@ -60,7 +60,7 @@ public class CategoryActivity extends AppCompatActivity implements ViewCategoryA
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CatSongzaiFragment(), "颂赞的歌声");
         adapter.addFragment(new CatJiaohuiFragment(), "教会");
-        adapter.addFragment(new CatJiduFragment(), "基督徒生活的实行");
+        /*adapter.addFragment(new CatJiduFragment(), "基督徒生活的实行");
         adapter.addFragment(new CatJingwenFragment(), "经文诗歌");
         adapter.addFragment(new CatKewangFragment(), "渴望主的再来");
         adapter.addFragment(new CatShenglingFragment(), "圣灵的丰满");
@@ -68,7 +68,7 @@ public class CategoryActivity extends AppCompatActivity implements ViewCategoryA
         adapter.addFragment(new CatShifengFragment(), "事奉的生活");
         adapter.addFragment(new CatYesuFragment(), "耶稣基督的福音");
         adapter.addFragment(new CatZaijiFragment(), "在基督里凯旋");
-        adapter.addFragment(new CatZanmeiFragment(), "赞美短歌");
+        adapter.addFragment(new CatZanmeiFragment(), "赞美短歌");*/
         viewPager.setAdapter(adapter);
 /*        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

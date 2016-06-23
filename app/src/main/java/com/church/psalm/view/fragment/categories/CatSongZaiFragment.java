@@ -19,38 +19,19 @@ import butterknife.ButterKnife;
 /**
  * Created by darrengu on 6/19/16.
  */
-public class CatSongzaiFragment extends Fragment {
-    @Bind(R.id.category_list)
-    ListView listView;
-    /*CategoryAdapter _adapter;
+public class CatSongzaiFragment extends CatBaseFragment {
 
-@Override
-public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-
-}
-
-@Nullable
-@Override
-public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_category, container, false);
-    ButterKnife.bind(this, view);
-    _adapter = new CategoryAdapter(getContext(), null);
-    listView.setAdapter(_adapter);
-    return view;
-}*/
     public CatSongzaiFragment() {
 
     }
-    @Nullable
+/*    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, view);
         //adapter = new CategoryAdapter(getContext(), null);
         return view;
-    }
+    }*/
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
