@@ -5,6 +5,7 @@ import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.activity.SearchActivity;
 import com.church.psalm.view.fragment.ListsFragment;
 import com.church.psalm.view.fragment.NumbersFragment;
+import com.church.psalm.view.fragment.categories.CatBaseFragment;
 
 import javax.inject.Singleton;
 
@@ -21,4 +22,5 @@ public interface DaggerComponent {
     void inject(ListsFragment listsFrag);
     void inject(NumbersFragment numFrag);
     void inject(NewScoreActivity scoreActivity);
+    void inject(CatBaseFragment baseFragment);
 }

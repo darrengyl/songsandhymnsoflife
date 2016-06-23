@@ -13,13 +13,20 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmBaseAdapter;
+import io.realm.RealmResults;
 
 /**
  * Created by darrengu on 6/19/16.
  */
 public class CategoryAdapter extends RealmBaseAdapter<Song> {
+
     public CategoryAdapter(Context context, OrderedRealmCollection<Song> data) {
         super(context, data);
+    }
+
+    public void setData(RealmResults<Song> data) {
+        super.updateData(data);
+        notifyDataSetChanged();
     }
 
     @Override

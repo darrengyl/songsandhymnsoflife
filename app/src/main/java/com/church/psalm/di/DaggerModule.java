@@ -2,6 +2,7 @@ package com.church.psalm.di;
 
 import android.app.Application;
 
+import com.church.psalm.presenter.activity.PresenterCategoryActivity;
 import com.church.psalm.presenter.activity.PresenterScoreActivity;
 import com.church.psalm.presenter.activity.PresenterSearchActivity;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
@@ -51,5 +52,11 @@ public class DaggerModule {
     @Singleton
     PresenterScoreActivity providesPresenterScoreActivity() {
         return new PresenterScoreActivity();
+    }
+
+    @Provides
+    @Singleton
+    PresenterCategoryActivity providesPresenterCategoryActivity() {
+        return new PresenterCategoryActivity();
     }
 }
