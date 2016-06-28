@@ -1,5 +1,6 @@
 package com.church.psalm.di;
 
+import com.church.psalm.view.activity.CategoryActivity;
 import com.church.psalm.view.activity.MainActivity;
 import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.activity.SearchActivity;
@@ -23,4 +24,5 @@ public interface DaggerComponent {
     void inject(NumbersFragment numFrag);
     void inject(NewScoreActivity scoreActivity);
     void inject(CatBaseFragment baseFragment);
+    void inject(CategoryActivity categoryActivity);
 }

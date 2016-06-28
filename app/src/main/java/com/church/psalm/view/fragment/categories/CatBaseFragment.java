@@ -15,6 +15,8 @@ import com.church.psalm.presenter.activity.PresenterCategoryActivity;
 import com.church.psalm.view.adapter.CategoryAdapter;
 import com.church.psalm.view.view.ViewCategoryFragment;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -43,14 +45,15 @@ public class CatBaseFragment extends Fragment implements ViewCategoryFragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, view);
-        adapter = new CategoryAdapter(getContext(), null);
+        adapter = new CategoryAdapter(getContext());
+        categoryList.setAdapter(adapter);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter.setViewFrag(this);
+        presenter.setReadyFrag(this);
     }
 
     @Override
@@ -64,10 +67,8 @@ public class CatBaseFragment extends Fragment implements ViewCategoryFragment{
         presenter.onItemClicked(position);
     }
 
-    public void setData(RealmResults<Song> data) {
+    @Override
+    public void setData(List<Song> data) {
         adapter.setData(data);
-    }
-
-    public void setView() {
     }
 }

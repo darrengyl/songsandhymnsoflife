@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.church.psalm.R;
+import com.church.psalm.presenter.activity.PresenterCategoryActivity;
 import com.church.psalm.view.adapter.CategoryAdapter;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,6 +39,7 @@ public class CatSongzaiFragment extends CatBaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        presenter.songzaiReady();
         Log.d("View Created", "Songzai");
     }
 

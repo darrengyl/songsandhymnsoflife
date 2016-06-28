@@ -27,6 +27,15 @@ public class Song extends RealmObject {
     private int _category;
     private int _subcategory;
 
+    public Song() {
+
+    }
+
+    /* Only used to create dummy Song */
+    public Song(int id, String title) {
+        _id = id;
+        _title = title;
+    }
 
     public int get_trackNumber() {
         return _trackNumber;
