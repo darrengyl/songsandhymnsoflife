@@ -22,12 +22,14 @@ import butterknife.ButterKnife;
  * Created by darrengu on 6/19/16.
  */
 public class CategoryAdapter extends BaseAdapter {
-    Context context;
+    private static final int VIEW_HOLDER_HEADER = 0;
+    private static final int VIEW_HOLDER_SONG = 1;
     List<Song> songList;
+    LayoutInflater inflater;
 
     public CategoryAdapter(Context context) {
-        this.context = context;
         songList = new ArrayList<>();
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public void setData(List<Song> data) {
@@ -60,9 +62,8 @@ public class CategoryAdapter extends BaseAdapter {
         Song current = getItem(position);
         SongHolder songHolder;
         HeaderHolder headerHolder;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        if (current.get_id() == 0) {
+        if (getItemViewType(position) == VIEW_HOLDER_HEADER) {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.header_category, parent, false);
                 headerHolder = new HeaderHolder(convertView);
@@ -86,6 +87,20 @@ public class CategoryAdapter extends BaseAdapter {
         return convertView;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (getItem(position).get_id() == 0) {
+            return VIEW_HOLDER_HEADER;
+        } else {
+            return VIEW_HOLDER_SONG;
+        }
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+
     static class HeaderHolder {
         @Bind(R.id.header)
         TextView header;
@@ -93,6 +108,7 @@ public class CategoryAdapter extends BaseAdapter {
         public HeaderHolder(View itemView) {
             ButterKnife.bind(this, itemView);
         }
+
     }
 
     static class SongHolder {
