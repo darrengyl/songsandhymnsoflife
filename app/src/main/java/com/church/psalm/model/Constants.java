@@ -8,6 +8,7 @@ public class Constants {
     public static final String REALM_FILE = "database.realm";
     public static final String SCORE_NAME = "latest_score.png";
     public static final int SEARCH_FILTER_NUMBER = 40;
+    public static final int HEADER_ID = 1000;
 
     //Columns in Songs table
     public static final String COLUMN_ID = "_id";

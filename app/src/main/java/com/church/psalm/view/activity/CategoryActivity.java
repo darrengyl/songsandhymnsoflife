@@ -67,34 +67,18 @@ public class CategoryActivity extends AppCompatActivity implements ViewCategoryA
     private void setupViewPager() {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CatSongzaiFragment(), "颂赞的歌声");
-        //adapter.addFragment(new CatJiaohuiFragment(), "教会");
-//        adapter.addFragment(new CatJiduFragment(), "基督徒生活的实行");
-//        adapter.addFragment(new CatJingwenFragment(), "经文诗歌");
-//        adapter.addFragment(new CatKewangFragment(), "渴望主的再来");
         adapter.addFragment(new CatShenglingFragment(), "圣灵的丰满");
-//        adapter.addFragment(new CatShengmingFragment(), "生命旅程的经历");
-//        adapter.addFragment(new CatShifengFragment(), "事奉的生活");
-//        adapter.addFragment(new CatYesuFragment(), "耶稣基督的福音");
-//        adapter.addFragment(new CatZaijiFragment(), "在基督里凯旋");
-//        adapter.addFragment(new CatZanmeiFragment(), "赞美短歌");
+        adapter.addFragment(new CatJiaohuiFragment(), "教会");
+        adapter.addFragment(new CatShengmingFragment(), "生命旅程的经历");
+        adapter.addFragment(new CatJiduFragment(), "基督徒生活的实行");
+        adapter.addFragment(new CatYesuFragment(), "耶稣基督的福音");
+        adapter.addFragment(new CatShifengFragment(), "事奉的生活");
+        adapter.addFragment(new CatZaijiFragment(), "在基督里凯旋");
+        adapter.addFragment(new CatKewangFragment(), "渴望主的再来");
+        adapter.addFragment(new CatZanmeiFragment(), "赞美短歌");
+        adapter.addFragment(new CatJingwenFragment(), "经文诗歌");
+
         viewPager.setAdapter(adapter);
-/*        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.d("Page selected", String.valueOf(position));
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
     }
 
     @Override

@@ -17,13 +17,11 @@ import butterknife.ButterKnife;
  * Created by darrengu on 6/19/16.
  */
 public class CatJiaohuiFragment extends CatBaseFragment{
-    public CatJiaohuiFragment() {
-
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d("View Created", "Jiaohui");
+        presenter.jiaohuiReady();
     }
 }

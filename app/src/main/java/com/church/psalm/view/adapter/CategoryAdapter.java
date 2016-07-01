@@ -10,6 +10,7 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.church.psalm.R;
+import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class CategoryAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position).get_id() == 0) {
+        if (getItem(position).get_id() == Constants.HEADER_ID) {
             return VIEW_HOLDER_HEADER;
         } else {
             return VIEW_HOLDER_SONG;
