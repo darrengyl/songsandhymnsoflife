@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ import com.church.psalm.R;
 import com.church.psalm.Util;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
-import com.church.psalm.presenter.activity.PresenterScoreActivity;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.view.ViewScoreActivity;
 import com.squareup.picasso.Picasso;
@@ -43,9 +41,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
-
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -92,9 +87,6 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
     private PhotoViewAttacher _attacher;
     private File file;
 
-    @Inject
-    PresenterScoreActivity presenter;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +96,6 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
         }
         setContentView(R.layout.score_layout);
         ButterKnife.bind(this);
-        presenter.setView(this);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -183,7 +174,9 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
                             e.printStackTrace();
                         } finally {
                             try {
-                                fos.close();
+                                if (fos != null) {
+                                    fos.close();
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

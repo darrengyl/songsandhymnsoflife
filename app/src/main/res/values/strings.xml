@@ -15,7 +15,7 @@
     <string name="content_description">content</string>
     <string name="search">search</string>
     <string name="search_hint">Title / Lyrics</string>
-    <string name="search_title">search title</string>
+    <string name="search_title">Search</string>
     <string name="numbers">NUMBERS</string>
     <string name="category">CATEGORY</string>
     <string name="list">LIST</string>
@@ -31,6 +31,7 @@
     <string name="share">Share</string>
     <string name="search_no_result">Sadly no result</string>
     <string name="server_error">There is a server error. Please try again</string>
+    <string name="category_menu">Category</string>
     <string-array name="tabs">
         <item>List</item>
         <item>Number</item>

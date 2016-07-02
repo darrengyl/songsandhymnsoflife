@@ -1,6 +1,5 @@
 package com.church.psalm.presenter.activity;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -67,7 +66,7 @@ public class PresenterSearchActivity implements Presenter {
         }
     }
 
-    public void search(String keyword) {
+    private void search(String keyword) {
         if (!TextUtils.isEmpty(keyword)) {
             _count = 0;
             Observable<SongMatch> titleQuery = _realm.where(Song.class)

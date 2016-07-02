@@ -85,7 +85,7 @@ public class MusicService extends Service implements
         initMusicPlayer();
     }
 
-    public void initMusicPlayer() {
+    private void initMusicPlayer() {
         player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         player.setOnPreparedListener(this);

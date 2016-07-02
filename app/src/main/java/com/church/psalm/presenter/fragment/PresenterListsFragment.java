@@ -253,7 +253,7 @@ public class PresenterListsFragment implements Presenter {
     }
 
     //TODO: move this. duplicate method
-    public void incrementFreq(int position) {
+    private void incrementFreq(int position) {
         Song song = _data.get(position);
         realm.beginTransaction();
         Log.d("frequency", String.valueOf(song.get_frequency()));

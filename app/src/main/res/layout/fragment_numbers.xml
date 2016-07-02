@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp" >
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/display"
@@ -14,13 +14,12 @@
         android:gravity="center"
         android:textColor="@color/colorPrimaryText"
         android:textColorHint="@color/colorSeconaryText"
-        android:textSize="55sp"
-        />
+        android:textSize="55sp" />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp" >
+        android:layout_margin="15dp">
 
         <TableRow
             android:layout_width="match_parent"
@@ -142,14 +141,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:background="@drawable/ripple_number"
-                    android:src="@drawable/ic_backspace_24dp" />
+                    android:src="@drawable/ic_backspace_24dp"
+                    android:tint="@color/colorAccent" />
             </RelativeLayout>
-
 
 
             <TextView
@@ -167,14 +167,15 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:background="@drawable/ripple_number"
-                    android:src="@drawable/ic_arrow_forward_24dp" />
+                    android:src="@drawable/ic_arrow_forward_24dp"
+                    android:tint="@color/colorAccent" />
             </RelativeLayout>
-
 
 
         </TableRow>

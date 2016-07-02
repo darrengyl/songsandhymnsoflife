@@ -41,7 +41,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import rx.Observer;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
 

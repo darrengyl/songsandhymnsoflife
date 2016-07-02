@@ -13,6 +13,10 @@
         android:title="@string/search_title"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/category"
+        android:title="@string/category_menu"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/acknowledgements"
         android:title="@string/acknowledgements"
         app:showAsAction="never" />

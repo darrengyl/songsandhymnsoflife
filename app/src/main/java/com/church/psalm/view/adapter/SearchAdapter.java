@@ -29,9 +29,9 @@ import butterknife.ButterKnife;
  * Created by darrengu on 5/10/16.
  */
 public class SearchAdapter extends ArrayAdapter<SongMatch> {
-    Context context;
-    List<SongMatch> songMatchList;
-    OnClickSongInterface listener;
+    private Context context;
+    private List<SongMatch> songMatchList;
+    private OnClickSongInterface listener;
 
     public SearchAdapter(Context context) {
         super(context, 0);

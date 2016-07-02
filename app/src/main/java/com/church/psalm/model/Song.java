@@ -32,8 +32,8 @@ public class Song extends RealmObject {
     }
 
     /* Only used to create dummy Song */
-    public Song(int id, String title) {
-        _id = id;
+    public Song(String title) {
+        _id = Constants.HEADER_ID;
         _title = title;
     }
 

@@ -22,14 +22,16 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
         <ImageView
             android:id="@+id/fav_star"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_centerVertical="true"
             android:background="@android:color/transparent"
+            android:tint="@color/colorPinkHeart"
             app:srcCompat="@drawable/ic_favorite_black_24dp" />
     </RelativeLayout>
 
@@ -47,9 +49,9 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="marquee"
             android:textColor="@color/colorPrimaryText"
             android:textSize="17sp"
-            android:ellipsize="marquee"
             tool:text="456" />
 
         <TextView

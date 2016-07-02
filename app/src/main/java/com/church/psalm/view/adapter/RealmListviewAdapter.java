@@ -68,7 +68,7 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
         Log.d("Adapter", "UpdateRealmResults is called");
     }
 
-    public OrderedRealmCollection<Song> getRealmResults() {
+    private OrderedRealmCollection<Song> getRealmResults() {
         return adapterData;
     }
 

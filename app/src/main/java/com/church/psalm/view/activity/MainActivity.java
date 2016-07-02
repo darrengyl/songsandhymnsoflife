@@ -19,16 +19,11 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.church.psalm.R;
-import com.church.psalm.presenter.activity.PresenterMainActivity;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.adapter.ViewPagerAdapter;
 import com.church.psalm.view.fragment.ListsFragment;
 import com.church.psalm.view.fragment.NumbersFragment;
 import com.church.psalm.view.view.ViewMainActivity;
-
-
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     TabLayout tabLayout;
     @Bind(R.id.pager)
     ViewPager viewPager;
-    @Inject
-    PresenterMainActivity presenterMainActivity;
+
     private MaterialDialog _dialog;
     private ListsFragment listsFragment;
     private MenuItem _sort;
     private MenuItem _search;
+    private MenuItem _category;
     private ViewPagerAdapter _viewPagerAdapter;
 
     @Override
@@ -111,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         }
     }
 
-    public void setOnTabSelectedListener() {
+    private void setOnTabSelectedListener() {
         tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -123,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                         _sort.setVisible(false);
                     }
                     _search.setVisible(true);
+                    _category.setVisible(true);
                 }
             }
         });
@@ -140,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         getMenuInflater().inflate(R.menu.menu_main, menu);
         _sort = menu.getItem(0);
         _search = menu.getItem(1);
+        _category = menu.getItem(2);
         if (tabLayout != null && tabLayout.getSelectedTabPosition() == 1) {
             _sort.setVisible(true);
         }
@@ -154,6 +151,9 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                 break;
             case R.id.search:
                 startActivity(new Intent(this, SearchActivity.class));
+                break;
+            case R.id.category:
+                startActivity(new Intent(this, CategoryActivity.class));
                 break;
             case R.id.acknowledgements:
                 showLicenseDialog();
@@ -187,8 +187,9 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
                 .show();
     }
 
-    public void removeMenuItem() {
+    private void removeMenuItem() {
         _sort.setVisible(false);
         _search.setVisible(false);
+        _category.setVisible(false);
     }
 }

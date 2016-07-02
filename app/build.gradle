@@ -6,7 +6,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.church.psalm"
@@ -36,7 +36,7 @@ android {
     }
 }
 
-def supportVersion = "23.3.0"
+def supportVersion = "24.0.0"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
