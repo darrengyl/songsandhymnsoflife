@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
-import io.realm.RealmResults;
 
 /**
  * Created by darrengu on 6/22/16.
@@ -32,7 +31,7 @@ public class CatBaseFragment extends Fragment implements ViewCategoryFragment{
     ListView categoryList;
     @Inject
     PresenterCategoryActivity presenter;
-    CategoryAdapter adapter;
+    private CategoryAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -2,6 +2,7 @@ package com.church.psalm.presenter.activity;
 
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
+import com.church.psalm.view.activity.NewScoreActivity;
 import com.church.psalm.view.view.ViewCategoryActivity;
 import com.church.psalm.view.view.ViewCategoryFragment;
 
@@ -26,6 +27,7 @@ public class PresenterCategoryActivity {
     List<Song> kewangList;
     List<Song> zanmeiList;
     List<Song> jingwenList;
+    List<List<Song>> overallList;
     private Realm _realm;
     private ViewCategoryFragment readyFrag;
     private ViewCategoryActivity viewActivity;
@@ -43,6 +45,19 @@ public class PresenterCategoryActivity {
         kewangList = new ArrayList<>();
         zanmeiList = new ArrayList<>();
         jingwenList = new ArrayList<>();
+
+        overallList = new ArrayList<>();
+        overallList.add(songzaiList);
+        overallList.add(shenglingList);
+        overallList.add(jiaohuiList);
+        overallList.add(shengmingList);
+        overallList.add(jiduList);
+        overallList.add(yesuList);
+        overallList.add(shifengList);
+        overallList.add(zaijiList);
+        overallList.add(kewangList);
+        overallList.add(zanmeiList);
+        overallList.add(jingwenList);
     }
 
     public void setReadyFrag(ViewCategoryFragment view) {
@@ -281,17 +296,10 @@ public class PresenterCategoryActivity {
     }
 
     public void onItemClicked(int position) {
-        viewActivity.getCurrentTab();
-    }
-
-    public void tabSelected(int position) {
-        switch (position) {
-            case 0:
-                songzaiReady();
-                break;
-            case 1:
-                shenglingReady();
-                break;
+        Song song = overallList.get(viewActivity.getCurrentTab()).get(position);
+        if (song.get_id() != Constants.HEADER_ID) {
+            int track = song.get_trackNumber();
+            viewActivity.showScoreActivity(track);
         }
     }
 }

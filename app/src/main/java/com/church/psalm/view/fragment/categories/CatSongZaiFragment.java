@@ -30,6 +30,4 @@ public class CatSongzaiFragment extends CatBaseFragment {
         presenter.songzaiReady();
         Log.d("View Created", "Songzai");
     }
-
-
 }

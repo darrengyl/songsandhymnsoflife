@@ -16,14 +16,7 @@ import butterknife.ButterKnife;
  * Created by darrengu on 6/19/16.
  */
 public class CatShenglingFragment extends CatBaseFragment {
-/*    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_category, container, false);
-        ButterKnife.bind(this, view);
-        //adapter = new CategoryAdapter(getContext(), null);
-        return view;
-    }*/
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

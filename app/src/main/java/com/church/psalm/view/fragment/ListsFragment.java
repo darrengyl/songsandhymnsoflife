@@ -31,15 +31,13 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.realm.RealmResults;
 
-//TODO: searchView
 public class ListsFragment extends Fragment implements ViewListFragment, OnClickInterface {
-    private MaterialDialog _dialog;
     @Bind(R.id.list)
     ListView listView;
     @Inject
     PresenterListsFragment presenterListsFragment;
-
     private RealmListviewAdapter _songsAdapter;
+    private MaterialDialog _dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

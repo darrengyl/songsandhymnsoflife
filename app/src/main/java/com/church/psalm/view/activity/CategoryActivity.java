@@ -1,5 +1,6 @@
 package com.church.psalm.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -29,7 +30,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class CategoryActivity extends AppCompatActivity implements ViewCategoryActivity{
-
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.pager)
@@ -49,7 +49,7 @@ public class CategoryActivity extends AppCompatActivity implements ViewCategoryA
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d("Tab selected", String.valueOf(tab.getPosition()));
-                presenter.tabSelected(tab.getPosition());
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -62,6 +62,7 @@ public class CategoryActivity extends AppCompatActivity implements ViewCategoryA
 
             }
         });
+        presenter.setViewActivity(this);
     }
 
     private void setupViewPager() {
@@ -77,12 +78,17 @@ public class CategoryActivity extends AppCompatActivity implements ViewCategoryA
         adapter.addFragment(new CatKewangFragment(), "渴望主的再来");
         adapter.addFragment(new CatZanmeiFragment(), "赞美短歌");
         adapter.addFragment(new CatJingwenFragment(), "经文诗歌");
-
         viewPager.setAdapter(adapter);
     }
 
     @Override
     public int getCurrentTab() {
         return tabLayout.getSelectedTabPosition();
+    }
+
+    @Override
+    public void showScoreActivity(int trackNumber) {
+        Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
+        startActivity(intent);
     }
 }

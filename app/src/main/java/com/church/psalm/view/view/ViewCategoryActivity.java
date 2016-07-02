@@ -5,4 +5,5 @@ package com.church.psalm.view.view;
  */
 public interface ViewCategoryActivity {
     int getCurrentTab();
+    void showScoreActivity(int trackNumber);
 }

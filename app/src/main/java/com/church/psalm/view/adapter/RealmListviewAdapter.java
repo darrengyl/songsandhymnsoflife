@@ -119,7 +119,6 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
 
         @OnClick(R.id.fav_star_holder)
         public void onClickFav() {
-            //getRealmResults().get(position)
             _listener.onClickedFav(position);
         }
 
