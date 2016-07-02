@@ -206,7 +206,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
         if (Util.isNetworkConnected()) {
             incrementFreq(position);
             int trackNumber = _adapter.getItem(position).getSong().get_trackNumber();
-            Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
+            Intent intent = ScoreActivity.getLaunchIntent(this, trackNumber);
             startActivity(intent);
             finish();
         } else {

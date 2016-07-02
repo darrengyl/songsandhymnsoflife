@@ -57,7 +57,7 @@ import static com.church.psalm.R.id.share;
 /**
  * Created by darrengu on 4/14/16.
  */
-public class NewScoreActivity extends AppCompatActivity implements ViewScoreActivity {
+public class ScoreActivity extends AppCompatActivity implements ViewScoreActivity {
     public static final String TRACK = "Track";
     public static final String SCORELINK =
             "http://shengmingshige.net/blog/wp-content/gallery/c-png/cu-%1$s.png";
@@ -115,7 +115,7 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 2, bitmap.getHeight() / 2, false);
                 imageView.setImageBitmap(scaledBitmap);
-                if (ContextCompat.checkSelfPermission(NewScoreActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (ContextCompat.checkSelfPermission(ScoreActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         == PackageManager.PERMISSION_GRANTED) {
                     saveBitmapInBackground(scaledBitmap);
                 }
@@ -364,7 +364,7 @@ public class NewScoreActivity extends AppCompatActivity implements ViewScoreActi
     }
 
     public static Intent getLaunchIntent(Context context, int track) {
-        Intent intent = new Intent(context, NewScoreActivity.class);
+        Intent intent = new Intent(context, ScoreActivity.class);
         intent.putExtra(TRACK, track);
         return intent;
     }

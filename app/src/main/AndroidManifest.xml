@@ -41,7 +41,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".view.activity.NewScoreActivity"
+            android:name=".view.activity.ScoreActivity"
             android:parentActivityName=".view.activity.MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
 

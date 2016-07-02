@@ -88,7 +88,7 @@ public class CategoryActivity extends AppCompatActivity implements ViewCategoryA
 
     @Override
     public void showScoreActivity(int trackNumber) {
-        Intent intent = NewScoreActivity.getLaunchIntent(this, trackNumber);
+        Intent intent = ScoreActivity.getLaunchIntent(this, trackNumber);
         startActivity(intent);
     }
 }

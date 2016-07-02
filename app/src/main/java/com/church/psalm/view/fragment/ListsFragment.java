@@ -17,7 +17,7 @@ import com.church.psalm.interfaces.OnClickInterface;
 import com.church.psalm.presenter.fragment.PresenterListsFragment;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.R;
-import com.church.psalm.view.activity.NewScoreActivity;
+import com.church.psalm.view.activity.ScoreActivity;
 import com.church.psalm.view.adapter.RealmListviewAdapter;
 import com.church.psalm.model.Song;
 
@@ -98,7 +98,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
 
     @Override
     public void startScoreActivity(int position) {
-        Intent intent = NewScoreActivity.getLaunchIntent(getActivity(), position);
+        Intent intent = ScoreActivity.getLaunchIntent(getActivity(), position);
         startActivity(intent);
     }
 
@@ -113,7 +113,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
         snackbar.show();
     }
 
-    private void showSortByDialog() {
+    public void showSortByDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("Sort by")
                 .items(R.array.sort_by_list)
@@ -161,10 +161,6 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
                 , message
                 , Snackbar.LENGTH_SHORT)
                 .show();
-    }
-
-    public void onClickSort() {
-        showSortByDialog();
     }
 
     public void scrollToFirst() {
