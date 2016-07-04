@@ -89,15 +89,12 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
     protected void onStart() {
         super.onStart();
         presenter.setView(this);
-        presenter.start();
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         presenter.setView(null);
-        presenter.stop();
         //_suscription.unsubscribe();
     }
 

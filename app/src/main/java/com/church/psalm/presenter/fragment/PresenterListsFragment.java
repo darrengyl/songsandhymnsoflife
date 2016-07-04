@@ -7,7 +7,6 @@ import com.church.psalm.R;
 import com.church.psalm.Util;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
-import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewListFragment;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -35,7 +34,7 @@ import rx.android.schedulers.AndroidSchedulers;
 /**
  * Created by darrengu on 3/18/16.
  */
-public class PresenterListsFragment implements Presenter {
+public class PresenterListsFragment {
     private static final int TRACK_ORDER = 0;
     private static final int ALPHA_ORDER = 1;
     private static final int FREQ_ORDER = 2;
@@ -59,7 +58,6 @@ public class PresenterListsFragment implements Presenter {
         _view = view;
     }
 
-    @Override
     public void start() {
         _view.showProgressDialog();
         if (_data != null) {
@@ -79,7 +77,6 @@ public class PresenterListsFragment implements Presenter {
         }
     }
 
-    @Override
     public void stop() {
         if (_transaction != null && !_transaction.isCancelled()) {
             _transaction.cancel();

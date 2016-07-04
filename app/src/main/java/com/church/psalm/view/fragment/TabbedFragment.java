@@ -11,10 +11,9 @@ import android.view.ViewGroup;
 
 import com.church.psalm.R;
 import com.church.psalm.Songsandhymnsoflife;
-import com.church.psalm.presenter.Presenter;
 import com.church.psalm.presenter.activity.PresenterMainActivity;
 import com.church.psalm.view.adapter.ViewPagerAdapter;
-import com.church.psalm.view.view.ViewMainFragment;
+import com.church.psalm.view.view.ViewTabbedFragment;
 
 import javax.inject.Inject;
 
@@ -24,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * Created by darrengu on 7/1/16.
  */
-public class TabbedFragment extends Fragment implements ViewMainFragment{
+public class TabbedFragment extends Fragment implements ViewTabbedFragment{
     @Bind(R.id.tab_layout)
     TabLayout tabLayout;
     @Bind(R.id.pager)

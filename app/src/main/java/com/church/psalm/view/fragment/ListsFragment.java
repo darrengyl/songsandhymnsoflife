@@ -67,6 +67,7 @@ public class ListsFragment extends Fragment implements ViewListFragment, OnClick
     public void onStop() {
         super.onStop();
         presenterListsFragment.setView(null);
+        presenterListsFragment.stop();
     }
 
     @Override

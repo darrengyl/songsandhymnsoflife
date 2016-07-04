@@ -6,7 +6,6 @@ import android.util.Log;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
 import com.church.psalm.model.SongMatch;
-import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewSearchActivity;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import rx.functions.Func2;
 /**
  * Created by darrengu on 4/3/16.
  */
-public class PresenterSearchActivity implements Presenter {
+public class PresenterSearchActivity {
     private ViewSearchActivity _view;
     private boolean _deleteEnabled;
     private Realm _realm;
@@ -36,15 +35,6 @@ public class PresenterSearchActivity implements Presenter {
 
     public void setView(ViewSearchActivity view) {
         _view = view;
-    }
-
-    @Override
-    public void start() {
-    }
-
-    @Override
-    public void stop() {
-
     }
 
     public void onTextChanged(String keyword) {

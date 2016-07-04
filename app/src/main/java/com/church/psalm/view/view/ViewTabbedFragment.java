@@ -1,9 +1,9 @@
 package com.church.psalm.view.view;
 
 /**
- * Created by darrengu on 7/1/16.
+ * Created by darrengu on 7/4/16.
  */
-public interface ViewMainFragment {
+public interface ViewTabbedFragment {
     void onToolbarClick();
 
     void onClickSortBy();

@@ -23,7 +23,6 @@ import com.church.psalm.R;
 import com.church.psalm.presenter.fragment.PresenterNumbersFragment;
 import com.church.psalm.Songsandhymnsoflife;
 import com.church.psalm.view.activity.ScoreActivity;
-import com.church.psalm.view.view.ViewMainFragment;
 import com.church.psalm.view.view.ViewNumberFragment;
 
 import javax.inject.Inject;
@@ -32,7 +31,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NumbersFragment extends Fragment implements ViewNumberFragment, ViewMainFragment {
+public class NumbersFragment extends Fragment implements ViewNumberFragment {
     //TODO: when user types track number, show title in real-time.
     //TODO: create different layout in landscape orientation
     @Inject
@@ -140,15 +139,5 @@ public class NumbersFragment extends Fragment implements ViewNumberFragment, Vie
     public void startScoreActivity(int trackNumber) {
         Intent intent = ScoreActivity.getLaunchIntent(getActivity(), trackNumber);
         startActivity(intent);
-    }
-
-    @Override
-    public void onToolbarClick() {
-
-    }
-
-    @Override
-    public void onClickSortBy() {
-
     }
 }

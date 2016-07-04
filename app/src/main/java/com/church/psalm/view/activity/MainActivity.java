@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     private MenuItem _sort;
     private MenuItem _search;
     private MenuItem _category;
+    private boolean isTabbed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +110,11 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.commitAllowingStateLoss();
-        presenter.setViewFragment(fragment);
+        presenter.setViewTabbed(fragment);
         if (Build.VERSION.SDK_INT >= 21) {
             toolBar.setElevation(0);
         }
+        isTabbed = true;
     }
 
     private void showNumberFragment() {
@@ -120,18 +122,18 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.commitAllowingStateLoss();
-        presenter.setViewFragment(fragment);
         if (Build.VERSION.SDK_INT >= 21) {
             toolBar.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                     getResources().getDisplayMetrics()));
         }
+        isTabbed = false;
     }
-
-
 
     @OnClick(R.id.tool_bar)
     public void onClickToolbar() {
-        presenter.onToolbarClick();
+        if (isTabbed) {
+            presenter.onToolbarClick();
+        }
     }
 
     @Override
@@ -147,7 +149,9 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sort_by:
-                presenter.onClickSortBy();
+                if (isTabbed) {
+                    presenter.onClickSortBy();
+                }
                 break;
             case R.id.search:
                 startActivity(new Intent(this, SearchActivity.class));

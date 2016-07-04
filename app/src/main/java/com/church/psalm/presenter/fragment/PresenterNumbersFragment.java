@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import com.church.psalm.Util;
 import com.church.psalm.model.Constants;
 import com.church.psalm.model.Song;
-import com.church.psalm.presenter.Presenter;
 import com.church.psalm.view.view.ViewNumberFragment;
 
 import io.realm.Realm;
@@ -13,7 +12,7 @@ import io.realm.Realm;
 /**
  * Created by darrengu on 3/18/16.
  */
-public class PresenterNumbersFragment implements Presenter {
+public class PresenterNumbersFragment {
     private StringBuilder stringBuilder;
     private ViewNumberFragment _view;
 
@@ -25,16 +24,10 @@ public class PresenterNumbersFragment implements Presenter {
         _view = view;
     }
 
-    @Override
     public void start() {
         if (_view != null) {
             _view.updateDisplay(stringBuilder.toString());
         }
-    }
-
-    @Override
-    public void stop() {
-
     }
 
     public void numberClicked(CharSequence num) {
