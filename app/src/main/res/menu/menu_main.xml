@@ -14,8 +14,9 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/category"
+        android:icon="@drawable/ic_format_list_bulleted_white_24dp"
         android:title="@string/category_menu"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/acknowledgements"
         android:title="@string/acknowledgements"

@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -260,11 +261,10 @@ public class ScoreActivity extends AppCompatActivity implements ViewScoreActivit
                 break;
             case android.R.id.home:
                 _controller.hide();
-                stopService(new Intent(getApplicationContext(), MusicService.class));
-                _musicService = null;
+                onBackPressed();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void flipIcon() {

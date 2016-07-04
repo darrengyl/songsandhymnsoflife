@@ -83,7 +83,11 @@ public class RealmListviewAdapter extends RealmBaseAdapter<Song> implements List
 
     @Override
     public int getPositionForSection(int sectionIndex) {
-        return _sectionMap.get(_sections[sectionIndex]);
+        if (_sectionMap != null && _sections != null) {
+            return _sectionMap.get(_sections[sectionIndex]);
+        } else {
+            return 0;
+        }
     }
 
     @Override
