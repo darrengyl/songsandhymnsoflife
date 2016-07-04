@@ -1,0 +1,41 @@
+// Generated code from Butter Knife. Do not modify!
+package com.church.psalm.view.activity;
+
+import android.view.View;
+import butterknife.ButterKnife.Finder;
+import butterknife.ButterKnife.ViewBinder;
+
+public class ScoreActivity$$ViewBinder<T extends com.church.psalm.view.activity.ScoreActivity> implements ViewBinder<T> {
+  @Override public void bind(final Finder finder, final T target, Object source) {
+    View view;
+    view = finder.findRequiredView(source, 2131689651, "field 'imageView'");
+    target.imageView = finder.castView(view, 2131689651, "field 'imageView'");
+    view = finder.findRequiredView(source, 2131689654, "field 'progressBar'");
+    target.progressBar = finder.castView(view, 2131689654, "field 'progressBar'");
+    view = finder.findRequiredView(source, 2131689653, "field 'errorView'");
+    target.errorView = finder.castView(view, 2131689653, "field 'errorView'");
+    view = finder.findRequiredView(source, 2131689589, "field 'toolbar'");
+    target.toolbar = finder.castView(view, 2131689589, "field 'toolbar'");
+    view = finder.findRequiredView(source, 2131689552, "field 'scrollView'");
+    target.scrollView = finder.castView(view, 2131689552, "field 'scrollView'");
+    view = finder.findRequiredView(source, 2131689652, "field 'lyricsTextView' and method 'onClickLyrics'");
+    target.lyricsTextView = finder.castView(view, 2131689652, "field 'lyricsTextView'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickLyrics();
+        }
+      });
+  }
+
+  @Override public void unbind(T target) {
+    target.imageView = null;
+    target.progressBar = null;
+    target.errorView = null;
+    target.toolbar = null;
+    target.scrollView = null;
+    target.lyricsTextView = null;
+  }
+}

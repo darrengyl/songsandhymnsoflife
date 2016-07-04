@@ -1,0 +1,59 @@
+[
+  {
+    "key": 990852462, 
+    "kind": "ERROR", 
+    "hash": 1034211888, 
+    "severity": "HIGH", 
+    "bug_trace": [
+      {
+        "node_tags": [
+          {
+            "tag": "kind", 
+            "value": "procedure_start"
+          }, 
+          {
+            "tag": "name", 
+            "value": "int RealmListviewAdapter.getPositionForSection(int)"
+          }, 
+          {
+            "tag": "name_id", 
+            "value": "com.church.psalm.view.adapter.RealmListviewAdapter.getPositionForSection(int):int"
+          }
+        ], 
+        "line_number": 85, 
+        "filename": "app/src/main/java/com/church/psalm/view/adapter/RealmListviewAdapter.java", 
+        "description": "start of procedure getPositionForSection(...)", 
+        "level": 0
+      }, 
+      {
+        "node_tags": [], 
+        "line_number": 86, 
+        "filename": "app/src/main/java/com/church/psalm/view/adapter/RealmListviewAdapter.java", 
+        "description": "", 
+        "level": 0
+      }
+    ], 
+    "bug_class": "PROVER", 
+    "dotty": "", 
+    "bug_type": "NULL_DEREFERENCE", 
+    "file": "app/src/main/java/com/church/psalm/view/adapter/RealmListviewAdapter.java", 
+    "qualifier_tags": [
+      {
+        "tag": "bucket", 
+        "value": "B1"
+      }, 
+      {
+        "tag": "line", 
+        "value": "86"
+      }, 
+      {
+        "tag": "value", 
+        "value": "RealmListviewAdapter._sectionMap.get(*RealmListviewAdapter._sections[sectionIndex])"
+      }
+    ], 
+    "line": 86, 
+    "procedure_id": "com.church.psalm.view.adapter.RealmListviewAdapter.getPositionForSection(int):int", 
+    "procedure": "int RealmListviewAdapter.getPositionForSection(int)", 
+    "qualifier": "object returned by RealmListviewAdapter._sectionMap.get(*RealmListviewAdapter._sections[sectionIndex]) could be null and is dereferenced at line 86"
+  }
+]

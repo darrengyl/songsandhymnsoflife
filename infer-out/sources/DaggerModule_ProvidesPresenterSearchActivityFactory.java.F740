@@ -1,0 +1,29 @@
+package com.church.psalm.di;
+
+import com.church.psalm.presenter.activity.PresenterSearchActivity;
+import dagger.internal.Factory;
+import javax.annotation.Generated;
+
+@Generated("dagger.internal.codegen.ComponentProcessor")
+public final class DaggerModule_ProvidesPresenterSearchActivityFactory implements Factory<PresenterSearchActivity> {
+  private final DaggerModule module;
+
+  public DaggerModule_ProvidesPresenterSearchActivityFactory(DaggerModule module) {  
+    assert module != null;
+    this.module = module;
+  }
+
+  @Override
+  public PresenterSearchActivity get() {  
+    PresenterSearchActivity provided = module.providesPresenterSearchActivity();
+    if (provided == null) {
+      throw new NullPointerException("Cannot return null from a non-@Nullable @Provides method");
+    }
+    return provided;
+  }
+
+  public static Factory<PresenterSearchActivity> create(DaggerModule module) {  
+    return new DaggerModule_ProvidesPresenterSearchActivityFactory(module);
+  }
+}
+

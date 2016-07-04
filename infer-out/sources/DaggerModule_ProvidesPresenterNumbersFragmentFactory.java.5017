@@ -1,0 +1,29 @@
+package com.church.psalm.di;
+
+import com.church.psalm.presenter.fragment.PresenterNumbersFragment;
+import dagger.internal.Factory;
+import javax.annotation.Generated;
+
+@Generated("dagger.internal.codegen.ComponentProcessor")
+public final class DaggerModule_ProvidesPresenterNumbersFragmentFactory implements Factory<PresenterNumbersFragment> {
+  private final DaggerModule module;
+
+  public DaggerModule_ProvidesPresenterNumbersFragmentFactory(DaggerModule module) {  
+    assert module != null;
+    this.module = module;
+  }
+
+  @Override
+  public PresenterNumbersFragment get() {  
+    PresenterNumbersFragment provided = module.providesPresenterNumbersFragment();
+    if (provided == null) {
+      throw new NullPointerException("Cannot return null from a non-@Nullable @Provides method");
+    }
+    return provided;
+  }
+
+  public static Factory<PresenterNumbersFragment> create(DaggerModule module) {  
+    return new DaggerModule_ProvidesPresenterNumbersFragmentFactory(module);
+  }
+}
+

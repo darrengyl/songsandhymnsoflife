@@ -1,0 +1,961 @@
+package io.realm;
+
+
+import android.util.JsonReader;
+import android.util.JsonToken;
+import io.realm.RealmFieldType;
+import io.realm.exceptions.RealmMigrationNeededException;
+import io.realm.internal.ColumnInfo;
+import io.realm.internal.ImplicitTransaction;
+import io.realm.internal.LinkView;
+import io.realm.internal.RealmObjectProxy;
+import io.realm.internal.Table;
+import io.realm.internal.TableOrView;
+import io.realm.internal.android.JsonUtils;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class SongRealmProxy extends com.church.psalm.model.Song
+    implements RealmObjectProxy, SongRealmProxyInterface {
+
+    static final class SongColumnInfo extends ColumnInfo {
+
+        public final long _idIndex;
+        public final long _trackNumberIndex;
+        public final long _titleIndex;
+        public final long _pinyinIndex;
+        public final long _frequencyIndex;
+        public final long _downloadedIndex;
+        public final long _lyricsIndex;
+        public final long _favoriteIndex;
+        public final long _firstOccurrenceIndex;
+        public final long _categoryIndex;
+        public final long _subcategoryIndex;
+
+        SongColumnInfo(String path, Table table) {
+            final Map<String, Long> indicesMap = new HashMap<String, Long>(11);
+            this._idIndex = getValidColumnIndex(path, table, "Song", "_id");
+            indicesMap.put("_id", this._idIndex);
+
+            this._trackNumberIndex = getValidColumnIndex(path, table, "Song", "_trackNumber");
+            indicesMap.put("_trackNumber", this._trackNumberIndex);
+
+            this._titleIndex = getValidColumnIndex(path, table, "Song", "_title");
+            indicesMap.put("_title", this._titleIndex);
+
+            this._pinyinIndex = getValidColumnIndex(path, table, "Song", "_pinyin");
+            indicesMap.put("_pinyin", this._pinyinIndex);
+
+            this._frequencyIndex = getValidColumnIndex(path, table, "Song", "_frequency");
+            indicesMap.put("_frequency", this._frequencyIndex);
+
+            this._downloadedIndex = getValidColumnIndex(path, table, "Song", "_downloaded");
+            indicesMap.put("_downloaded", this._downloadedIndex);
+
+            this._lyricsIndex = getValidColumnIndex(path, table, "Song", "_lyrics");
+            indicesMap.put("_lyrics", this._lyricsIndex);
+
+            this._favoriteIndex = getValidColumnIndex(path, table, "Song", "_favorite");
+            indicesMap.put("_favorite", this._favoriteIndex);
+
+            this._firstOccurrenceIndex = getValidColumnIndex(path, table, "Song", "_firstOccurrence");
+            indicesMap.put("_firstOccurrence", this._firstOccurrenceIndex);
+
+            this._categoryIndex = getValidColumnIndex(path, table, "Song", "_category");
+            indicesMap.put("_category", this._categoryIndex);
+
+            this._subcategoryIndex = getValidColumnIndex(path, table, "Song", "_subcategory");
+            indicesMap.put("_subcategory", this._subcategoryIndex);
+
+            setIndicesMap(indicesMap);
+        }
+    }
+
+    private final SongColumnInfo columnInfo;
+    private final ProxyState proxyState;
+    private static final List<String> FIELD_NAMES;
+    static {
+        List<String> fieldNames = new ArrayList<String>();
+        fieldNames.add("_id");
+        fieldNames.add("_trackNumber");
+        fieldNames.add("_title");
+        fieldNames.add("_pinyin");
+        fieldNames.add("_frequency");
+        fieldNames.add("_downloaded");
+        fieldNames.add("_lyrics");
+        fieldNames.add("_favorite");
+        fieldNames.add("_firstOccurrence");
+        fieldNames.add("_category");
+        fieldNames.add("_subcategory");
+        FIELD_NAMES = Collections.unmodifiableList(fieldNames);
+    }
+
+    SongRealmProxy(ColumnInfo columnInfo) {
+        this.columnInfo = (SongColumnInfo) columnInfo;
+        this.proxyState = new ProxyState(com.church.psalm.model.Song.class, this);
+    }
+
+    @SuppressWarnings("cast")
+    public int realmGet$_id() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (int) proxyState.getRow$realm().getLong(columnInfo._idIndex);
+    }
+
+    public void realmSet$_id(int value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setLong(columnInfo._idIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public int realmGet$_trackNumber() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (int) proxyState.getRow$realm().getLong(columnInfo._trackNumberIndex);
+    }
+
+    public void realmSet$_trackNumber(int value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setLong(columnInfo._trackNumberIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public String realmGet$_title() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (java.lang.String) proxyState.getRow$realm().getString(columnInfo._titleIndex);
+    }
+
+    public void realmSet$_title(String value) {
+        proxyState.getRealm$realm().checkIfValid();
+        if (value == null) {
+            throw new IllegalArgumentException("Trying to set non-nullable field _title to null.");
+        }
+        proxyState.getRow$realm().setString(columnInfo._titleIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public String realmGet$_pinyin() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (java.lang.String) proxyState.getRow$realm().getString(columnInfo._pinyinIndex);
+    }
+
+    public void realmSet$_pinyin(String value) {
+        proxyState.getRealm$realm().checkIfValid();
+        if (value == null) {
+            proxyState.getRow$realm().setNull(columnInfo._pinyinIndex);
+            return;
+        }
+        proxyState.getRow$realm().setString(columnInfo._pinyinIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public int realmGet$_frequency() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (int) proxyState.getRow$realm().getLong(columnInfo._frequencyIndex);
+    }
+
+    public void realmSet$_frequency(int value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setLong(columnInfo._frequencyIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public boolean realmGet$_downloaded() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (boolean) proxyState.getRow$realm().getBoolean(columnInfo._downloadedIndex);
+    }
+
+    public void realmSet$_downloaded(boolean value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setBoolean(columnInfo._downloadedIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public String realmGet$_lyrics() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (java.lang.String) proxyState.getRow$realm().getString(columnInfo._lyricsIndex);
+    }
+
+    public void realmSet$_lyrics(String value) {
+        proxyState.getRealm$realm().checkIfValid();
+        if (value == null) {
+            proxyState.getRow$realm().setNull(columnInfo._lyricsIndex);
+            return;
+        }
+        proxyState.getRow$realm().setString(columnInfo._lyricsIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public boolean realmGet$_favorite() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (boolean) proxyState.getRow$realm().getBoolean(columnInfo._favoriteIndex);
+    }
+
+    public void realmSet$_favorite(boolean value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setBoolean(columnInfo._favoriteIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public int realmGet$_firstOccurrence() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (int) proxyState.getRow$realm().getLong(columnInfo._firstOccurrenceIndex);
+    }
+
+    public void realmSet$_firstOccurrence(int value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setLong(columnInfo._firstOccurrenceIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public int realmGet$_category() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (int) proxyState.getRow$realm().getLong(columnInfo._categoryIndex);
+    }
+
+    public void realmSet$_category(int value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setLong(columnInfo._categoryIndex, value);
+    }
+
+    @SuppressWarnings("cast")
+    public int realmGet$_subcategory() {
+        proxyState.getRealm$realm().checkIfValid();
+        return (int) proxyState.getRow$realm().getLong(columnInfo._subcategoryIndex);
+    }
+
+    public void realmSet$_subcategory(int value) {
+        proxyState.getRealm$realm().checkIfValid();
+        proxyState.getRow$realm().setLong(columnInfo._subcategoryIndex, value);
+    }
+
+    public static Table initTable(ImplicitTransaction transaction) {
+        if (!transaction.hasTable("class_Song")) {
+            Table table = transaction.getTable("class_Song");
+            table.addColumn(RealmFieldType.INTEGER, "_id", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.INTEGER, "_trackNumber", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.STRING, "_title", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.STRING, "_pinyin", Table.NULLABLE);
+            table.addColumn(RealmFieldType.INTEGER, "_frequency", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.BOOLEAN, "_downloaded", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.STRING, "_lyrics", Table.NULLABLE);
+            table.addColumn(RealmFieldType.BOOLEAN, "_favorite", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.INTEGER, "_firstOccurrence", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.INTEGER, "_category", Table.NOT_NULLABLE);
+            table.addColumn(RealmFieldType.INTEGER, "_subcategory", Table.NOT_NULLABLE);
+            table.addSearchIndex(table.getColumnIndex("_id"));
+            table.addSearchIndex(table.getColumnIndex("_trackNumber"));
+            table.addSearchIndex(table.getColumnIndex("_title"));
+            table.addSearchIndex(table.getColumnIndex("_pinyin"));
+            table.addSearchIndex(table.getColumnIndex("_lyrics"));
+            table.setPrimaryKey("_id");
+            return table;
+        }
+        return transaction.getTable("class_Song");
+    }
+
+    public static SongColumnInfo validateTable(ImplicitTransaction transaction) {
+        if (transaction.hasTable("class_Song")) {
+            Table table = transaction.getTable("class_Song");
+            if (table.getColumnCount() != 11) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field count does not match - expected 11 but was " + table.getColumnCount());
+            }
+            Map<String, RealmFieldType> columnTypes = new HashMap<String, RealmFieldType>();
+            for (long i = 0; i < 11; i++) {
+                columnTypes.put(table.getColumnName(i), table.getColumnType(i));
+            }
+
+            final SongColumnInfo columnInfo = new SongColumnInfo(transaction.getPath(), table);
+
+            if (!columnTypes.containsKey("_id")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_id' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_id") != RealmFieldType.INTEGER) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'int' for field '_id' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._idIndex) && table.findFirstNull(columnInfo._idIndex) != TableOrView.NO_MATCH) {
+                throw new IllegalStateException("Cannot migrate an object with null value in field '_id'. Either maintain the same type for primary key field '_id', or remove the object with null value before migration.");
+            }
+            if (table.getPrimaryKey() != table.getColumnIndex("_id")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Primary key not defined for field '_id' in existing Realm file. Add @PrimaryKey.");
+            }
+            if (!table.hasSearchIndex(table.getColumnIndex("_id"))) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Index not defined for field '_id' in existing Realm file. Either set @Index or migrate using io.realm.internal.Table.removeSearchIndex().");
+            }
+            if (!columnTypes.containsKey("_trackNumber")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_trackNumber' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_trackNumber") != RealmFieldType.INTEGER) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'int' for field '_trackNumber' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._trackNumberIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_trackNumber' does support null values in the existing Realm file. Use corresponding boxed type for field '_trackNumber' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!table.hasSearchIndex(table.getColumnIndex("_trackNumber"))) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Index not defined for field '_trackNumber' in existing Realm file. Either set @Index or migrate using io.realm.internal.Table.removeSearchIndex().");
+            }
+            if (!columnTypes.containsKey("_title")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_title' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_title") != RealmFieldType.STRING) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'String' for field '_title' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._titleIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_title' does support null values in the existing Realm file. Remove @Required or @PrimaryKey from field '_title' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!table.hasSearchIndex(table.getColumnIndex("_title"))) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Index not defined for field '_title' in existing Realm file. Either set @Index or migrate using io.realm.internal.Table.removeSearchIndex().");
+            }
+            if (!columnTypes.containsKey("_pinyin")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_pinyin' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_pinyin") != RealmFieldType.STRING) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'String' for field '_pinyin' in existing Realm file.");
+            }
+            if (!table.isColumnNullable(columnInfo._pinyinIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_pinyin' is required. Either set @Required to field '_pinyin' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!table.hasSearchIndex(table.getColumnIndex("_pinyin"))) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Index not defined for field '_pinyin' in existing Realm file. Either set @Index or migrate using io.realm.internal.Table.removeSearchIndex().");
+            }
+            if (!columnTypes.containsKey("_frequency")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_frequency' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_frequency") != RealmFieldType.INTEGER) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'int' for field '_frequency' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._frequencyIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_frequency' does support null values in the existing Realm file. Use corresponding boxed type for field '_frequency' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!columnTypes.containsKey("_downloaded")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_downloaded' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_downloaded") != RealmFieldType.BOOLEAN) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'boolean' for field '_downloaded' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._downloadedIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_downloaded' does support null values in the existing Realm file. Use corresponding boxed type for field '_downloaded' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!columnTypes.containsKey("_lyrics")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_lyrics' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_lyrics") != RealmFieldType.STRING) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'String' for field '_lyrics' in existing Realm file.");
+            }
+            if (!table.isColumnNullable(columnInfo._lyricsIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_lyrics' is required. Either set @Required to field '_lyrics' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!table.hasSearchIndex(table.getColumnIndex("_lyrics"))) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Index not defined for field '_lyrics' in existing Realm file. Either set @Index or migrate using io.realm.internal.Table.removeSearchIndex().");
+            }
+            if (!columnTypes.containsKey("_favorite")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_favorite' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_favorite") != RealmFieldType.BOOLEAN) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'boolean' for field '_favorite' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._favoriteIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_favorite' does support null values in the existing Realm file. Use corresponding boxed type for field '_favorite' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!columnTypes.containsKey("_firstOccurrence")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_firstOccurrence' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_firstOccurrence") != RealmFieldType.INTEGER) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'int' for field '_firstOccurrence' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._firstOccurrenceIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_firstOccurrence' does support null values in the existing Realm file. Use corresponding boxed type for field '_firstOccurrence' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!columnTypes.containsKey("_category")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_category' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_category") != RealmFieldType.INTEGER) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'int' for field '_category' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._categoryIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_category' does support null values in the existing Realm file. Use corresponding boxed type for field '_category' or migrate using RealmObjectSchema.setNullable().");
+            }
+            if (!columnTypes.containsKey("_subcategory")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field '_subcategory' in existing Realm file. Either remove field or migrate using io.realm.internal.Table.addColumn().");
+            }
+            if (columnTypes.get("_subcategory") != RealmFieldType.INTEGER) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'int' for field '_subcategory' in existing Realm file.");
+            }
+            if (table.isColumnNullable(columnInfo._subcategoryIndex)) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Field '_subcategory' does support null values in the existing Realm file. Use corresponding boxed type for field '_subcategory' or migrate using RealmObjectSchema.setNullable().");
+            }
+            return columnInfo;
+        } else {
+            throw new RealmMigrationNeededException(transaction.getPath(), "The Song class is missing from the schema for this Realm.");
+        }
+    }
+
+    public static String getTableName() {
+        return "class_Song";
+    }
+
+    public static List<String> getFieldNames() {
+        return FIELD_NAMES;
+    }
+
+    @SuppressWarnings("cast")
+    public static com.church.psalm.model.Song createOrUpdateUsingJsonObject(Realm realm, JSONObject json, boolean update)
+        throws JSONException {
+        com.church.psalm.model.Song obj = null;
+        if (update) {
+            Table table = realm.getTable(com.church.psalm.model.Song.class);
+            long pkColumnIndex = table.getPrimaryKey();
+            long rowIndex = TableOrView.NO_MATCH;
+            if (!json.isNull("_id")) {
+                rowIndex = table.findFirstLong(pkColumnIndex, json.getLong("_id"));
+            }
+            if (rowIndex != TableOrView.NO_MATCH) {
+                obj = new io.realm.SongRealmProxy(realm.schema.getColumnInfo(com.church.psalm.model.Song.class));
+                ((RealmObjectProxy)obj).realmGet$proxyState().setRealm$realm(realm);
+                ((RealmObjectProxy)obj).realmGet$proxyState().setRow$realm(table.getUncheckedRow(rowIndex));
+            }
+        }
+        if (obj == null) {
+            if (json.has("_id")) {
+                if (json.isNull("_id")) {
+                    obj = (io.realm.SongRealmProxy) realm.createObject(com.church.psalm.model.Song.class, null);
+                } else {
+                    obj = (io.realm.SongRealmProxy) realm.createObject(com.church.psalm.model.Song.class, json.getInt("_id"));
+                }
+            } else {
+                obj = (io.realm.SongRealmProxy) realm.createObject(com.church.psalm.model.Song.class);
+            }
+        }
+        if (json.has("_id")) {
+            if (json.isNull("_id")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _id to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_id((int) json.getInt("_id"));
+            }
+        }
+        if (json.has("_trackNumber")) {
+            if (json.isNull("_trackNumber")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _trackNumber to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_trackNumber((int) json.getInt("_trackNumber"));
+            }
+        }
+        if (json.has("_title")) {
+            if (json.isNull("_title")) {
+                ((SongRealmProxyInterface) obj).realmSet$_title(null);
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_title((String) json.getString("_title"));
+            }
+        }
+        if (json.has("_pinyin")) {
+            if (json.isNull("_pinyin")) {
+                ((SongRealmProxyInterface) obj).realmSet$_pinyin(null);
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_pinyin((String) json.getString("_pinyin"));
+            }
+        }
+        if (json.has("_frequency")) {
+            if (json.isNull("_frequency")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _frequency to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_frequency((int) json.getInt("_frequency"));
+            }
+        }
+        if (json.has("_downloaded")) {
+            if (json.isNull("_downloaded")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _downloaded to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_downloaded((boolean) json.getBoolean("_downloaded"));
+            }
+        }
+        if (json.has("_lyrics")) {
+            if (json.isNull("_lyrics")) {
+                ((SongRealmProxyInterface) obj).realmSet$_lyrics(null);
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_lyrics((String) json.getString("_lyrics"));
+            }
+        }
+        if (json.has("_favorite")) {
+            if (json.isNull("_favorite")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _favorite to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_favorite((boolean) json.getBoolean("_favorite"));
+            }
+        }
+        if (json.has("_firstOccurrence")) {
+            if (json.isNull("_firstOccurrence")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _firstOccurrence to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_firstOccurrence((int) json.getInt("_firstOccurrence"));
+            }
+        }
+        if (json.has("_category")) {
+            if (json.isNull("_category")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _category to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_category((int) json.getInt("_category"));
+            }
+        }
+        if (json.has("_subcategory")) {
+            if (json.isNull("_subcategory")) {
+                throw new IllegalArgumentException("Trying to set non-nullable field _subcategory to null.");
+            } else {
+                ((SongRealmProxyInterface) obj).realmSet$_subcategory((int) json.getInt("_subcategory"));
+            }
+        }
+        return obj;
+    }
+
+    @SuppressWarnings("cast")
+    public static com.church.psalm.model.Song createUsingJsonStream(Realm realm, JsonReader reader)
+        throws IOException {
+        com.church.psalm.model.Song obj = realm.createObject(com.church.psalm.model.Song.class);
+        reader.beginObject();
+        while (reader.hasNext()) {
+            String name = reader.nextName();
+            if (name.equals("_id")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _id to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_id((int) reader.nextInt());
+                }
+            } else if (name.equals("_trackNumber")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _trackNumber to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_trackNumber((int) reader.nextInt());
+                }
+            } else if (name.equals("_title")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    ((SongRealmProxyInterface) obj).realmSet$_title(null);
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_title((String) reader.nextString());
+                }
+            } else if (name.equals("_pinyin")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    ((SongRealmProxyInterface) obj).realmSet$_pinyin(null);
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_pinyin((String) reader.nextString());
+                }
+            } else if (name.equals("_frequency")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _frequency to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_frequency((int) reader.nextInt());
+                }
+            } else if (name.equals("_downloaded")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _downloaded to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_downloaded((boolean) reader.nextBoolean());
+                }
+            } else if (name.equals("_lyrics")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    ((SongRealmProxyInterface) obj).realmSet$_lyrics(null);
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_lyrics((String) reader.nextString());
+                }
+            } else if (name.equals("_favorite")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _favorite to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_favorite((boolean) reader.nextBoolean());
+                }
+            } else if (name.equals("_firstOccurrence")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _firstOccurrence to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_firstOccurrence((int) reader.nextInt());
+                }
+            } else if (name.equals("_category")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _category to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_category((int) reader.nextInt());
+                }
+            } else if (name.equals("_subcategory")) {
+                if (reader.peek() == JsonToken.NULL) {
+                    reader.skipValue();
+                    throw new IllegalArgumentException("Trying to set non-nullable field _subcategory to null.");
+                } else {
+                    ((SongRealmProxyInterface) obj).realmSet$_subcategory((int) reader.nextInt());
+                }
+            } else {
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return obj;
+    }
+
+    public static com.church.psalm.model.Song copyOrUpdate(Realm realm, com.church.psalm.model.Song object, boolean update, Map<RealmModel,RealmObjectProxy> cache) {
+        if (object instanceof RealmObjectProxy && ((RealmObjectProxy) object).realmGet$proxyState().getRealm$realm() != null && ((RealmObjectProxy) object).realmGet$proxyState().getRealm$realm().threadId != realm.threadId) {
+            throw new IllegalArgumentException("Objects which belong to Realm instances in other threads cannot be copied into this Realm instance.");
+        }
+        if (object instanceof RealmObjectProxy && ((RealmObjectProxy)object).realmGet$proxyState().getRealm$realm() != null && ((RealmObjectProxy)object).realmGet$proxyState().getRealm$realm().getPath().equals(realm.getPath())) {
+            return object;
+        }
+        RealmObjectProxy cachedRealmObject = cache.get(object);
+        if (cachedRealmObject != null) {
+            return (com.church.psalm.model.Song) cachedRealmObject;
+        } else {
+            com.church.psalm.model.Song realmObject = null;
+            boolean canUpdate = update;
+            if (canUpdate) {
+                Table table = realm.getTable(com.church.psalm.model.Song.class);
+                long pkColumnIndex = table.getPrimaryKey();
+                long rowIndex = table.findFirstLong(pkColumnIndex, ((SongRealmProxyInterface) object).realmGet$_id());
+                if (rowIndex != TableOrView.NO_MATCH) {
+                    realmObject = new io.realm.SongRealmProxy(realm.schema.getColumnInfo(com.church.psalm.model.Song.class));
+                    ((RealmObjectProxy)realmObject).realmGet$proxyState().setRealm$realm(realm);
+                    ((RealmObjectProxy)realmObject).realmGet$proxyState().setRow$realm(table.getUncheckedRow(rowIndex));
+                    cache.put(object, (RealmObjectProxy) realmObject);
+                } else {
+                    canUpdate = false;
+                }
+            }
+
+            if (canUpdate) {
+                return update(realm, realmObject, object, cache);
+            } else {
+                return copy(realm, object, update, cache);
+            }
+        }
+    }
+
+    public static com.church.psalm.model.Song copy(Realm realm, com.church.psalm.model.Song newObject, boolean update, Map<RealmModel,RealmObjectProxy> cache) {
+        RealmObjectProxy cachedRealmObject = cache.get(newObject);
+        if (cachedRealmObject != null) {
+            return (com.church.psalm.model.Song) cachedRealmObject;
+        } else {
+            com.church.psalm.model.Song realmObject = realm.createObject(com.church.psalm.model.Song.class, ((SongRealmProxyInterface) newObject).realmGet$_id());
+            cache.put(newObject, (RealmObjectProxy) realmObject);
+            ((SongRealmProxyInterface) realmObject).realmSet$_id(((SongRealmProxyInterface) newObject).realmGet$_id());
+            ((SongRealmProxyInterface) realmObject).realmSet$_trackNumber(((SongRealmProxyInterface) newObject).realmGet$_trackNumber());
+            ((SongRealmProxyInterface) realmObject).realmSet$_title(((SongRealmProxyInterface) newObject).realmGet$_title());
+            ((SongRealmProxyInterface) realmObject).realmSet$_pinyin(((SongRealmProxyInterface) newObject).realmGet$_pinyin());
+            ((SongRealmProxyInterface) realmObject).realmSet$_frequency(((SongRealmProxyInterface) newObject).realmGet$_frequency());
+            ((SongRealmProxyInterface) realmObject).realmSet$_downloaded(((SongRealmProxyInterface) newObject).realmGet$_downloaded());
+            ((SongRealmProxyInterface) realmObject).realmSet$_lyrics(((SongRealmProxyInterface) newObject).realmGet$_lyrics());
+            ((SongRealmProxyInterface) realmObject).realmSet$_favorite(((SongRealmProxyInterface) newObject).realmGet$_favorite());
+            ((SongRealmProxyInterface) realmObject).realmSet$_firstOccurrence(((SongRealmProxyInterface) newObject).realmGet$_firstOccurrence());
+            ((SongRealmProxyInterface) realmObject).realmSet$_category(((SongRealmProxyInterface) newObject).realmGet$_category());
+            ((SongRealmProxyInterface) realmObject).realmSet$_subcategory(((SongRealmProxyInterface) newObject).realmGet$_subcategory());
+            return realmObject;
+        }
+    }
+
+    public static long insert(Realm realm, com.church.psalm.model.Song object, Map<RealmModel,Long> cache) {
+        Table table = realm.getTable(com.church.psalm.model.Song.class);
+        long tableNativePtr = table.getNativeTablePointer();
+        SongColumnInfo columnInfo = (SongColumnInfo) realm.schema.getColumnInfo(com.church.psalm.model.Song.class);
+        long rowIndex = Table.nativeAddEmptyRow(tableNativePtr, 1);
+        cache.put(object, rowIndex);
+        Table.nativeSetLong(tableNativePtr, columnInfo._idIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_id());
+        Table.nativeSetLong(tableNativePtr, columnInfo._trackNumberIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_trackNumber());
+        String realmGet$_title = ((SongRealmProxyInterface)object).realmGet$_title();
+        if (realmGet$_title != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo._titleIndex, rowIndex, realmGet$_title);
+        }
+        String realmGet$_pinyin = ((SongRealmProxyInterface)object).realmGet$_pinyin();
+        if (realmGet$_pinyin != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo._pinyinIndex, rowIndex, realmGet$_pinyin);
+        }
+        Table.nativeSetLong(tableNativePtr, columnInfo._frequencyIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_frequency());
+        Table.nativeSetBoolean(tableNativePtr, columnInfo._downloadedIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_downloaded());
+        String realmGet$_lyrics = ((SongRealmProxyInterface)object).realmGet$_lyrics();
+        if (realmGet$_lyrics != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo._lyricsIndex, rowIndex, realmGet$_lyrics);
+        }
+        Table.nativeSetBoolean(tableNativePtr, columnInfo._favoriteIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_favorite());
+        Table.nativeSetLong(tableNativePtr, columnInfo._firstOccurrenceIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_firstOccurrence());
+        Table.nativeSetLong(tableNativePtr, columnInfo._categoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_category());
+        Table.nativeSetLong(tableNativePtr, columnInfo._subcategoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_subcategory());
+        return rowIndex;
+    }
+
+    public static void insert(Realm realm, Iterator<? extends RealmModel> objects, Map<RealmModel,Long> cache) {
+        Table table = realm.getTable(com.church.psalm.model.Song.class);
+        long tableNativePtr = table.getNativeTablePointer();
+        SongColumnInfo columnInfo = (SongColumnInfo) realm.schema.getColumnInfo(com.church.psalm.model.Song.class);
+        com.church.psalm.model.Song object = null;
+        while (objects.hasNext()) {
+            object = (com.church.psalm.model.Song) objects.next();
+            if(!cache.containsKey(object)) {
+                long rowIndex = Table.nativeAddEmptyRow(tableNativePtr, 1);
+                cache.put(object, rowIndex);
+                Table.nativeSetLong(tableNativePtr, columnInfo._idIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_id());
+                Table.nativeSetLong(tableNativePtr, columnInfo._trackNumberIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_trackNumber());
+                String realmGet$_title = ((SongRealmProxyInterface)object).realmGet$_title();
+                if (realmGet$_title != null) {
+                    Table.nativeSetString(tableNativePtr, columnInfo._titleIndex, rowIndex, realmGet$_title);
+                }
+                String realmGet$_pinyin = ((SongRealmProxyInterface)object).realmGet$_pinyin();
+                if (realmGet$_pinyin != null) {
+                    Table.nativeSetString(tableNativePtr, columnInfo._pinyinIndex, rowIndex, realmGet$_pinyin);
+                }
+                Table.nativeSetLong(tableNativePtr, columnInfo._frequencyIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_frequency());
+                Table.nativeSetBoolean(tableNativePtr, columnInfo._downloadedIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_downloaded());
+                String realmGet$_lyrics = ((SongRealmProxyInterface)object).realmGet$_lyrics();
+                if (realmGet$_lyrics != null) {
+                    Table.nativeSetString(tableNativePtr, columnInfo._lyricsIndex, rowIndex, realmGet$_lyrics);
+                }
+                Table.nativeSetBoolean(tableNativePtr, columnInfo._favoriteIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_favorite());
+                Table.nativeSetLong(tableNativePtr, columnInfo._firstOccurrenceIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_firstOccurrence());
+                Table.nativeSetLong(tableNativePtr, columnInfo._categoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_category());
+                Table.nativeSetLong(tableNativePtr, columnInfo._subcategoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_subcategory());
+            }
+        }
+    }
+
+    public static long insertOrUpdate(Realm realm, com.church.psalm.model.Song object, Map<RealmModel,Long> cache) {
+        Table table = realm.getTable(com.church.psalm.model.Song.class);
+        long tableNativePtr = table.getNativeTablePointer();
+        SongColumnInfo columnInfo = (SongColumnInfo) realm.schema.getColumnInfo(com.church.psalm.model.Song.class);
+        long pkColumnIndex = table.getPrimaryKey();
+        long rowIndex = TableOrView.NO_MATCH;
+        Object primaryKeyValue = ((SongRealmProxyInterface) object).realmGet$_id();
+        if (primaryKeyValue != null) {
+            rowIndex = table.findFirstLong(pkColumnIndex, ((SongRealmProxyInterface) object).realmGet$_id());
+        }
+        if (rowIndex == TableOrView.NO_MATCH) {
+            rowIndex = Table.nativeAddEmptyRow(tableNativePtr, 1);
+            if (primaryKeyValue != null) {
+                Table.nativeSetLong(tableNativePtr, pkColumnIndex, rowIndex, ((SongRealmProxyInterface) object).realmGet$_id());
+            }
+        }
+        cache.put(object, rowIndex);
+        Table.nativeSetLong(tableNativePtr, columnInfo._idIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_id());
+        Table.nativeSetLong(tableNativePtr, columnInfo._trackNumberIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_trackNumber());
+        String realmGet$_title = ((SongRealmProxyInterface)object).realmGet$_title();
+        if (realmGet$_title != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo._titleIndex, rowIndex, realmGet$_title);
+        } else {
+            Table.nativeSetNull(tableNativePtr, columnInfo._titleIndex, rowIndex);
+        }
+        String realmGet$_pinyin = ((SongRealmProxyInterface)object).realmGet$_pinyin();
+        if (realmGet$_pinyin != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo._pinyinIndex, rowIndex, realmGet$_pinyin);
+        } else {
+            Table.nativeSetNull(tableNativePtr, columnInfo._pinyinIndex, rowIndex);
+        }
+        Table.nativeSetLong(tableNativePtr, columnInfo._frequencyIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_frequency());
+        Table.nativeSetBoolean(tableNativePtr, columnInfo._downloadedIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_downloaded());
+        String realmGet$_lyrics = ((SongRealmProxyInterface)object).realmGet$_lyrics();
+        if (realmGet$_lyrics != null) {
+            Table.nativeSetString(tableNativePtr, columnInfo._lyricsIndex, rowIndex, realmGet$_lyrics);
+        } else {
+            Table.nativeSetNull(tableNativePtr, columnInfo._lyricsIndex, rowIndex);
+        }
+        Table.nativeSetBoolean(tableNativePtr, columnInfo._favoriteIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_favorite());
+        Table.nativeSetLong(tableNativePtr, columnInfo._firstOccurrenceIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_firstOccurrence());
+        Table.nativeSetLong(tableNativePtr, columnInfo._categoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_category());
+        Table.nativeSetLong(tableNativePtr, columnInfo._subcategoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_subcategory());
+        return rowIndex;
+    }
+
+    public static void insertOrUpdate(Realm realm, Iterator<? extends RealmModel> objects, Map<RealmModel,Long> cache) {
+        Table table = realm.getTable(com.church.psalm.model.Song.class);
+        long tableNativePtr = table.getNativeTablePointer();
+        SongColumnInfo columnInfo = (SongColumnInfo) realm.schema.getColumnInfo(com.church.psalm.model.Song.class);
+        long pkColumnIndex = table.getPrimaryKey();
+        com.church.psalm.model.Song object = null;
+        while (objects.hasNext()) {
+            object = (com.church.psalm.model.Song) objects.next();
+            if(!cache.containsKey(object)) {
+                long rowIndex = TableOrView.NO_MATCH;
+                Object primaryKeyValue = ((SongRealmProxyInterface) object).realmGet$_id();
+                if (primaryKeyValue != null) {
+                    rowIndex = table.findFirstLong(pkColumnIndex, ((SongRealmProxyInterface) object).realmGet$_id());
+                }
+                if (rowIndex == TableOrView.NO_MATCH) {
+                    rowIndex = Table.nativeAddEmptyRow(tableNativePtr, 1);
+                    if (primaryKeyValue != null) {
+                        Table.nativeSetLong(tableNativePtr, pkColumnIndex, rowIndex, ((SongRealmProxyInterface) object).realmGet$_id());
+                    }
+                }
+                cache.put(object, rowIndex);
+                Table.nativeSetLong(tableNativePtr, columnInfo._idIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_id());
+                Table.nativeSetLong(tableNativePtr, columnInfo._trackNumberIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_trackNumber());
+                String realmGet$_title = ((SongRealmProxyInterface)object).realmGet$_title();
+                if (realmGet$_title != null) {
+                    Table.nativeSetString(tableNativePtr, columnInfo._titleIndex, rowIndex, realmGet$_title);
+                } else {
+                    Table.nativeSetNull(tableNativePtr, columnInfo._titleIndex, rowIndex);
+                }
+                String realmGet$_pinyin = ((SongRealmProxyInterface)object).realmGet$_pinyin();
+                if (realmGet$_pinyin != null) {
+                    Table.nativeSetString(tableNativePtr, columnInfo._pinyinIndex, rowIndex, realmGet$_pinyin);
+                } else {
+                    Table.nativeSetNull(tableNativePtr, columnInfo._pinyinIndex, rowIndex);
+                }
+                Table.nativeSetLong(tableNativePtr, columnInfo._frequencyIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_frequency());
+                Table.nativeSetBoolean(tableNativePtr, columnInfo._downloadedIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_downloaded());
+                String realmGet$_lyrics = ((SongRealmProxyInterface)object).realmGet$_lyrics();
+                if (realmGet$_lyrics != null) {
+                    Table.nativeSetString(tableNativePtr, columnInfo._lyricsIndex, rowIndex, realmGet$_lyrics);
+                } else {
+                    Table.nativeSetNull(tableNativePtr, columnInfo._lyricsIndex, rowIndex);
+                }
+                Table.nativeSetBoolean(tableNativePtr, columnInfo._favoriteIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_favorite());
+                Table.nativeSetLong(tableNativePtr, columnInfo._firstOccurrenceIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_firstOccurrence());
+                Table.nativeSetLong(tableNativePtr, columnInfo._categoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_category());
+                Table.nativeSetLong(tableNativePtr, columnInfo._subcategoryIndex, rowIndex, ((SongRealmProxyInterface)object).realmGet$_subcategory());
+            }
+        }
+    }
+
+    public static com.church.psalm.model.Song createDetachedCopy(com.church.psalm.model.Song realmObject, int currentDepth, int maxDepth, Map<RealmModel, CacheData<RealmModel>> cache) {
+        if (currentDepth > maxDepth || realmObject == null) {
+            return null;
+        }
+        CacheData<RealmModel> cachedObject = cache.get(realmObject);
+        com.church.psalm.model.Song unmanagedObject;
+        if (cachedObject != null) {
+            // Reuse cached object or recreate it because it was encountered at a lower depth.
+            if (currentDepth >= cachedObject.minDepth) {
+                return (com.church.psalm.model.Song)cachedObject.object;
+            } else {
+                unmanagedObject = (com.church.psalm.model.Song)cachedObject.object;
+                cachedObject.minDepth = currentDepth;
+            }
+        } else {
+            unmanagedObject = new com.church.psalm.model.Song();
+            cache.put(realmObject, new RealmObjectProxy.CacheData(currentDepth, unmanagedObject));
+        }
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_id(((SongRealmProxyInterface) realmObject).realmGet$_id());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_trackNumber(((SongRealmProxyInterface) realmObject).realmGet$_trackNumber());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_title(((SongRealmProxyInterface) realmObject).realmGet$_title());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_pinyin(((SongRealmProxyInterface) realmObject).realmGet$_pinyin());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_frequency(((SongRealmProxyInterface) realmObject).realmGet$_frequency());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_downloaded(((SongRealmProxyInterface) realmObject).realmGet$_downloaded());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_lyrics(((SongRealmProxyInterface) realmObject).realmGet$_lyrics());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_favorite(((SongRealmProxyInterface) realmObject).realmGet$_favorite());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_firstOccurrence(((SongRealmProxyInterface) realmObject).realmGet$_firstOccurrence());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_category(((SongRealmProxyInterface) realmObject).realmGet$_category());
+        ((SongRealmProxyInterface) unmanagedObject).realmSet$_subcategory(((SongRealmProxyInterface) realmObject).realmGet$_subcategory());
+        return unmanagedObject;
+    }
+
+    static com.church.psalm.model.Song update(Realm realm, com.church.psalm.model.Song realmObject, com.church.psalm.model.Song newObject, Map<RealmModel, RealmObjectProxy> cache) {
+        ((SongRealmProxyInterface) realmObject).realmSet$_trackNumber(((SongRealmProxyInterface) newObject).realmGet$_trackNumber());
+        ((SongRealmProxyInterface) realmObject).realmSet$_title(((SongRealmProxyInterface) newObject).realmGet$_title());
+        ((SongRealmProxyInterface) realmObject).realmSet$_pinyin(((SongRealmProxyInterface) newObject).realmGet$_pinyin());
+        ((SongRealmProxyInterface) realmObject).realmSet$_frequency(((SongRealmProxyInterface) newObject).realmGet$_frequency());
+        ((SongRealmProxyInterface) realmObject).realmSet$_downloaded(((SongRealmProxyInterface) newObject).realmGet$_downloaded());
+        ((SongRealmProxyInterface) realmObject).realmSet$_lyrics(((SongRealmProxyInterface) newObject).realmGet$_lyrics());
+        ((SongRealmProxyInterface) realmObject).realmSet$_favorite(((SongRealmProxyInterface) newObject).realmGet$_favorite());
+        ((SongRealmProxyInterface) realmObject).realmSet$_firstOccurrence(((SongRealmProxyInterface) newObject).realmGet$_firstOccurrence());
+        ((SongRealmProxyInterface) realmObject).realmSet$_category(((SongRealmProxyInterface) newObject).realmGet$_category());
+        ((SongRealmProxyInterface) realmObject).realmSet$_subcategory(((SongRealmProxyInterface) newObject).realmGet$_subcategory());
+        return realmObject;
+    }
+
+    @Override
+    public String toString() {
+        if (!RealmObject.isValid(this)) {
+            return "Invalid object";
+        }
+        StringBuilder stringBuilder = new StringBuilder("Song = [");
+        stringBuilder.append("{_id:");
+        stringBuilder.append(realmGet$_id());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_trackNumber:");
+        stringBuilder.append(realmGet$_trackNumber());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_title:");
+        stringBuilder.append(realmGet$_title());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_pinyin:");
+        stringBuilder.append(realmGet$_pinyin() != null ? realmGet$_pinyin() : "null");
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_frequency:");
+        stringBuilder.append(realmGet$_frequency());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_downloaded:");
+        stringBuilder.append(realmGet$_downloaded());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_lyrics:");
+        stringBuilder.append(realmGet$_lyrics() != null ? realmGet$_lyrics() : "null");
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_favorite:");
+        stringBuilder.append(realmGet$_favorite());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_firstOccurrence:");
+        stringBuilder.append(realmGet$_firstOccurrence());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_category:");
+        stringBuilder.append(realmGet$_category());
+        stringBuilder.append("}");
+        stringBuilder.append(",");
+        stringBuilder.append("{_subcategory:");
+        stringBuilder.append(realmGet$_subcategory());
+        stringBuilder.append("}");
+        stringBuilder.append("]");
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public ProxyState realmGet$proxyState() {
+        return proxyState;
+    }
+
+    @Override
+    public int hashCode() {
+        String realmName = proxyState.getRealm$realm().getPath();
+        String tableName = proxyState.getRow$realm().getTable().getName();
+        long rowIndex = proxyState.getRow$realm().getIndex();
+
+        int result = 17;
+        result = 31 * result + ((realmName != null) ? realmName.hashCode() : 0);
+        result = 31 * result + ((tableName != null) ? tableName.hashCode() : 0);
+        result = 31 * result + (int) (rowIndex ^ (rowIndex >>> 32));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SongRealmProxy aSong = (SongRealmProxy)o;
+
+        String path = proxyState.getRealm$realm().getPath();
+        String otherPath = aSong.proxyState.getRealm$realm().getPath();
+        if (path != null ? !path.equals(otherPath) : otherPath != null) return false;;
+
+        String tableName = proxyState.getRow$realm().getTable().getName();
+        String otherTableName = aSong.proxyState.getRow$realm().getTable().getName();
+        if (tableName != null ? !tableName.equals(otherTableName) : otherTableName != null) return false;
+
+        if (proxyState.getRow$realm().getIndex() != aSong.proxyState.getRow$realm().getIndex()) return false;
+
+        return true;
+    }
+
+}

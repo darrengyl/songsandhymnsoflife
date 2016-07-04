@@ -1,0 +1,18 @@
+{
+  "int": {
+    "files": 85, 
+    "procedures": 720, 
+    "NULL_DEREFERENCE": 1, 
+    "lines": 24630
+  }, 
+  "float": {
+    "reporting_time": 0.2711300849914551, 
+    "analysis_time": 14.641194105148315, 
+    "capture_time": 0.0, 
+    "makefile_generation_time": 0.18942594528198242
+  }, 
+  "normal": {
+    "infer_version": "unknown", 
+    "analyzer": "infer"
+  }
+}

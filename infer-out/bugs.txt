@@ -1,0 +1,9 @@
+
+Found 1 issue
+app/src/main/java/com/church/psalm/view/adapter/RealmListviewAdapter.java:86: error: NULL_DEREFERENCE
+  object returned by RealmListviewAdapter._sectionMap.get(*RealmListviewAdapter._sections[sectionIndex]) could be null and is dereferenced at line 86
+  84.       @Override
+  85.       public int getPositionForSection(int sectionIndex) {
+  86. >         return _sectionMap.get(_sections[sectionIndex]);
+  87.       }
+  88.   

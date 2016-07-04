@@ -1,0 +1,19 @@
+package com.church.psalm.presenter.activity;
+
+import dagger.internal.Factory;
+import javax.annotation.Generated;
+
+@Generated("dagger.internal.codegen.ComponentProcessor")
+public enum PresenterSearchActivity_Factory implements Factory<PresenterSearchActivity> {
+INSTANCE;
+
+  @Override
+  public PresenterSearchActivity get() {  
+    return new PresenterSearchActivity();
+  }
+
+  public static Factory<PresenterSearchActivity> create() {  
+    return INSTANCE;
+  }
+}
+
