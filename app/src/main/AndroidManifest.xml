@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.church.psalm"
-    android:versionName="3.0"
-    android:versionCode="5">
+    android:versionCode="5"
+    android:versionName="3.0">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".Songsandhymnsoflife"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name=".MainActivity"
+            android:name=".view.activity.MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
-
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,18 +27,29 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name=".ScoreActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-            android:parentActivityName=".MainActivity">
+            android:name=".view.activity.SearchActivity"
+            android:parentActivityName=".view.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
 
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
+        <activity
+            android:name=".view.activity.ScoreActivity"
+            android:parentActivityName=".view.activity.MainActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
         <service android:name=".MusicService" />
+
+        <activity android:name=".view.activity.CategoryActivity" />
     </application>
 
 </manifest>

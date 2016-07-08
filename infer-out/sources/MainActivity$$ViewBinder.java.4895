@@ -1,0 +1,29 @@
+// Generated code from Butter Knife. Do not modify!
+package com.church.psalm.view.activity;
+
+import android.view.View;
+import butterknife.ButterKnife.Finder;
+import butterknife.ButterKnife.ViewBinder;
+
+public class MainActivity$$ViewBinder<T extends com.church.psalm.view.activity.MainActivity> implements ViewBinder<T> {
+  @Override public void bind(final Finder finder, final T target, Object source) {
+    View view;
+    view = finder.findRequiredView(source, 2131689589, "field 'toolBar' and method 'onClickToolbar'");
+    target.toolBar = finder.castView(view, 2131689589, "field 'toolBar'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickToolbar();
+        }
+      });
+    view = finder.findRequiredView(source, 2131689584, "field 'frameLayout'");
+    target.frameLayout = finder.castView(view, 2131689584, "field 'frameLayout'");
+  }
+
+  @Override public void unbind(T target) {
+    target.toolBar = null;
+    target.frameLayout = null;
+  }
+}

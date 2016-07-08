@@ -1,0 +1,126 @@
+// Generated code from Butter Knife. Do not modify!
+package com.church.psalm.view.fragment;
+
+import android.view.View;
+import butterknife.ButterKnife.Finder;
+import butterknife.ButterKnife.ViewBinder;
+
+public class NumbersFragment$$ViewBinder<T extends com.church.psalm.view.fragment.NumbersFragment> implements ViewBinder<T> {
+  @Override public void bind(final Finder finder, final T target, Object source) {
+    View view;
+    view = finder.findRequiredView(source, 2131689611, "field 'display'");
+    target.display = finder.castView(view, 2131689611, "field 'display'");
+    view = finder.findRequiredView(source, 2131689622, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689612, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689613, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689614, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689615, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689616, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689617, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689618, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689619, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689620, "method 'onClickOnNumbers'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickOnNumbers(p0);
+        }
+      });
+    view = finder.findRequiredView(source, 2131689621, "method 'onClickBackspace'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickBackspace();
+        }
+      });
+    view = finder.findRequiredView(source, 2131689623, "method 'onClickAccept'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickAccept();
+        }
+      });
+  }
+
+  @Override public void unbind(T target) {
+    target.display = null;
+  }
+}

@@ -1,0 +1,29 @@
+package com.church.psalm.di;
+
+import com.church.psalm.presenter.activity.PresenterCategoryActivity;
+import dagger.internal.Factory;
+import javax.annotation.Generated;
+
+@Generated("dagger.internal.codegen.ComponentProcessor")
+public final class DaggerModule_ProvidesPresenterCategoryActivityFactory implements Factory<PresenterCategoryActivity> {
+  private final DaggerModule module;
+
+  public DaggerModule_ProvidesPresenterCategoryActivityFactory(DaggerModule module) {  
+    assert module != null;
+    this.module = module;
+  }
+
+  @Override
+  public PresenterCategoryActivity get() {  
+    PresenterCategoryActivity provided = module.providesPresenterCategoryActivity();
+    if (provided == null) {
+      throw new NullPointerException("Cannot return null from a non-@Nullable @Provides method");
+    }
+    return provided;
+  }
+
+  public static Factory<PresenterCategoryActivity> create(DaggerModule module) {  
+    return new DaggerModule_ProvidesPresenterCategoryActivityFactory(module);
+  }
+}
+

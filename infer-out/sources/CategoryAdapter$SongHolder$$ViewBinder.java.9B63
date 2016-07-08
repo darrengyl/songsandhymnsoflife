@@ -1,0 +1,21 @@
+// Generated code from Butter Knife. Do not modify!
+package com.church.psalm.view.adapter;
+
+import android.view.View;
+import butterknife.ButterKnife.Finder;
+import butterknife.ButterKnife.ViewBinder;
+
+public class CategoryAdapter$SongHolder$$ViewBinder<T extends com.church.psalm.view.adapter.CategoryAdapter.SongHolder> implements ViewBinder<T> {
+  @Override public void bind(final Finder finder, final T target, Object source) {
+    View view;
+    view = finder.findRequiredView(source, 2131689606, "field 'track'");
+    target.track = finder.castView(view, 2131689606, "field 'track'");
+    view = finder.findRequiredView(source, 2131689543, "field 'title'");
+    target.title = finder.castView(view, 2131689543, "field 'title'");
+  }
+
+  @Override public void unbind(T target) {
+    target.track = null;
+    target.title = null;
+  }
+}

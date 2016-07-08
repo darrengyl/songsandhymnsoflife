@@ -1,0 +1,27 @@
+// Generated code from Butter Knife. Do not modify!
+package com.church.psalm.view.adapter;
+
+import android.view.View;
+import butterknife.ButterKnife.Finder;
+import butterknife.ButterKnife.ViewBinder;
+
+public class SearchAdapter$SongResultViewHolder$$ViewBinder<T extends com.church.psalm.view.adapter.SearchAdapter.SongResultViewHolder> implements ViewBinder<T> {
+  @Override public void bind(final Finder finder, final T target, Object source) {
+    View view;
+    view = finder.findRequiredView(source, 2131689602, "field 'track'");
+    target.track = finder.castView(view, 2131689602, "field 'track'");
+    view = finder.findRequiredView(source, 2131689543, "field 'title'");
+    target.title = finder.castView(view, 2131689543, "field 'title'");
+    view = finder.findRequiredView(source, 2131689608, "field 'lyrics'");
+    target.lyrics = finder.castView(view, 2131689608, "field 'lyrics'");
+    view = finder.findRequiredView(source, 2131689607, "field 'cardView'");
+    target.cardView = finder.castView(view, 2131689607, "field 'cardView'");
+  }
+
+  @Override public void unbind(T target) {
+    target.track = null;
+    target.title = null;
+    target.lyrics = null;
+    target.cardView = null;
+  }
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        card_view:cardCornerRadius="2dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tracknumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:textColor="@color/colorSeconaryText"
+                    android:textSize="15sp"
+                    tool:text="123" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="54dp"
+                    android:layout_marginRight="16dp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="17sp"
+                    tool:text="这是诗歌的标题" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/lyrics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="54dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:maxLines="3"
+                android:textSize="15sp"
+                android:visibility="visible"
+                tool:text="这是诗歌的歌词这是诗歌的歌词" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>
+

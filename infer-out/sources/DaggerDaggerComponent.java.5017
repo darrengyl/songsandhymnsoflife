@@ -1,0 +1,130 @@
+package com.church.psalm.di;
+
+import com.church.psalm.presenter.activity.PresenterCategoryActivity;
+import com.church.psalm.presenter.activity.PresenterMainActivity;
+import com.church.psalm.presenter.activity.PresenterSearchActivity;
+import com.church.psalm.presenter.fragment.PresenterListsFragment;
+import com.church.psalm.presenter.fragment.PresenterNumbersFragment;
+import com.church.psalm.view.activity.CategoryActivity;
+import com.church.psalm.view.activity.CategoryActivity_MembersInjector;
+import com.church.psalm.view.activity.MainActivity;
+import com.church.psalm.view.activity.MainActivity_MembersInjector;
+import com.church.psalm.view.activity.ScoreActivity;
+import com.church.psalm.view.activity.SearchActivity;
+import com.church.psalm.view.activity.SearchActivity_MembersInjector;
+import com.church.psalm.view.fragment.ListsFragment;
+import com.church.psalm.view.fragment.ListsFragment_MembersInjector;
+import com.church.psalm.view.fragment.NumbersFragment;
+import com.church.psalm.view.fragment.NumbersFragment_MembersInjector;
+import com.church.psalm.view.fragment.TabbedFragment;
+import com.church.psalm.view.fragment.TabbedFragment_MembersInjector;
+import com.church.psalm.view.fragment.categories.CatBaseFragment;
+import com.church.psalm.view.fragment.categories.CatBaseFragment_MembersInjector;
+import dagger.MembersInjector;
+import dagger.internal.MembersInjectors;
+import dagger.internal.ScopedProvider;
+import javax.annotation.Generated;
+import javax.inject.Provider;
+
+@Generated("dagger.internal.codegen.ComponentProcessor")
+public final class DaggerDaggerComponent implements DaggerComponent {
+  private Provider<PresenterMainActivity> providesPresenterMainActivityProvider;
+  private MembersInjector<MainActivity> mainActivityMembersInjector;
+  private Provider<PresenterSearchActivity> providesPresenterSearchActivityProvider;
+  private MembersInjector<SearchActivity> searchActivityMembersInjector;
+  private Provider<PresenterListsFragment> providesPresenterListsFragmentProvider;
+  private MembersInjector<ListsFragment> listsFragmentMembersInjector;
+  private Provider<PresenterNumbersFragment> providesPresenterNumbersFragmentProvider;
+  private MembersInjector<NumbersFragment> numbersFragmentMembersInjector;
+  private Provider<PresenterCategoryActivity> providesPresenterCategoryActivityProvider;
+  private MembersInjector<CatBaseFragment> catBaseFragmentMembersInjector;
+  private MembersInjector<CategoryActivity> categoryActivityMembersInjector;
+  private MembersInjector<TabbedFragment> tabbedFragmentMembersInjector;
+
+  private DaggerDaggerComponent(Builder builder) {  
+    assert builder != null;
+    initialize(builder);
+  }
+
+  public static Builder builder() {  
+    return new Builder();
+  }
+
+  private void initialize(final Builder builder) {  
+    this.providesPresenterMainActivityProvider = ScopedProvider.create(DaggerModule_ProvidesPresenterMainActivityFactory.create(builder.daggerModule));
+    this.mainActivityMembersInjector = MainActivity_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), providesPresenterMainActivityProvider);
+    this.providesPresenterSearchActivityProvider = ScopedProvider.create(DaggerModule_ProvidesPresenterSearchActivityFactory.create(builder.daggerModule));
+    this.searchActivityMembersInjector = SearchActivity_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), providesPresenterSearchActivityProvider);
+    this.providesPresenterListsFragmentProvider = ScopedProvider.create(DaggerModule_ProvidesPresenterListsFragmentFactory.create(builder.daggerModule));
+    this.listsFragmentMembersInjector = ListsFragment_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), providesPresenterListsFragmentProvider);
+    this.providesPresenterNumbersFragmentProvider = ScopedProvider.create(DaggerModule_ProvidesPresenterNumbersFragmentFactory.create(builder.daggerModule));
+    this.numbersFragmentMembersInjector = NumbersFragment_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), providesPresenterNumbersFragmentProvider);
+    this.providesPresenterCategoryActivityProvider = ScopedProvider.create(DaggerModule_ProvidesPresenterCategoryActivityFactory.create(builder.daggerModule));
+    this.catBaseFragmentMembersInjector = CatBaseFragment_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), providesPresenterCategoryActivityProvider);
+    this.categoryActivityMembersInjector = CategoryActivity_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), providesPresenterCategoryActivityProvider);
+    this.tabbedFragmentMembersInjector = TabbedFragment_MembersInjector.create((MembersInjector) MembersInjectors.noOp(), providesPresenterMainActivityProvider);
+  }
+
+  @Override
+  public void inject(MainActivity mainActivity) {  
+    mainActivityMembersInjector.injectMembers(mainActivity);
+  }
+
+  @Override
+  public void inject(SearchActivity searchActivity) {  
+    searchActivityMembersInjector.injectMembers(searchActivity);
+  }
+
+  @Override
+  public void inject(ListsFragment listsFrag) {  
+    listsFragmentMembersInjector.injectMembers(listsFrag);
+  }
+
+  @Override
+  public void inject(NumbersFragment numFrag) {  
+    numbersFragmentMembersInjector.injectMembers(numFrag);
+  }
+
+  @Override
+  public void inject(ScoreActivity scoreActivity) {  
+    MembersInjectors.noOp().injectMembers(scoreActivity);
+  }
+
+  @Override
+  public void inject(CatBaseFragment baseFragment) {  
+    catBaseFragmentMembersInjector.injectMembers(baseFragment);
+  }
+
+  @Override
+  public void inject(CategoryActivity categoryActivity) {  
+    categoryActivityMembersInjector.injectMembers(categoryActivity);
+  }
+
+  @Override
+  public void inject(TabbedFragment tabbedFragment) {  
+    tabbedFragmentMembersInjector.injectMembers(tabbedFragment);
+  }
+
+  public static final class Builder {
+    private DaggerModule daggerModule;
+  
+    private Builder() {  
+    }
+  
+    public DaggerComponent build() {  
+      if (daggerModule == null) {
+        throw new IllegalStateException("daggerModule must be set");
+      }
+      return new DaggerDaggerComponent(this);
+    }
+  
+    public Builder daggerModule(DaggerModule daggerModule) {  
+      if (daggerModule == null) {
+        throw new NullPointerException("daggerModule");
+      }
+      this.daggerModule = daggerModule;
+      return this;
+    }
+  }
+}
+

@@ -1,0 +1,45 @@
+// Generated code from Butter Knife. Do not modify!
+package com.church.psalm.view.adapter;
+
+import android.view.View;
+import butterknife.ButterKnife.Finder;
+import butterknife.ButterKnife.ViewBinder;
+
+public class RealmListviewAdapter$SongViewHolder$$ViewBinder<T extends com.church.psalm.view.adapter.RealmListviewAdapter.SongViewHolder> implements ViewBinder<T> {
+  @Override public void bind(final Finder finder, final T target, Object source) {
+    View view;
+    view = finder.findRequiredView(source, 2131689602, "field 'track'");
+    target.track = finder.castView(view, 2131689602, "field 'track'");
+    view = finder.findRequiredView(source, 2131689543, "field 'title'");
+    target.title = finder.castView(view, 2131689543, "field 'title'");
+    view = finder.findRequiredView(source, 2131689605, "field 'freq'");
+    target.freq = finder.castView(view, 2131689605, "field 'freq'");
+    view = finder.findRequiredView(source, 2131689604, "field 'fav'");
+    target.fav = finder.castView(view, 2131689604, "field 'fav'");
+    view = finder.findRequiredView(source, 2131689603, "method 'onClickFav'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickFav();
+        }
+      });
+    view = finder.findRequiredView(source, 2131689601, "method 'onClickItem'");
+    view.setOnClickListener(
+      new butterknife.internal.DebouncingOnClickListener() {
+        @Override public void doClick(
+          android.view.View p0
+        ) {
+          target.onClickItem();
+        }
+      });
+  }
+
+  @Override public void unbind(T target) {
+    target.track = null;
+    target.title = null;
+    target.freq = null;
+    target.fav = null;
+  }
+}
