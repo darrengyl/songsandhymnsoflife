@@ -23,6 +23,16 @@ keyword: songs and hymns of life, Titus Chu, Watchman Nee, Christianity. "生命
 8. Share the score or lyrics directly in the app
 
 # Screenshots
+![device-2016-07-07-231138](https://cloud.githubusercontent.com/assets/4451159/16677612/4f19bffe-449d-11e6-835a-396d774e0834.png)
+![device-2016-07-07-231228](https://cloud.githubusercontent.com/assets/4451159/16677611/4f18bf78-449d-11e6-855a-baed181561e9.png)
+![device-2016-07-07-231322](https://cloud.githubusercontent.com/assets/4451159/16677613/4f1a3506-449d-11e6-9946-618a31e0f65f.png)
+![device-2016-07-07-231417](https://cloud.githubusercontent.com/assets/4451159/16677614/4f1ba10c-449d-11e6-8ad1-1767139ee776.png)
+![device-2016-07-07-231556](https://cloud.githubusercontent.com/assets/4451159/16677616/4f1ea73a-449d-11e6-99d6-95efaf1c02db.png)
+![device-2016-07-07-231713](https://cloud.githubusercontent.com/assets/4451159/16677615/4f1e9b0a-449d-11e6-8688-6ea1083ecbff.png)
+![device-2016-07-07-231834](https://cloud.githubusercontent.com/assets/4451159/16677617/4f21942c-449d-11e6-8a3f-58e98567b68b.png)
+![device-2016-07-07-231925](https://cloud.githubusercontent.com/assets/4451159/16677620/4f272be4-449d-11e6-9825-aabbcabee907.png)
+![device-2016-07-07-232006](https://cloud.githubusercontent.com/assets/4451159/16677618/4f24aa18-449d-11e6-95da-5b3608770b6a.png)
+![device-2016-07-07-232127](https://cloud.githubusercontent.com/assets/4451159/16677619/4f264d3c-449d-11e6-9512-3fa08420e292.png)
 
 
 
