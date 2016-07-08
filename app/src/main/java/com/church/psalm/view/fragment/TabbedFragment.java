@@ -50,7 +50,7 @@ public class TabbedFragment extends Fragment implements ViewTabbedFragment{
     }
 
     private void setOnTabSelectedListener() {
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 super.onTabSelected(tab);
