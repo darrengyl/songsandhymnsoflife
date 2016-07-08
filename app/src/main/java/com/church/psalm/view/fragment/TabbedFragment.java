@@ -28,7 +28,6 @@ public class TabbedFragment extends Fragment implements ViewTabbedFragment{
     TabLayout tabLayout;
     @Bind(R.id.pager)
     ViewPager viewPager;
-    private ViewPagerAdapter _viewPagerAdapter;
     private ListsFragment listsFragment;
     @Inject
     PresenterMainActivity presenter;
@@ -39,11 +38,11 @@ public class TabbedFragment extends Fragment implements ViewTabbedFragment{
         View view = inflater.inflate(R.layout.fragment_tabbed, container, false);
         ButterKnife.bind(this, view);
         ((Songsandhymnsoflife) getActivity().getApplication()).getComponent().inject(this);
-        _viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        ViewPagerAdapter _viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         NumbersFragment numbersFragment = new NumbersFragment();
-        _viewPagerAdapter.addFragment(numbersFragment, "NUMBER");
+        _viewPagerAdapter.addFragment(numbersFragment, getString(R.string.numbers));
         listsFragment = new ListsFragment();
-        _viewPagerAdapter.addFragment(listsFragment, "LIST");
+        _viewPagerAdapter.addFragment(listsFragment, getString(R.string.list));
         viewPager.setAdapter(_viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         setOnTabSelectedListener();

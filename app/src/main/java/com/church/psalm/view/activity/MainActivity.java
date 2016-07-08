@@ -60,19 +60,15 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
         ButterKnife.bind(this);
         ((Songsandhymnsoflife) getApplication()).getComponent().inject(this);
         setSupportActionBar(toolBar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Hymns of Life");
-        }
         presenter.setViewActivity(this);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 new MaterialDialog.Builder(this)
-                        .title("Permission Needed")
-                        .content("Without the permission to write data to your storage, none of song info can be stored. " +
-                                "In that case not all functions will be available")
-                        .positiveText("OK")
+                        .title(R.string.permission_needed)
+                        .content(R.string.permission_content)
+                        .positiveText(R.string.ok)
                         .cancelable(false)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
@@ -170,8 +166,8 @@ public class MainActivity extends AppCompatActivity implements ViewMainActivity 
     @Override
     public void showProgressDialog() {
         _dialog = new MaterialDialog.Builder(this)
-                .title("Loading data")
-                .content("Please wait")
+                .title(R.string.loading_data)
+                .content(R.string.please_wait)
                 .progress(true, 0)
                 .show();
     }

@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity implements ViewSearchActiv
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         setUpSearchview();
-        banner.setText("Only showing first " + Constants.SEARCH_FILTER_NUMBER + " records");
+        banner.setText(String.format(getString(R.string.filter_result_text), Constants.SEARCH_FILTER_NUMBER));
         _realm = Realm.getDefaultInstance();
         _adapter = new SearchAdapter(this);
         _adapter.setOnClickListener(this);
